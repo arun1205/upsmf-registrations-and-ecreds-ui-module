@@ -149,7 +149,7 @@ export class ManageClaimsComponent {
       {
         claimId: "327",
         grievanceRaiser: 'Devpratap Nagendra',
-        claimType:'Candiadate',
+        claimType:'Registration',
         status:"Approved",
         claimDate: "23-06-2023",
         approvedDate: "23-12-2023",
@@ -159,7 +159,7 @@ export class ManageClaimsComponent {
       {
         claimId: "336",
         grievanceRaiser: 'Mani Charri',
-        claimType:'Candiadate',
+        claimType:'Registration',
         status:"Approved",
         claimDate: "23-06-2023",
         approvedDate: "23-12-2023",
@@ -169,7 +169,7 @@ export class ManageClaimsComponent {
       {
         claimId: "335",
         grievanceRaiser: 'Geethesh Misra',
-        claimType:'Candiadate',
+        claimType:'Registration',
         status:"Rejected",
         claimDate: "23-06-2023",
         rejectedDate: "23-12-2023",
@@ -179,7 +179,7 @@ export class ManageClaimsComponent {
       {
         claimId: "334",
         grievanceRaiser: 'Vinodini Vaishnav',
-        claimType:'Candiadate',
+        claimType:'goodStanding',
         status:"Rejected",
         claimDate: "23-06-2023",
         rejectedDate: "23-12-2023",
@@ -199,7 +199,7 @@ export class ManageClaimsComponent {
       {
         claimId: "332",
         grievanceRaiser: 'Nancy Jain',
-        claimType:'Candiadate',
+        claimType:'goodstanding',
         status:"Pending",
         claimDate: "23-06-2023",
         approvedDate: "23-12-2023",
@@ -209,7 +209,7 @@ export class ManageClaimsComponent {
       {
         claimId: "331",
         grievanceRaiser: 'Deepak Sharma',
-        claimType:'Candiadate',
+        claimType:'Registration',
         status:"Pending",
         claimDate: "23-06-2023",
         approvedDate: "23-12-2023",
@@ -219,7 +219,7 @@ export class ManageClaimsComponent {
       {
         claimId: "330",
         grievanceRaiser: 'Usha Singh',
-        claimType:'Candiadate',
+        claimType:'Registration',
         status:"Pending",
         claimDate: "23-06-2023",
         approvedDate: "23-12-2023",
