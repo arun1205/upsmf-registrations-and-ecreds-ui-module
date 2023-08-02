@@ -8,6 +8,9 @@ const routes: Routes = [
   {
     path: 'claims', loadChildren :()=> import('./modules/claims-management/claims-management.module').then(m=>m.ClaimsManagementModule)
   },
+  {
+    path:'authentication', loadChildren :()=>import('./modules/user-authentication/user-authentication.module').then(m=>m.UserAuthenticationModule)
+  }
 ];
 
 @NgModule({
