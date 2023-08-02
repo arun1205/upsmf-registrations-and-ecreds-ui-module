@@ -1,0 +1,43 @@
+<div class="login-fullscreen-container">
+    <div class="login-container">
+        <div class="image-cls">
+            <img style="width: 26rem;" src="../../assets/images/sunbird_logo.png" alt="UPSMF logo">
+        </div>
+        <div class="login-main-container">
+            <div class="login-content">
+                <h2 class="login-text">Login</h2>
+                <div class="login-inputs" >
+                   
+                    <form class="login-section" [formGroup]="loginForm" (ngSubmit)="signInForm()">
+                        <div class="input-container">
+                            <h4>User name / Mobile No</h4>
+                            <mat-form-field appearance="outline" class="text-class">
+                                <mat-label>User name / Mobile No</mat-label>
+                                <input matInput placeholder="Enter Email" formControlName="emailphno" type="email" >
+                            </mat-form-field>
+                            <label style="color:red" *ngIf="loginForm.get('emailphno')?.hasError('invalidInput') ">Invalid email or phone number.</label>
+
+                        </div>
+
+                        <div class="input-container">
+                            <h4 >Password</h4>
+                            <mat-form-field appearance="outline" class="text-class">
+                                <mat-label>password</mat-label>
+                                <input type="password" matInput placeholder="Enter password" formControlName="password" >
+                            </mat-form-field>
+                        </div>
+                        <div class="input-container" style="margin-top:6%;">
+                            <button class="text-class action-btns" [disabled]="!loginForm.valid" type="submit" mat-raised-button color="primary">SIGN IN</button>
+                        </div>
+                        
+                        
+                    </form>
+                </div>
+            </div>
+            
+
+        </div>
+
+    </div>
+
+</div>
