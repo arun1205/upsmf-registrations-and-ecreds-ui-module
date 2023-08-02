@@ -1,0 +1,125 @@
+<app-header></app-header>
+<div class="flex  flex-auto " style="    padding-left: 33%;
+padding-top: 5%;">
+    <h2>New Registration Certificate</h2>
+</div>
+<div style="margin: 115px;">
+    <form [formGroup]="newRegCertformGroup"
+        (ngSubmit)="onNewRegnCertformSubmit(newRegCertformGroup.value)">
+        <div class="ml4 body-header flex justify-between items-center mb-4 ">
+            <h2 style="font-weight: 500 ml4">Claim Details</h2>
+        </div>
+
+        <div class="flex flex-column">
+            <div class="flex flex-row  ml4">
+                <div class="flex flex-column mt3">
+                    <h4>Council</h4>
+                    <mat-form-field appearance="outline" style="width:16.5rem">
+                        <mat-label>Council Name</mat-label>
+                        <mat-select (selectionChange)="councilSelected($event)" formControlName="councilName">
+                            <span *ngFor='let council of councilsTypesArray;let i = index'>
+                                <mat-option [value]="council">{{council}}</mat-option>
+                            </span>
+                        </mat-select>
+                        <mat-error *ngIf="newRegCertformGroup.controls['councilName'].invalid">
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="ml4 flex flex-column mt3">
+                    <h4>Qualification</h4>
+                    <mat-form-field appearance="outline" style="width:16.5rem">
+                        <mat-label>Select here</mat-label>
+                        <mat-select (selectionChange)="qualificationSelected($event)" formControlName="qualificationType">
+                            <span *ngFor='let qualification of qualificationsTypesArray;let i = index'>
+                                <mat-option [value]="qualification">{{qualification}}</mat-option>
+                            </span>
+                        </mat-select>
+                        <mat-error *ngIf="newRegCertformGroup.controls['qualificationType'].invalid">
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="ml4  flex flex-row ">
+                <div class=" flex flex-column">
+                    <h4 >Type</h4>
+                    <mat-form-field appearance="outline" style="width:16.5rem">
+                        <mat-label>Claim Type </mat-label>
+                        <mat-select (selectionChange)="claimSelected($event)" formControlName="claimType">
+                            <span *ngFor='let claim of claimsTypesArray;let i = index'>
+                                <mat-option [value]="claim">{{claim}}</mat-option>
+                            </span>
+                        </mat-select>
+                        <mat-error *ngIf="newRegCertformGroup.controls['claimType'].invalid">
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="ml4 flex flex-column">
+                    <h4>Roll Number</h4>
+                    <mat-form-field appearance="outline" style="width:16.5rem">
+                        <input matInput placeholder="Roll Number" formControlName="rollNo">
+                        <mat-error *ngIf="newRegCertformGroup.controls['rollNo'].invalid">
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex flex-row ml4  mt2 mb3 ">
+                <div class=" flex flex-column mr2">
+                <div class=" mt3 ">
+                    <h4 class="mb1 mt2">Origin </h4>
+                    <mat-radio-group color="primary" name="origin" aria-label="Origin" formControlName="origin" >
+                        <span *ngFor='let origin of originTypesArray;let i = index' >
+                            <mat-radio-button [value]="origin"
+                                (change)="radioChecked(origin,i)">{{origin}}</mat-radio-button>
+                        </span>
+
+                    </mat-radio-group>
+                </div>
+                        
+                        <mat-error *ngIf="submitted && newRegCertformGroup.controls['origin'].errors?.['required']">
+                        </mat-error>
+                </div>
+
+                <div class=" flex flex-column ml4 mt3">
+                    <h4 class="mb1 mt3">End date </h4>
+                <mat-form-field>
+                   
+                    <mat-label>Choose a date</mat-label>
+                    <input matInput [matDatepicker]="picker"  formControlName="endDate">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  </div>
+            </div>
+
+            <div class="flex flex-row  ml4 mt2">
+                <div class="flex flex-column ">
+                    <h4 >Select type of course</h4>
+                    <mat-form-field appearance="outline" style="width:16.5rem">
+                        <mat-label>Degree </mat-label>
+                        <mat-select (selectionChange)="degreeSelected($event)" formControlName="degree">
+                            <span *ngFor='let degree of degreesTypesArray;let i = index'>
+                                <mat-option [value]="degree">{{degree}}</mat-option>
+                            </span>
+                        </mat-select>
+                        <mat-error *ngIf="newRegCertformGroup.controls['degree'].invalid">
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <br /> <br /> <br /> 
+            <div class="ml4 body-header flex justify-between items-center mb-4 ">
+                <h2 style="font-weight: 500 ml4"></h2>
+                <div class="button-group ">
+                    <button mat-stroked-button color="primary" (click)="onReset()">Cancel</button>
+                    <button mat-stroked-button color="primary" class="ml2" >Next</button>
+                </div>
+            </div>
+            
+            <br /> <br /> <br /> <br />
+        </div>
+      
+    </form>
+</div>
