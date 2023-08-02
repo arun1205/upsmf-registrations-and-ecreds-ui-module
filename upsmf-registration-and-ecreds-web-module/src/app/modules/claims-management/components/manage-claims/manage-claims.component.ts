@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router  } from '@angular/router';
+import { Router } from '@angular/router';
 import { TableColumn, ClaimsTableData } from '../../../../interfaces/interfaces';
 
 
@@ -10,18 +10,18 @@ import { TableColumn, ClaimsTableData } from '../../../../interfaces/interfaces'
 })
 export class ManageClaimsComponent {
   claims: ClaimsTableData[] = [];
-  pendingClaims:  ClaimsTableData[] = [];
-  approvedClaims:  ClaimsTableData[] = [];
-  rejectedClaims:  ClaimsTableData[] = [];
+  pendingClaims: ClaimsTableData[] = [];
+  approvedClaims: ClaimsTableData[] = [];
+  rejectedClaims: ClaimsTableData[] = [];
 
   claimsTableColumns: TableColumn[] = [];
-  pendingClaimsTableColumns:  TableColumn[] = [];
-  approvedClaimsTableColumns:  TableColumn[] = [];
-  rejectedClaimsTableColumns : TableColumn[] = [];
+  pendingClaimsTableColumns: TableColumn[] = [];
+  approvedClaimsTableColumns: TableColumn[] = [];
+  rejectedClaimsTableColumns: TableColumn[] = [];
 
-  isDataLoading : boolean = false;
-  constructor( 
-    private router: Router ){}
+  isDataLoading: boolean = false;
+  constructor(
+    private router: Router) { }
 
   ngOnInit(): void {
     this.initializeColumns();
@@ -33,10 +33,10 @@ export class ManageClaimsComponent {
   initializeColumns(): void {
     this.pendingClaimsTableColumns = [
       {
-        columnDef: 'claimId',
+        columnDef: 'id',
         header: 'Claim ID',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimId']}`
+        cell: (element: Record<string, any>) => `${element['id']}`
       },
       {
         columnDef: 'claimType',
@@ -62,10 +62,10 @@ export class ManageClaimsComponent {
     ];
     this.approvedClaimsTableColumns = [
       {
-        columnDef: 'claimId',
+        columnDef: 'id',
         header: 'Claim ID',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimId']}`
+        cell: (element: Record<string, any>) => `${element['id']}`
       },
       {
         columnDef: 'claimType',
@@ -74,16 +74,16 @@ export class ManageClaimsComponent {
         cell: (element: Record<string, any>) => `${element['claimType']}`
       },
       {
-        columnDef: 'claimDate',
+        columnDef: 'createdAt',
         header: 'Claim Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimDate']}`
+        cell: (element: Record<string, any>) => `${element['createdAt']}`
       },
       {
-        columnDef: 'approvedDate',
+        columnDef: 'updatedAt',
         header: 'Approved Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['approvedDate']}`
+        cell: (element: Record<string, any>) => `${element['updatedAt']}`
       },
       {
         columnDef: 'viewClaims',
@@ -94,13 +94,13 @@ export class ManageClaimsComponent {
       }
 
     ];
-   
+
     this.rejectedClaimsTableColumns = [
       {
-        columnDef: 'claimId',
+        columnDef: 'id',
         header: 'Claim ID',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimId']}`
+        cell: (element: Record<string, any>) => `${element['id']}`
       },
       {
         columnDef: 'claimType',
@@ -109,16 +109,16 @@ export class ManageClaimsComponent {
         cell: (element: Record<string, any>) => `${element['claimType']}`
       },
       {
-        columnDef: 'claimDate',
+        columnDef: 'createdAt',
         header: 'Claim Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimDate']}`
+        cell: (element: Record<string, any>) => `${element['createdAt']}`
       },
       {
-        columnDef: 'rejectedDate',
+        columnDef: 'updatedAt',
         header: 'Rejected Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['rejectedDate']}`
+        cell: (element: Record<string, any>) => `${element['updatedAt']}`
       },
       {
         columnDef: 'isLink',
@@ -138,129 +138,200 @@ export class ManageClaimsComponent {
     }, 2000);
     this.claims = [
       {
-        claimId: "340",
-        grievanceRaiser: 'Kalpana Shrivastav',
-        claimType:'Institue',
-        status:"Pending",
-        claimDate: "23-06-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description.This is a lorem ipsum description which is pretty much large enough to test a description",
-        attachedDocs:["Doc 1","Doc2"]
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: new Date("2023-08-02T06:47:12.601+00:00").toLocaleDateString("en-us"),
+        status: "OPEN",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        closed: false
       },
       {
-        claimId: "327",
-        grievanceRaiser: 'Devpratap Nagendra',
-        claimType:'Registration',
-        status:"Approved",
-        claimDate: "23-06-2023",
-        approvedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description",
-        attachedDocs:["Doc 1","Doc2"]
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "OPEN",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        closed: true
       },
       {
-        claimId: "336",
-        grievanceRaiser: 'Mani Charri',
-        claimType:'Registration',
-        status:"Approved",
-        claimDate: "23-06-2023",
-        approvedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
-     
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "CLOSED",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        notes: "Rejected",
+        closed: true
       },
       {
-        claimId: "335",
-        grievanceRaiser: 'Geethesh Misra',
-        claimType:'Registration',
-        status:"Rejected",
-        claimDate: "23-06-2023",
-        rejectedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
-     
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "CLOSED",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        notes: "Rejected",
+        closed: true
       },
       {
-        claimId: "334",
-        grievanceRaiser: 'Vinodini Vaishnav',
-        claimType:'goodStanding',
-        status:"Rejected",
-        claimDate: "23-06-2023",
-        rejectedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
-     
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "CLOSED",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        notes: "Rejected",
+        closed: true
       },
       {
-        claimId: "333",
-        grievanceRaiser: 'Apporva Nautiyal',
-        claimType:'Candiadate',
-        status:"Pending",
-        claimDate: "23-06-2023",
-        approvedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
-     
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "OPEN",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        closed: false
       },
       {
-        claimId: "332",
-        grievanceRaiser: 'Nancy Jain',
-        claimType:'goodstanding',
-        status:"Pending",
-        claimDate: "23-06-2023",
-        approvedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
-     
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "CLOSED",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        closed: true
       },
       {
-        claimId: "331",
-        grievanceRaiser: 'Deepak Sharma',
-        claimType:'Registration',
-        status:"Pending",
-        claimDate: "23-06-2023",
-        approvedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
-     
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "OPEN",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        closed: false
       },
       {
-        claimId: "330",
-        grievanceRaiser: 'Usha Singh',
-        claimType:'Registration',
-        status:"Pending",
-        claimDate: "23-06-2023",
-        approvedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
-     
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "CLOSED",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        closed: true
       },
       {
-        claimId: "27",
-        grievanceRaiser: 'Kamlesh Pandey',
-        claimType:'Candiadate',
-        status:"Pending",
-        claimDate: "23-06-2023",
-        approvedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
-     
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "CLOSED",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        closed: true
       },
       {
-        claimId: "317",
-        grievanceRaiser: 'Pappiya Mukherjee',
-        claimType:'Candiadate',
-        status:"Pending",
-        claimDate: "23-06-2023",
-        approvedDate: "23-12-2023",
-        description: "This is a lorem ipsum description which is pretty much large enough to test a description"
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "OPEN",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        closed: false
       }
-     
+
     ];
-    this.pendingClaims = this.claims.filter(claim => claim['status'] === 'Pending');
-    this.approvedClaims = this.claims.filter(claim => claim['status'] === 'Approved');
-    this.rejectedClaims = this.claims.filter(claim => claim['status'] === 'Rejected');
+    this.pendingClaims = this.claims.filter(claim => claim['status'] === 'OPEN');
+    this.approvedClaims = this.claims.filter(claim => claim['status'] === 'CLOSED');
+    this.rejectedClaims = this.claims.filter(claim => claim?.notes);
   }
 
   onClickItem(e: any) {
     console.log(e?.id)
     let id = parseInt(e?.id)
     //this.router.navigate(['/:'+id], {state: {data: e}});
-    this.router.navigate(['/grievance',  e.id ], {state : {data: e}} );
-   // this.router.navigate(['/grievance', e.id]);
+    this.router.navigate(['/grievance', e.id], { state: { data: e } });
+    // this.router.navigate(['/grievance', e.id]);
   }
 
-  raiseNewGrievance(){
-    
+  raiseNewGrievance() {
+
   }
 }
