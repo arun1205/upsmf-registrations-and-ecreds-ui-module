@@ -7,12 +7,14 @@ import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from 'src/app/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SelfRegistrationComponent } from './components/self-registration/self-registration.component';
+import { PasswordPageComponent } from './components/password-page/password-page.component';
 
 
 @NgModule({
   declarations: [
     LoginPageComponent,
-    SelfRegistrationComponent
+    SelfRegistrationComponent,
+    PasswordPageComponent
   ],
   imports: [
     CommonModule,

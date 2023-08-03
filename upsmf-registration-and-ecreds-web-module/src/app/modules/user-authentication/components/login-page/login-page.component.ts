@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent {
-  // loginform:FormControl;
   loginForm: FormGroup;
 
   constructor(private router:Router){
@@ -39,6 +38,7 @@ export class LoginPageComponent {
   signInForm(){
     console.log(this.loginForm)
   }
+  
 
   }
 
