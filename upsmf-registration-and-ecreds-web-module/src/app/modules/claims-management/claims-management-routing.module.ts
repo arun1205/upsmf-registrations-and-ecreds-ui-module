@@ -4,6 +4,8 @@ import { ManageClaimsComponent } from './components/manage-claims/manage-claims.
 import { NewClaimsMenuComponent } from './components/new-claims-menu/new-claims-menu.component';
 import { NewRegnCertificateComponent } from './components/new-regn-certificate/new-regn-certificate.component';
 import { NewRegnCertDetailsComponent } from './components/new-regn-cert-details/new-regn-cert-details.component';
+import { GoodStandingForeignVerificationComponent } from './components/good-standing-foreign-verification/good-standing-foreign-verification.component';
+
 
 
 const routes: Routes = [ 
@@ -23,10 +25,7 @@ const routes: Routes = [
     path: 'new-regn-cert-details', component: NewRegnCertDetailsComponent, pathMatch: 'full',
   },
   {
-    path: 'good-stand-cert', component: NewClaimsMenuComponent, pathMatch: 'full',
-  },
-  {
-    path: 'frgn-verify-req', component: NewClaimsMenuComponent, pathMatch: 'full',
+    path: 'good-stand-frgn-cert', component: GoodStandingForeignVerificationComponent, pathMatch: 'full',
   },
   {
     path: 'renew-cert-claim', component: NewClaimsMenuComponent, pathMatch: 'full',

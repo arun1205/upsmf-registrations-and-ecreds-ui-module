@@ -44,16 +44,15 @@ export class NewClaimsMenuComponent {
         this.router.navigate(['claims/new-regn-cert'])
         break;
       case 'goodStandingCert':
-        this.router.navigate(['claims/good-stand-cert'])
+        this.router.navigate(['claims/good-stand-frgn-cert'])
         break;
       case 'ForeignVerifyReq':
-        this.router.navigate(['claims/frgn-verify-req'])
+        this.router.navigate(['claims/good-stand-frgn-cert'])
         break;
       case 'renewCertClaim':
         this.router.navigate(['claims/renew-cert-claim'])
         break;
       default:
-
         return '';
     }
     return;

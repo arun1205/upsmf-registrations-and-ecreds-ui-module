@@ -21,7 +21,7 @@
             </div>
         </mat-drawer>
 
-        <div style="min-height: 550px;">
+        <div style="min-height: 300px;">
             <ng-template #notPayment>
                 <form [formGroup]="newRegCertDetailsformGroup" *ngIf="candidateDetails">
                     <div class="ml4 flex flex-column mt3">
@@ -309,7 +309,7 @@
 
                                 <mat-list>
                                     <mat-list-item>{{ selected }}
-                                        <mat-icon class="mt2 ml4"
+                                        <mat-icon class="mt2 ml4 right"
                                             (click)="removeSelectedCourseFile(index)">delete</mat-icon></mat-list-item>
                                     <mat-divider></mat-divider>
 
