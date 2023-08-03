@@ -120,12 +120,7 @@ export class NewRegnCertDetailsComponent {
 
   showInfo(option : any){
     console.log(option)
-    option == "Candidate Details" ? this.candidateDetails = true : this.candidateDetails = false
-
-
     switch (option) {
-
-     
       case 'Payment Details':
         this.paymentDetails = !this.paymentDetails 
         break;

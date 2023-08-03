@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ManageClaimsComponent } from './modules/claims-management/components/manage-claims/manage-claims.component';
+import { LoginPageComponent } from './modules/user-authentication/components/login-page/login-page.component';
 const routes: Routes = [
   {
-    path: '', component:ManageClaimsComponent, pathMatch: 'full',
+    path: '', component: LoginPageComponent, pathMatch: 'full'
   },
   {
-    path: 'claims', loadChildren :()=> import('./modules/claims-management/claims-management.module').then(m=>m.ClaimsManagementModule)
+    path: 'claims', loadChildren: () => import('./modules/claims-management/claims-management.module').then(m => m.ClaimsManagementModule)
   },
   {
-    path:'authentication', loadChildren :()=>import('./modules/user-authentication/user-authentication.module').then(m=>m.UserAuthenticationModule)
+    path: 'authentication', loadChildren: () => import('./modules/user-authentication/user-authentication.module').then(m => m.UserAuthenticationModule)
   }
 ];
 
