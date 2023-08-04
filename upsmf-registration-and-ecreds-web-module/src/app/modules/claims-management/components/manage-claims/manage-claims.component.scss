@@ -1,6 +1,46 @@
-table {
-    width: 90%;
-  }
-  th.mat-sort-header-sorted {
-    color: black;
-  }
+.main-container{
+  padding: 4rem;
+  background-color: #F0F3F4;
+  height: 100%;
+  padding-left: 10rem;
+  padding-right: 10rem;
+}
+.header-container{
+  display: flex;
+  flex-direction: column;
+}
+.head-details{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+.h2{
+  font-weight: bold;
+}
+
+
+
+.mat-mdc-tab-labels{
+  width: 4rem !important;
+
+}
+mat-tab{
+   width: 4rem !important;
+}
+
+// table {
+//   width: 90%;
+// }
+
+// th.mat-sort-header-sorted {
+//   color: black;
+// }
+
+// th{
+//   background-color: #e4e4e4e4;
+// }
+
+// .mat-tab-group{
+//   background-color: #e4e4e4e4;
+// }

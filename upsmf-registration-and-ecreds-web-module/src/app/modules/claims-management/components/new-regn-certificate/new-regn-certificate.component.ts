@@ -18,7 +18,7 @@ export class NewRegnCertificateComponent {
 
 
   originTypesArray = [
-    'Uttar Pradesh', 'Outside UP'
+    'From UP', 'Outside UP'
   ]
   councilsTypesArray= [
     'Paramedical', 'Nursing'

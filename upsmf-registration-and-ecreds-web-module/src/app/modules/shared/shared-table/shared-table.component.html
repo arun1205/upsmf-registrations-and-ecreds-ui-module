@@ -1,15 +1,18 @@
 <div>
+    <div class="search" >
+        <mat-form-field appearance="outline"  class="searchfield">
+            <input matInput  (keyup)="applyFilter($event?.target?.value)" placeholder="Search">
+            <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+        <div class="filter">
+            <mat-icon  fontIcon=filter_list></mat-icon>
+            <mat-label >Filter</mat-label>
+            
+        </div>
+    </div>
+   
 
-    <mat-form-field style="width:16.5rem;height:4rem" class="mt3">
-        <input matInput appearance="outline" (keyup)="applyFilter($event?.target?.value)" placeholder="Search">
-    </mat-form-field>
-    <span class="ml2">
-        <mat-icon fontIcon="filter_list_alt"></mat-icon>
-        <mat-label >Filter</mat-label>
-        
-    </span>
-
-    <table class="m4 p4 mt2" mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort
+    <table  mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort
         sortActionDescription="Sort by number">
         <ng-container matColumnDef="position" *ngFor="let disCol of tableColumns let colIndex = index;"
             matColumnDef="{{disCol.columnDef}}">

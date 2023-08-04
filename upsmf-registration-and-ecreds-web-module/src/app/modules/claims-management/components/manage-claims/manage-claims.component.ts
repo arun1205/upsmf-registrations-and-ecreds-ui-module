@@ -45,8 +45,14 @@ export class ManageClaimsComponent {
         cell: (element: Record<string, any>) => `${element['claimType']}`
       },
       {
+        columnDef: 'createdAt',
+        header: 'Claim Date',
+        isSortable: true,
+        cell: (element: Record<string, any>) => `${element['createdAt']}`
+      },
+      {
         columnDef: 'isLink',
-        header: '',
+        header: 'Status',
         isSortable: false,
         isLink: true,
         cell: (element: Record<string, any>) => `Submitted`
