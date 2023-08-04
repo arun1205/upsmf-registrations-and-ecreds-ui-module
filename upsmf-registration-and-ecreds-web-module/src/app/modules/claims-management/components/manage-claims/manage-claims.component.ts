@@ -327,7 +327,7 @@ export class ManageClaimsComponent {
     console.log(e?.id)
     let id = parseInt(e?.id)
     //this.router.navigate(['/:'+id], {state: {data: e}});
-    this.router.navigate(['/grievance', e.id], { state: { data: e } });
+    this.router.navigate(['/claims', e.id], { state: { data: e } });
     // this.router.navigate(['/grievance', e.id]);
   }
 

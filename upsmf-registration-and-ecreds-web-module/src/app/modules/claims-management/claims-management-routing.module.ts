@@ -8,10 +8,10 @@ import { GoodStandingForeignVerificationComponent } from './components/good-stan
 
 
 
-const routes: Routes = [ 
-/*   {
-    path: 'login', loadChildren :()=> import('../auth-modules/auth-modules.module').then(m=>m.AuthModulesModule)
-  }, */
+const routes: Routes = [
+  /*   {
+      path: 'login', loadChildren :()=> import('../auth-modules/auth-modules.module').then(m=>m.AuthModulesModule)
+    }, */
   {
     path: 'manage', component: ManageClaimsComponent, pathMatch: 'full',
   },
@@ -30,11 +30,9 @@ const routes: Routes = [
   {
     path: 'renew-cert-claim', component: NewClaimsMenuComponent, pathMatch: 'full',
   },
-
-  
- /*  {
-    path: ':id', component:GrievanceDetailsComponent, pathMatch: 'full',
-  }, */
+  {
+    path: ':id', component: NewRegnCertDetailsComponent, pathMatch: 'full',
+  },
 
 ];
 
