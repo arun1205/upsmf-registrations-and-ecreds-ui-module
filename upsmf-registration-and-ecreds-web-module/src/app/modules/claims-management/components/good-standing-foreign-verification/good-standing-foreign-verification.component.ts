@@ -14,7 +14,6 @@ export class GoodStandingForeignVerificationComponent {
   candidateDetails: boolean = true;
   links = ['Candidate Details', 'Payment Details']
 
-  goodStandingForeignVerificationformGroup$: Observable<FormGroup>;
   goodStandingForeignVerificationformGroup: FormGroup;
   submitted = false;
 
