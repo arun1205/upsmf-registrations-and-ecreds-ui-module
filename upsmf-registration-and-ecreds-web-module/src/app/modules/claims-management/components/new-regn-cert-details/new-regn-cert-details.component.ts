@@ -14,6 +14,7 @@ export class NewRegnCertDetailsComponent {
 
 
   public newRegCertDetailsformGroup: FormGroup;
+  newRegCourseDetailsformGroup: FormGroup;
   submitted = false;
 
   candidateDetails:boolean = true;
@@ -54,7 +55,9 @@ export class NewRegnCertDetailsComponent {
       state: new FormControl('', [
         Validators.required]),
       pin: new FormControl('', [
-        Validators.required]),
+        Validators.required,
+        Validators.pattern("^[0-9]*$")]
+        ),
       country: new FormControl('', [
         Validators.required]),
       adhr: new FormControl('', [
@@ -68,8 +71,32 @@ export class NewRegnCertDetailsComponent {
         Validators.required,
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
       });
+
+      this.newRegCourseDetailsformGroup = this.formBuilder.group({
+        courseName: new FormControl('', [
+          Validators.required]),
+          collegeName: new FormControl('', [
+          Validators.required]),
+          examBody: new FormControl('', [
+          Validators.required]),
+          joinDate: new FormControl('', [
+          Validators.required]),
+          rollNum: new FormControl('', [
+          Validators.required,
+          Validators.pattern("^[0-9]*$")]),
+          passDate: new FormControl('', [
+          Validators.required])
+        });
     }
 
+    newRegCertDetailsformGroupSubmit(value: any) {
+      console.log(value)
+      this.submitted = true;
+      if (this.newRegCertDetailsformGroup.valid) {
+        this.candidateDetails = false;
+      }
+      
+    }
 
     onFileChanged(event?: any){
       console.log(event);
@@ -82,6 +109,7 @@ export class NewRegnCertDetailsComponent {
         }
       }
     }
+
 
     onCourseFileChanged(event?: any){
       console.log(event);

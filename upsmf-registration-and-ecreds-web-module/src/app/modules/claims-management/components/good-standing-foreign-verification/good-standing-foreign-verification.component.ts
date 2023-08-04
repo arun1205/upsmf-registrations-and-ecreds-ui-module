@@ -122,9 +122,9 @@ export class GoodStandingForeignVerificationComponent {
     console.log(value)
     this.submitted = true;
     if (this.goodStandingForeignVerificationformGroup.valid) {
-
+      this.candidateDetails = false;
     }
-    this.candidateDetails = false;
+    
   }
 
   onReset() {
