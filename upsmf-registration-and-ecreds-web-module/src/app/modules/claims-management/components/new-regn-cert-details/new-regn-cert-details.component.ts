@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-new-regn-cert-details',
@@ -28,7 +28,7 @@ export class NewRegnCertDetailsComponent {
   courseFileList: File[] = [];
 
   constructor(private formBuilder: FormBuilder,
-     ) { }
+    private location: Location) { }
 
      ngOnInit() {
       this.initForm();
@@ -137,5 +137,17 @@ export class NewRegnCertDetailsComponent {
         return '';
     }
     return;
+  }
+
+  onReset() {
+    console.log("onReset")
+    this.submitted = false;
+    this.newRegCertDetailsformGroup.reset();
+    this.listOfFiles = [];
+  }
+
+  navToPreviousPage(){
+    console.log("hhh")
+    this.location.back()
   }
 }

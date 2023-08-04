@@ -210,12 +210,12 @@
                                     </div>
                                     <div class="buttons">
                                         <div class="button-group">
-                                            <button class="button" mat-raised-button  color="primary" ><mat-icon>keyboard_backspace</mat-icon>Previous</button>
+                                            <button type="button" class="button" mat-raised-button  color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
                                         </div>
                                         
                         
                                         <div class="button-group">
-                                            <button class="button" mat-stroked-button color="primary" >Cancel</button>
+                                            <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()">Cancel</button>
                                             <button  class="button" mat-raised-button color="primary"  ><mat-icon matSuffix>arrow_right_alt</mat-icon>Next</button>
                                         </div>
                                     </div>
@@ -320,12 +320,12 @@
                                     </div>
                                     <div class="buttons">
                                         <div class="button-group">
-                                            <button class="button" mat-raised-button  color="primary" ><mat-icon>keyboard_backspace</mat-icon>Previous</button>
+                                            <button type="button"  mat-raised-button  color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
                                         </div>
                                         
                         
                                         <div class="button-group">
-                                            <button class="button" mat-stroked-button color="primary" >Cancel</button>
+                                            <button type="button"   mat-stroked-button color="primary" (click)="onReset()">Cancel</button>
                                             <button  class="button" mat-raised-button color="primary" ><mat-icon matSuffix>arrow_right_alt</mat-icon>Next</button>
                                         </div>
                                     </div>
@@ -368,12 +368,13 @@
                             </div>
                             <div class="buttons">
                                 <div class="button-group">
-                                    <button class="button" mat-raised-button  color="primary" ><mat-icon>keyboard_backspace</mat-icon>Previous</button>
+                                    <button  class="button" mat-raised-button  color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
                                 </div>
                                 
                 
                                 <div class="button-group">
-                                    <button class="button" mat-stroked-button color="primary" >Cancel</button>
+                                    <button class="button"  mat-stroked-button color="primary">Cancel</button> 
+                       
                                     <button  class="button" mat-raised-button color="primary" ><mat-icon matSuffix>arrow_right_alt</mat-icon>Make Payment</button>
                                 </div>
                             </div>
