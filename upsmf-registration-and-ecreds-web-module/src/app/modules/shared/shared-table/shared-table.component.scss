@@ -1,0 +1,49 @@
+.searchfield{
+    width:21rem;
+    height:3.5rem;
+    background-color: #ffff;
+    margin-top: 2rem;
+}
+.search{
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: row;
+    
+}
+.filter{
+    margin-left: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+
+}
+
+
+mat-label{
+    font-size: initial;
+    
+}
+.mat-mdc-table{
+    background-color: #F0F3F4;
+    .mdc-data-table__header-row{
+        background-color:rgba(0, 0, 0, 0.04); 
+        
+    }
+}
+mat-paginator{
+    margin-top:5rem;
+    background-color: #F0F3F4;
+    // width: 100%;
+}
+::ng-deep .mat-mdc-paginator-container{
+    // width: 100%;
+    // display: flex;
+    justify-content: space-between !important;
+}
+
+
+::ng-deep .mat-mdc-tab-header{
+    width: 37rem !important;
+}
+

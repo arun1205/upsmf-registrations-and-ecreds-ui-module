@@ -124,7 +124,7 @@ export class NewRegnCertDetailsComponent {
       case 'Payment Details':
         this.paymentDetails = !this.paymentDetails 
         break;
-        case 'Candidate Details':
+        case 'Candidate Details': 
           this.candidateDetails = true;
           this.paymentDetails = false;
           break;

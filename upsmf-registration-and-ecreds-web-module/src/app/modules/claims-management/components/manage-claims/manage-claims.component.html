@@ -1,42 +1,43 @@
 <app-header></app-header>
-<div style="margin: 105px;">
-    <h2 style="margin: 50px;">Claim Registration Certificates</h2>
+    <div class="main-container">
+        <div class="header-container">
+            <div class="head-details">
+                <h2 >Claim Registration Certificates</h2>
+                <button mat-button color="primary" routerLink="/claims/new" mat-raised-button color="primary">New Claim </button>
 
+            </div>
+        </div>
 
-    <div class="fixed right-0 ">
-        <button mat-button color="primary" routerLink="/claims/new">New Claim </button>
-        <button mat-stroked-button color="primary">Back </button>
-    </div>
-    <mat-tab-group>
-        <mat-tab label="Pending Claims">
-            <app-shared-skeleton-loading [isLoading]="isDataLoading">
-            </app-shared-skeleton-loading>
-            <app-shared-table *ngIf="!isDataLoading"
-             [tableColumns]="pendingClaimsTableColumns"
-             [tableData]="pendingClaims"
-             [isPageable]="true"
+        <mat-tab-group  >
+            <mat-tab class="ptab" label="Pending Claims">
+                <app-shared-skeleton-loading [isLoading]="isDataLoading">
+                </app-shared-skeleton-loading>
+                <app-shared-table *ngIf="!isDataLoading"
+                [tableColumns]="pendingClaimsTableColumns"
+                [tableData]="pendingClaims"
+                [isPageable]="true"
+                    (rowAction)="onClickItem($event)">
+
+                </app-shared-table>
+            </mat-tab>
+            <mat-tab label="Approved Claims"> 
+                <app-shared-table
+                [tableColumns]="approvedClaimsTableColumns"
+                [tableData]="approvedClaims"
+                [isPageable]="true" 
                 (rowAction)="onClickItem($event)">
+                
+                </app-shared-table>
 
-            </app-shared-table>
-        </mat-tab>
-        <mat-tab label="Approved Claims"> 
-            <app-shared-table
-            [tableColumns]="approvedClaimsTableColumns"
-            [tableData]="approvedClaims"
-            [isPageable]="true" 
-            (rowAction)="onClickItem($event)">
-            
-            </app-shared-table>
-
-             </mat-tab>
-        <mat-tab label="Rejected Claims"> 
-            <app-shared-table
-            [tableColumns]="rejectedClaimsTableColumns"
-            [tableData]="rejectedClaims"
-            [isPageable]="true" 
-            (rowAction)="onClickItem($event)">
-            
-            </app-shared-table>
-        </mat-tab>
-    </mat-tab-group>
-</div>
+                </mat-tab>
+            <mat-tab label="Rejected Claims"> 
+                <app-shared-table
+                [tableColumns]="rejectedClaimsTableColumns"
+                [tableData]="rejectedClaims"
+                [isPageable]="true" 
+                (rowAction)="onClickItem($event)">
+                
+                </app-shared-table>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
