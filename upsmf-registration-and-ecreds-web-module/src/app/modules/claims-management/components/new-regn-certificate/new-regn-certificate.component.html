@@ -100,7 +100,7 @@
                             <div class="claim-form-column">
                                 <h4 >Select type of course</h4>
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Degree </mat-label>
+                                    <mat-label>Select type of course </mat-label>
                                     <mat-select (selectionChange)="degreeSelected($event)" formControlName="degree">
                                         <span *ngFor='let degree of degreesTypesArray;let i = index'>
                                             <mat-option [value]="degree">{{degree}}</mat-option>

@@ -71,9 +71,9 @@ export class NewRegnCertificateComponent {
     console.log(value)
     this.submitted = true;
     if( this.newRegCertformGroup.valid){
-     
+      this.router.navigate(['claims/new-regn-cert-details']);
     }
-    this.router.navigate(['claims/new-regn-cert-details'])
+    
   }
 
   radioChecked(e: any, e1: any) {
