@@ -22,7 +22,8 @@
                     <div class="content">
                         <ng-template #notPayment>
                             <div class="content-details">
-                                <form [formGroup]="newRegCertDetailsformGroup" *ngIf="candidateDetails">
+                                <form [formGroup]="newRegCertDetailsformGroup" *ngIf="candidateDetails"
+                                (ngSubmit)="newRegCertDetailsformGroupSubmit(newRegCertDetailsformGroup.value)">
                                     <div class="applicant-details">
                                         <h4>Applicant Name</h4>
                                         <mat-form-field appearance="outline" >
@@ -62,21 +63,17 @@
 
                                     <!-- </div> -->
 
-                                    <!-- <div class="ml4 flex flex-column"> -->
+                                    <div style="width: 17.5rem" class=" flex flex-column px2" [ngClass]="{ 'invalid-field': submitted && newRegCertDetailsformGroup.controls['gender'].errors }">
                                         <!-- <div class=" mt3 "> -->
                                             <h4 >Gender </h4>
-                                            <mat-radio-group color="primary" name="gender" aria-label="gender" formControlName="gender">
+                                            <mat-radio-group color="primary"  formControlName="gender">
                                                 <span *ngFor='let origin of genderTypesArray;let i = index'>
                                                     <mat-radio-button [value]="origin"
                                                         (change)="radioChecked(origin,i)">{{origin}}</mat-radio-button>
                                                 </span>
 
                                             </mat-radio-group>
-                                        <!-- </div> -->
-
-                                        <mat-error
-                                            *ngIf="submitted && newRegCertDetailsformGroup.controls['gender'].errors?.['required']">
-                                        </mat-error>
+                                        </div>
                                     </div>
 
                                     <div class="place-details">
@@ -223,40 +220,36 @@
 
 
 
-                                <form [formGroup]="newRegCertDetailsformGroup" *ngIf="!candidateDetails">
+                                <form [formGroup]="newRegCourseDetailsformGroup" *ngIf="!candidateDetails">
                                     <div class="applicant-details">
                                         <h4>Course Name</h4>
                                         <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Applicant Name" formControlName="applicantName">
-                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['applicantName'].invalid">
-                                            </mat-error>
+                                            <input matInput placeholder="Course Name" formControlName="courseName">
+                                           
                                         </mat-form-field>
                                     </div>
 
                                     <div class="applicant-details">
                                         <h4>College Name</h4>
                                         <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Mother's Name" formControlName="motherName">
-                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['motherName'].invalid">
-                                            </mat-error>
+                                            <input matInput placeholder="College Name" formControlName="collegeName">
+                                          
                                         </mat-form-field>
                                     </div>
 
                                     <div class="applicant-details">
                                         <h4>Examination Body</h4>
                                         <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Father's Name" formControlName="fatherName">
-                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['fatherName'].invalid">
-                                            </mat-error>
+                                            <input matInput placeholder="Examination Body" formControlName="examBody">
+                                          
                                         </mat-form-field>
                                     </div>
 
                                     <div class="applicant-details">
                                         <h4>Final year roll number</h4>
                                         <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Father's Name" formControlName="fatherName">
-                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['fatherName'].invalid">
-                                            </mat-error>
+                                            <input matInput placeholder="Final year roll number" formControlName="rollNum">
+                                           
                                         </mat-form-field>
                                     </div>
 
@@ -265,7 +258,7 @@
                                         <mat-form-field appearance="outline">
 
                                             <mat-label>Choose a date</mat-label>
-                                            <input matInput [matDatepicker]="pickerjoindate" formControlName="dob">
+                                            <input matInput [matDatepicker]="pickerjoindate" formControlName="joinDate">
                                             <mat-datepicker-toggle matIconSuffix [for]="pickerjoindate"></mat-datepicker-toggle>
                                             <mat-datepicker #pickerjoindate></mat-datepicker>
                                         </mat-form-field>
@@ -276,7 +269,7 @@
                                         <h4>Course Passing Date</h4>
                                         <mat-form-field appearance="outline">
                                             <mat-label>Choose a date</mat-label>
-                                            <input matInput [matDatepicker]="pickerpassingDate" formControlName="dob">
+                                            <input matInput [matDatepicker]="pickerpassingDate" formControlName="passDate">
                                             <mat-datepicker-toggle matIconSuffix [for]="pickerpassingDate"></mat-datepicker-toggle>
                                             <mat-datepicker #pickerpassingDate></mat-datepicker>
                                         </mat-form-field>

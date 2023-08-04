@@ -137,7 +137,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="ml4 flex flex-column">
+                <div class="ml4 flex flex-column" [ngClass]="{ 'invalid-field': submitted && goodStandingForeignVerificationformGroup.controls['proQual'].errors }">
                     <div class=" mt3 ">
                         <h4 class="mb1 ">Professional Qualification </h4>
                         <mat-radio-group color="primary" formControlName="proQual">
@@ -146,9 +146,6 @@
                                     >{{qual}}</mat-radio-button>
                             </span>
                         </mat-radio-group>
-                        <mat-error
-                            *ngIf="submitted && goodStandingForeignVerificationformGroup.controls['proQual'].errors?.['required']">
-                        </mat-error>
                     </div>
                 </div>
                 <div class="ml4 flex flex-column mt3">

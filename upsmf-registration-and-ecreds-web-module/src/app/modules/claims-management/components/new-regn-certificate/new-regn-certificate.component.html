@@ -68,10 +68,10 @@
                         </div>
                         <div class="flex flex-row  mb3 ">
                           <!--   <div class="claim-form-column"> -->
-                            <div class=" flex flex-column ml4 mt3 mr4 pr3">
+                            <div class=" flex flex-column ml4 mt3 mr4 pr3" [ngClass]="{ 'invalid-field': submitted && newRegCertformGroup.controls['origin'].errors }">
                             <!-- <div class=" mt3 "> -->
                                 <h4 >Origin </h4>
-                                <mat-radio-group color="primary"  name="origin" aria-label="Origin" formControlName="origin" >
+                                <mat-radio-group color="primary"  name="origin" aria-label="Origin" formControlName="origin"  >
                                     <span *ngFor='let origin of originTypesArray;let i = index' >
                                         <mat-radio-button [value]="origin"  
                                             (change)="radioChecked(origin,i)">{{origin}}</mat-radio-button>
@@ -79,9 +79,7 @@
 
                                 </mat-radio-group>
                             <!-- </div> -->
-                                    
-                                    <mat-error *ngIf="submitted && newRegCertformGroup.controls['origin'].errors?.['required']">
-                                    </mat-error>
+                                 
                             </div>
 
                             <div class=" flex flex-column ml4 mt3">
