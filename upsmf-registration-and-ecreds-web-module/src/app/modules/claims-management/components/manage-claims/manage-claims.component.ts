@@ -337,7 +337,4 @@ export class ManageClaimsComponent {
     // this.router.navigate(['/grievance', e.id]);
   }
 
-  raiseNewGrievance() {
-
-  }
 }
