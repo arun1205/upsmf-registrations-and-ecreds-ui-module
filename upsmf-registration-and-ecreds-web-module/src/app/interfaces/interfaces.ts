@@ -17,6 +17,14 @@ export interface ClaimsTableData {
     notes?: string
   }
 
+  export interface UsersTableData {
+    status: string;
+    name: string;
+    email:string;
+    id: string,
+    phoneNumber: string,
+    role: string,
+  }
 
   export interface TableColumn {
     columnDef: string;
@@ -25,6 +33,7 @@ export interface ClaimsTableData {
     isLink?: boolean;
     isAction?: boolean;
     url?: string;
+    isMenuOption?: boolean;
     isSortable?: boolean;
   }
 
