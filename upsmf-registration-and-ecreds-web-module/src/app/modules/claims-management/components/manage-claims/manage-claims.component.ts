@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { TableColumn, ClaimsTableData } from '../../../../interfaces/interfaces';
 
+import { BaseServiceService } from 'src/app/services/base-service.service';
 
 @Component({
   selector: 'app-manage-claims',
@@ -21,7 +22,8 @@ export class ManageClaimsComponent {
 
   isDataLoading: boolean = false;
   constructor(
-    private router: Router) { }
+    private router: Router,
+    private baseService: BaseServiceService  ) { }
 
   ngOnInit(): void {
     this.initializeColumns();
@@ -144,6 +146,14 @@ export class ManageClaimsComponent {
   }
 
   getclaims() {
+    this.baseService.getClaims$().subscribe(
+      (response) =>{
+        console.log(response);
+
+      },
+      
+
+    )
     this.isDataLoading = true;
     setTimeout(() => {
       this.isDataLoading = false;
