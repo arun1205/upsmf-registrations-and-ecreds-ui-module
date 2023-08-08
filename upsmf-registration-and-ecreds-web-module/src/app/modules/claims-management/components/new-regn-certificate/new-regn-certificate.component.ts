@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { BaseServiceService } from 'src/app/services/base-service.service';
+
 
 @Component({
   selector: 'app-new-regn-certificate',
@@ -15,6 +18,7 @@ export class NewRegnCertificateComponent {
   listOfFiles: any[] = [];
   isLoading = false;
   submitted = false;
+  details:Observable<any>;
 
 
   originTypesArray = [
@@ -38,9 +42,9 @@ export class NewRegnCertificateComponent {
 
 
 
-  public newRegCertformGroup: FormGroup;
+  @Input()  newRegCertformGroup: FormGroup;
   constructor(private formBuilder: FormBuilder,
-    private router:Router      ) { }
+    private router:Router,private baseService: BaseServiceService      ) { }
 
   ngOnInit() {
     this.createForm();
@@ -64,6 +68,25 @@ export class NewRegnCertificateComponent {
       degree: new FormControl('', [
         Validators.required]),
     });
+
+  }
+
+  onSubmit(value:any){
+    var data = this.newRegCertformGroup.value;
+    var myPostObject = {
+      councilName:data.councilName,
+      claimType:data.claimType,
+      origin:data.origin,
+      degree:data.degree,
+    } 
+    this.baseService.makeClaim$(myPostObject).subscribe(
+      (response) =>{
+        console.log(response);
+
+      },
+      
+
+    )
   }
 
   
@@ -132,6 +155,9 @@ export class NewRegnCertificateComponent {
     const sizes = ['Bytes', 'KB', 'MB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+}
+claimData(){
+  
 }
 
 

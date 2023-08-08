@@ -1,6 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
+import { NewRegnCertificateComponent } from '../new-regn-certificate/new-regn-certificate.component';
+import { BaseServiceService } from 'src/app/services/base-service.service';
+import {  mergeMap } from 'rxjs';
+import { SharedSnackbarMessageComponent } from 'src/app/modules/shared/shared-snackbar-message/shared-snackbar-message.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-regn-cert-details',
@@ -12,7 +17,7 @@ export class NewRegnCertDetailsComponent {
   
   links=['Candidate Details','Course Details','Payment Details']
 
-
+  newRegCertformGroup: FormGroup;
   public newRegCertDetailsformGroup: FormGroup;
   newRegCourseDetailsformGroup: FormGroup;
   submitted = false;
@@ -29,7 +34,11 @@ export class NewRegnCertDetailsComponent {
   courseFileList: File[] = [];
 
   constructor(private formBuilder: FormBuilder,
-    private location: Location) { }
+    private location: Location,private baseService: BaseServiceService,
+    private router: Router
+      ) {
+        console.log(this.router?.getCurrentNavigation()?.extras.state)
+       }
 
      ngOnInit() {
       this.initForm();
@@ -38,29 +47,29 @@ export class NewRegnCertDetailsComponent {
   initForm() {
 
     this.newRegCertDetailsformGroup = this.formBuilder.group({
-      applicantName: new FormControl('', [
+      applicantName: new FormControl('44g4g', [
         Validators.required]),
-      motherName: new FormControl('', [
+      motherName: new FormControl('g43g', [
         Validators.required]),
-      fatherName: new FormControl('', [
+      fatherName: new FormControl('4g42g', [
         Validators.required]),
-      dob: new FormControl('', [
+      dob: new FormControl('g43', [
         Validators.required]),
-      al1: new FormControl('', [
+      al1: new FormControl('e4t', [
         Validators.required]),
-      al2: new FormControl('', [
+      al2: new FormControl('efewf', [
         Validators.required]),
-      district: new FormControl('', [
+      district: new FormControl('dfgh', [
         Validators.required]),
-      state: new FormControl('', [
+      state: new FormControl('cvbn', [
         Validators.required]),
-      pin: new FormControl('', [
+      pin: new FormControl('123', [
         Validators.required,
         Validators.pattern("^[0-9]*$")]
         ),
-      country: new FormControl('', [
+      country: new FormControl('sdfgh', [
         Validators.required]),
-      adhr: new FormControl('', [
+      adhr: new FormControl('3456', [
         Validators.required]),
       gender: new FormControl('', [
         Validators.required]),
@@ -97,6 +106,81 @@ export class NewRegnCertDetailsComponent {
       }
       
     }
+    onSubmit(value:any){
+      var applicant_details = this?.newRegCertDetailsformGroup?.value;
+      var course_details = this?.newRegCourseDetailsformGroup?.value;
+      var data = this?.newRegCertformGroup?.value;
+      console.log("first form",data)
+      console.log(applicant_details)
+      // console.log(data)
+     
+      var updateStudent ={
+        
+        // council:data.councilName,
+        email: applicant_details.email,
+        mothersName: applicant_details.motherName,
+        fathersName: applicant_details.fatherName,
+        dateOfBirth: applicant_details.dateOfBirth,
+        // date: string,
+        aadhaarNo: applicant_details.aadhaarNo,
+        gender: applicant_details.gender,
+        courseName: course_details.courseName,
+        nursingCollage: course_details.collegeName,
+        joiningMonth: course_details.joinDate,
+        // joiningYear: string,
+        passingMonth: course_details.passDate,
+        // passingYear: number,
+        finalYearRollNo: course_details.rollNo,
+        // examBody: string
+
+      }
+      this.baseService.updateStudent$(updateStudent).pipe(
+        mergeMap((response)=>{
+          console.log("first",response)
+          var claimBody={
+            entityId:response.id,
+            entityName:course_details.courseName,
+            name: applicant_details.applicantName
+
+          }
+          
+          return this.baseService.createClaim$(claimBody);
+        })
+        ).subscribe(
+            (response)=>{
+              console.log("second",response)
+              
+            }
+          );
+
+          }
+          
+        
+        
+      // this.baseService.updateStudent$(updateStudent).subscribe(
+      //   (response) => {
+      //           console.log('Response:', response.id)
+
+      //         },
+      //         (error) => {
+      //           console.error('Error:', error);
+      //         }
+      //       );
+    //   var claim ={
+    //     entityName:this,
+    // entityId: string,
+    // name:string,
+    //   }
+    //   forkJoin([this.baseService.updateStudent$(updateStudent), this.baseService.createClaim$(claim)]).subscribe(
+    //     ([response1, response2]) => {
+    //       console.log('Response:', response1);
+    //       console.log('Response:', response);
+    //     },
+    //     (error) => {
+    //       console.error('Error:', error);
+    //     }
+    //   );
+    // }
 
     onFileChanged(event?: any){
       console.log(event);
@@ -109,6 +193,7 @@ export class NewRegnCertDetailsComponent {
         }
       }
     }
+   
 
 
     onCourseFileChanged(event?: any){
