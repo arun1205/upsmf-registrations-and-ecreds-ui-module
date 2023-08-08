@@ -1,10 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
-import { NewRegnCertificateComponent } from '../new-regn-certificate/new-regn-certificate.component';
 import { BaseServiceService } from 'src/app/services/base-service.service';
 import {  mergeMap } from 'rxjs';
-import { SharedSnackbarMessageComponent } from 'src/app/modules/shared/shared-snackbar-message/shared-snackbar-message.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -53,7 +51,7 @@ export class NewRegnCertDetailsComponent {
         Validators.required]),
       fatherName: new FormControl('4g42g', [
         Validators.required]),
-      dob: new FormControl('g43', [
+      dob: new FormControl('08/08/2023', [
         Validators.required]),
       al1: new FormControl('e4t', [
         Validators.required]),
@@ -63,15 +61,15 @@ export class NewRegnCertDetailsComponent {
         Validators.required]),
       state: new FormControl('cvbn', [
         Validators.required]),
-      pin: new FormControl('123', [
-        Validators.required,
+      pin: new FormControl('342312', [
+        Validators.required,Validators.minLength(6),
         Validators.pattern("^[0-9]*$")]
         ),
       country: new FormControl('sdfgh', [
         Validators.required]),
       adhr: new FormControl('3456', [
         Validators.required]),
-      gender: new FormControl('', [
+      gender: new FormControl('Male', [
         Validators.required]),
       email: new FormControl('arun@awe.com', [
         Validators.required,
@@ -82,18 +80,18 @@ export class NewRegnCertDetailsComponent {
       });
 
       this.newRegCourseDetailsformGroup = this.formBuilder.group({
-        courseName: new FormControl('', [
+        courseName: new FormControl('jnexg', [
           Validators.required]),
-          collegeName: new FormControl('', [
+          collegeName: new FormControl('kjnkjeznf', [
           Validators.required]),
-          examBody: new FormControl('', [
+          examBody: new FormControl('jnejnrk', [
           Validators.required]),
-          joinDate: new FormControl('', [
+          joinDate: new FormControl('08/08/2023', [
           Validators.required]),
-          rollNum: new FormControl('', [
+          rollNum: new FormControl('12345', [
           Validators.required,
           Validators.pattern("^[0-9]*$")]),
-          passDate: new FormControl('', [
+          passDate: new FormControl('08/08/2023', [
           Validators.required])
         });
     }
@@ -107,6 +105,7 @@ export class NewRegnCertDetailsComponent {
       
     }
     onSubmit(value:any){
+      console.log(value)
       var applicant_details = this?.newRegCertDetailsformGroup?.value;
       var course_details = this?.newRegCourseDetailsformGroup?.value;
       var data = this?.newRegCertformGroup?.value;
@@ -149,7 +148,7 @@ export class NewRegnCertDetailsComponent {
         ).subscribe(
             (response)=>{
               console.log("second",response)
-              
+              this.router.navigate(['/claims/manage']);
             }
           );
 

@@ -5,7 +5,6 @@ import { HeaderComponent } from './header/header.component';
 import { SharedSkeletonLoadingComponent } from './shared-skeleton-loading/shared-skeleton-loading.component';
 import { MaterialModule } from '../../../app/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedSnackbarMessageComponent } from './shared-snackbar-message/shared-snackbar-message.component';
 
 
 @NgModule({
@@ -13,7 +12,6 @@ import { SharedSnackbarMessageComponent } from './shared-snackbar-message/shared
     SharedTableComponent,
     HeaderComponent,
     SharedSkeletonLoadingComponent,
-    SharedSnackbarMessageComponent,
    
   ],
   imports: [
@@ -28,7 +26,6 @@ import { SharedSnackbarMessageComponent } from './shared-snackbar-message/shared
     SharedTableComponent,
     HeaderComponent,
     SharedSkeletonLoadingComponent,
-    SharedSnackbarMessageComponent
     
   ]
 })

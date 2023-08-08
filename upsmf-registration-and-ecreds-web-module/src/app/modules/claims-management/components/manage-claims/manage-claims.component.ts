@@ -127,6 +127,12 @@ export class ManageClaimsComponent {
         cell: (element: Record<string, any>) => `${element['updatedAt']}`
       },
       {
+        columnDef: 'notes',
+        header: 'Reason for Rejection',
+        isSortable: true,
+        cell: (element: Record<string, any>) => `${element['notes']}`
+      },
+      {
         columnDef: 'isLink',
         header: '',
         isSortable: false,
@@ -182,14 +188,31 @@ export class ManageClaimsComponent {
         createdAt: "2023-08-02T05:50:52.535+00:00",
         updatedAt: "2023-08-02T06:47:31.718+00:00",
         attestedOn: "2023-08-02T06:47:12.601+00:00",
-        status: "CLOSED",
+        status: "REJECTED",
         attestorEntity: "Teacher",
         requestorName: "kumarpawans67@gmail.com",
         attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
         attestationName: "studentVerification",
         attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
         claimType: "Registration",
-        notes: "Rejected",
+        notes: "Rejected because of document mismatch ",
+        closed: true
+      },
+      {
+        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+        entity: "Student",
+        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
+        createdAt: "2023-08-02T05:50:52.535+00:00",
+        updatedAt: "2023-08-02T06:47:31.718+00:00",
+        attestedOn: "2023-08-02T06:47:12.601+00:00",
+        status: "REJECTED",
+        attestorEntity: "Teacher",
+        requestorName: "kumarpawans67@gmail.com",
+        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
+        attestationName: "studentVerification",
+        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
+        claimType: "Registration",
+        notes: "Rejected because of incorrect DOB",
         closed: true
       },
       {
@@ -206,24 +229,7 @@ export class ManageClaimsComponent {
         attestationName: "studentVerification",
         attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
         claimType: "Registration",
-        notes: "Rejected",
-        closed: true
-      },
-      {
-        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-        entity: "Student",
-        entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-        createdAt: "2023-08-02T05:50:52.535+00:00",
-        updatedAt: "2023-08-02T06:47:31.718+00:00",
-        attestedOn: "2023-08-02T06:47:12.601+00:00",
-        status: "CLOSED",
-        attestorEntity: "Teacher",
-        requestorName: "kumarpawans67@gmail.com",
-        attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-        attestationName: "studentVerification",
-        attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-        claimType: "Registration",
-        notes: "Rejected",
+        notes: "Rejected because of insufficient docs",
         closed: true
       },
       {
