@@ -32,3 +32,34 @@ export interface ClaimsTableData {
     examsTableColumns: [];
     exams: [];
   }
+  export interface claimcolumn {
+    councilName:string,
+      claimType:string,
+      origin:string,
+      degree:string,
+  }
+  export interface studentDetails {
+    // registrationType: string,
+    // council: string,
+    email: string,
+    mothersName: string,
+    fathersName: string,
+    dateOfBirth: string,
+    // date: string,
+    aadhaarNo: string,
+    gender: string,
+    courseName: string,
+    nursingCollage: string,
+    joiningMonth: string,
+    // joiningYear: string,
+    passingMonth: string,
+    // passingYear: number,
+    finalYearRollNo: number,
+    // examBody: string    
+  }
+  export interface claimDetails {
+    entityName:string,
+    entityId: string,
+    name:string,
+  }
+  

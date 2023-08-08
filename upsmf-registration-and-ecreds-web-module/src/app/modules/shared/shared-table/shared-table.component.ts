@@ -17,7 +17,7 @@ export interface TableProps {
 }
 
 
-/* interface Column {
+/* interface  c {
   field: string;
   header: string;
 } */
