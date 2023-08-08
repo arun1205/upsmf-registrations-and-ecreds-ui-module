@@ -57,6 +57,10 @@ export class SharedTableComponent implements AfterViewInit {
   }
 
   @Output() rowAction: EventEmitter<any> = new EventEmitter<any>();
+  @Output() editData: EventEmitter<any>= new EventEmitter<any>();
+  @Output() toggleData: EventEmitter<any>= new EventEmitter<any>();
+  @Output() deleteData: EventEmitter<any>= new EventEmitter<any>();
+  
 
 
   constructor() {}
@@ -91,5 +95,17 @@ export class SharedTableComponent implements AfterViewInit {
 
     emitRowAction(row: any) {
       this.rowAction.emit(row);
+    }
+
+    onClickEdit(e : any){
+      this.editData.emit(e);
+    }
+
+    onDeactivateToggle(e : any){
+      this.toggleData.emit(e);
+    }
+
+    onClickDelete(e : any){
+      this.deleteData.emit(e);
     }
 }

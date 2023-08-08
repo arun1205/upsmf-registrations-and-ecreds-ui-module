@@ -1,0 +1,51 @@
+.main-container{
+    height: fit-content;
+    width: 100%;
+    background-color: #F0F3F4;
+    display: flex;
+    flex-direction: column;
+}
+.claim-details-container{
+    padding: 4rem;
+    margin-left: 4rem;
+}
+
+.certificate-container{
+    width: 100%;
+    background-color: white;
+    height: fit-content;;
+    border-radius: 4px; 
+}
+.inner-container{
+    margin-top: 2rem;
+   
+}
+.claim-form-header{
+    padding: 2rem;
+    margin-left: 2rem;
+    font-weight: bolder;
+}
+.claim-form-column{
+    margin-bottom: 1rem;
+    margin-left: 4rem;
+}
+mat-form-field{
+    width:20rem;
+}
+.claim-buttons{
+    margin-top: 0rem;
+    display: flex;
+    justify-content: end;
+    background-color: #F0F3F4;
+    align-items: end;
+    height: 6rem;
+}
+.cancel-button{
+    height: 3rem;
+    width: 6rem;
+}
+.next-button{
+    margin-left: 1rem;
+    height: 3rem;
+    width: 6rem;
+}
