@@ -30,12 +30,13 @@ export class NewRegnCertDetailsComponent {
 
   listOfCourseFiles: any[] = [];
   courseFileList: File[] = [];
+  stateData: any;
 
   constructor(private formBuilder: FormBuilder,
     private location: Location,private baseService: BaseServiceService,
     private router: Router
       ) {
-        console.log(this.router?.getCurrentNavigation()?.extras.state)
+        this.stateData= this.router?.getCurrentNavigation()?.extras.state;
        }
 
      ngOnInit() {
@@ -45,29 +46,29 @@ export class NewRegnCertDetailsComponent {
   initForm() {
 
     this.newRegCertDetailsformGroup = this.formBuilder.group({
-      applicantName: new FormControl('44g4g', [
+      applicantName: new FormControl('', [
         Validators.required]),
-      motherName: new FormControl('g43g', [
+      motherName: new FormControl('', [
         Validators.required]),
-      fatherName: new FormControl('4g42g', [
+      fatherName: new FormControl('', [
         Validators.required]),
       dob: new FormControl('08/08/2023', [
         Validators.required]),
-      al1: new FormControl('e4t', [
+      al1: new FormControl('', [
         Validators.required]),
-      al2: new FormControl('efewf', [
+      al2: new FormControl('', [
         Validators.required]),
-      district: new FormControl('dfgh', [
+      district: new FormControl('', [
         Validators.required]),
-      state: new FormControl('cvbn', [
+      state: new FormControl('', [
         Validators.required]),
-      pin: new FormControl('342312', [
+      pin: new FormControl('', [
         Validators.required,Validators.minLength(6),
         Validators.pattern("^[0-9]*$")]
         ),
-      country: new FormControl('sdfgh', [
+      country: new FormControl('', [
         Validators.required]),
-      adhr: new FormControl('3456', [
+      adhr: new FormControl('', [
         Validators.required]),
       gender: new FormControl('Male', [
         Validators.required]),
@@ -80,15 +81,15 @@ export class NewRegnCertDetailsComponent {
       });
 
       this.newRegCourseDetailsformGroup = this.formBuilder.group({
-        courseName: new FormControl('jnexg', [
+        courseName: new FormControl('', [
           Validators.required]),
-          collegeName: new FormControl('kjnkjeznf', [
+          collegeName: new FormControl('', [
           Validators.required]),
-          examBody: new FormControl('jnejnrk', [
+          examBody: new FormControl('', [
           Validators.required]),
           joinDate: new FormControl('08/08/2023', [
           Validators.required]),
-          rollNum: new FormControl('12345', [
+          rollNum: new FormControl('', [
           Validators.required,
           Validators.pattern("^[0-9]*$")]),
           passDate: new FormControl('08/08/2023', [
@@ -108,14 +109,15 @@ export class NewRegnCertDetailsComponent {
       console.log(value)
       var applicant_details = this?.newRegCertDetailsformGroup?.value;
       var course_details = this?.newRegCourseDetailsformGroup?.value;
-      var data = this?.newRegCertformGroup?.value;
+      var data = this.stateData;
       console.log("first form",data)
       console.log(applicant_details)
-      // console.log(data)
+      console.log(data)
      
       var updateStudent ={
         
-        // council:data.councilName,
+        registrationType: data.body.degree,
+        council: data.body.councilName,
         email: applicant_details.email,
         mothersName: applicant_details.motherName,
         fathersName: applicant_details.fatherName,
@@ -123,64 +125,45 @@ export class NewRegnCertDetailsComponent {
         // date: string,
         aadhaarNo: applicant_details.aadhaarNo,
         gender: applicant_details.gender,
-        courseName: course_details.courseName,
+        courseName: data.body.claimType,
         nursingCollage: course_details.collegeName,
         joiningMonth: course_details.joinDate,
-        // joiningYear: string,
+        // joiningYear: course_details.joinDate,
         passingMonth: course_details.passDate,
-        // passingYear: number,
+        // passingYear: course_details.pass,
         finalYearRollNo: course_details.rollNo,
         // examBody: string
 
       }
       this.baseService.updateStudent$(updateStudent).pipe(
-        mergeMap((response)=>{
-          console.log("first",response)
-          var claimBody={
-            entityId:response.id,
-            entityName:course_details.courseName,
-            name: applicant_details.applicantName
-
+        mergeMap((response) => {
+          console.log("first", response)
+          var claimBody = {
+            entityId: response.id,
+            entityName: course_details.courseName,
+            name: applicant_details.applicantName,
+            propertiesOSID: {
+              studentUPVerification: [response.id
+  
+              ]
+            }
           }
-          
+          console.log(claimBody)
+  
           return this.baseService.createClaim$(claimBody);
         })
-        ).subscribe(
-            (response)=>{
-              console.log("second",response)
-              this.router.navigate(['/claims/manage']);
-            }
-          );
+      ).subscribe(
+        (response) => {
+          console.log("second", response)
+  
+        }
+      );
 
-          }
+    }
           
         
         
-      // this.baseService.updateStudent$(updateStudent).subscribe(
-      //   (response) => {
-      //           console.log('Response:', response.id)
-
-      //         },
-      //         (error) => {
-      //           console.error('Error:', error);
-      //         }
-      //       );
-    //   var claim ={
-    //     entityName:this,
-    // entityId: string,
-    // name:string,
-    //   }
-    //   forkJoin([this.baseService.updateStudent$(updateStudent), this.baseService.createClaim$(claim)]).subscribe(
-    //     ([response1, response2]) => {
-    //       console.log('Response:', response1);
-    //       console.log('Response:', response);
-    //     },
-    //     (error) => {
-    //       console.error('Error:', error);
-    //     }
-    //   );
-    // }
-
+   
     onFileChanged(event?: any){
       console.log(event);
       for (let i = 0; i <= event.target.files.length - 1; i++) {
