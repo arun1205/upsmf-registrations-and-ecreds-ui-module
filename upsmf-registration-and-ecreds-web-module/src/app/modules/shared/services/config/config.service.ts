@@ -9,7 +9,10 @@ import * as constants from './constants.json';
  * Service to fetch config details.
  *
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
+// @Injectable()
 export class ConfigService {
   /**
    * property containing url config
