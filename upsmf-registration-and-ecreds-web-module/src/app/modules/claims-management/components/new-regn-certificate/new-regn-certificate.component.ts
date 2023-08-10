@@ -18,13 +18,13 @@ export class NewRegnCertificateComponent {
   listOfFiles: any[] = [];
   isLoading = false;
   submitted = false;
-  details:Observable<any>;
+  details: Observable<any>;
 
 
   originTypesArray = [
     'From UP', 'Outside UP'
   ]
-  councilsTypesArray= [
+  councilsTypesArray = [
     'Paramedical', 'Nursing'
   ]
 
@@ -32,19 +32,19 @@ export class NewRegnCertificateComponent {
     'MSC', 'BSC', 'POST BASIC', 'NURSING PRACtitioner'
   ]
 
-  claimsTypesArray= [
+  claimsTypesArray = [
     'Permanent', 'Additional', 'Provisional', 'Others'
   ]
 
-  degreesTypesArray= [
+  courseTypesArray = [
     'degree', 'Diploma'
   ]
 
 
 
-  @Input()  newRegCertformGroup: FormGroup;
+  @Input() newRegCertformGroup: FormGroup;
   constructor(private formBuilder: FormBuilder,
-    private router:Router,private baseService: BaseServiceService      ) { }
+    private router: Router, private baseService: BaseServiceService) { }
 
   ngOnInit() {
     this.createForm();
@@ -57,46 +57,46 @@ export class NewRegnCertificateComponent {
         Validators.required]),
       claimType: new FormControl('', [
         Validators.required]),
-      qualificationType: new FormControl({ disabled: true, value: '' },[
-        Validators.required] ),
+      qualificationType: new FormControl({ disabled: true, value: '' }, [
+        Validators.required]),
       councilName: new FormControl('', [
         Validators.required]),
       origin: new FormControl('', [
         Validators.required]),
       endDate: new FormControl({ disabled: true, value: '' }, [
-        Validators.required,this.validateMinAge(15) as ValidatorFn]),
-      degree: new FormControl({ disabled: true, value: '' },[
+        Validators.required, this.validateMinAge(15) as ValidatorFn]),
+      courseType: new FormControl({ disabled: true, value: '' }, [
         Validators.required]),
     });
-    (this.origin.valueChanges).subscribe(checked =>{
-      if(this.origin.value === 'From UP'){
-        checked ? this.degree.enable() : this.degree.disable()
+    (this.origin.valueChanges).subscribe(value => {
+      value === 'From UP' ? this.courseType.enable() : this.courseType.disable()
+    });
+    this.courseType.valueChanges.subscribe(value => {
+      if (value === "Diploma") {
+        this.qualificationType?.enable();
+        this.rollNo?.enable();
+        this.dob?.enable();
+      } else {
+        this.qualificationType?.disable();
+        this.rollNo?.disable();
+        this.dob?.disable();
       }
     });
-    // this.degree.valueChanges.subscribe(checked =>{
-    //   console.log(checked)
-    //   console.log(this.degree.value)
-    //   if(this.degree.value === 'Diploma'){
-    //     checked ? this.qualification.enable(): this.qualification.disable();
-    //     checked ? this.rollNo.enable() : this.rollNo.disable();
-    //     checked ? this.dob.enable() :this.dob.disable();
-    //   }
-    // });
 
   }
-  get origin(){
+  get origin() {
     return this.newRegCertformGroup.get('origin') as FormControl;
   }
-  get degree(){
-    return this.newRegCertformGroup.get('degree') as FormControl;
+  get courseType() {
+    return this.newRegCertformGroup.get('courseType') as FormControl;
   }
-  get qualification(){
-    return this.newRegCertformGroup.get('qualification') as FormControl;
+  get qualificationType() {
+    return this.newRegCertformGroup.get('qualificationType') as FormControl;
   }
-  get rollNo(){
-    return this.newRegCertformGroup.get('rollNo')  as FormControl;
+  get rollNo() {
+    return this.newRegCertformGroup.get('rollNo') as FormControl;
   }
-  get dob(){
+  get dob() {
     return this.newRegCertformGroup.get('endDate') as FormControl;
   }
   validateMinAge(minAge: number) {
@@ -113,16 +113,15 @@ export class NewRegnCertificateComponent {
     };
   }
 
-  onSubmit(value:any){
-    var data = this.newRegCertformGroup.value;
-    var myPostObject = {
-      councilName:data.councilName,
-      claimType:data.claimType,
-      origin:data.origin,
-      degree:data.degree,
-    } 
-    this.baseService.makeClaim$(myPostObject).subscribe(
-      (response) =>{
+  onSubmit(value: any) {
+    var makeClaimBody = {
+      councilName: this.newRegCertformGroup.value.councilName,
+      claimType: this.newRegCertformGroup.value.claimType,
+      origin: this.newRegCertformGroup.value.origin,
+      degree: this.newRegCertformGroup.value.courseType,
+    }
+    this.baseService.makeClaim$(makeClaimBody).subscribe(
+      (response) => {
         console.log(response);
 
       },
@@ -130,19 +129,16 @@ export class NewRegnCertificateComponent {
         console.error('Error response:', error);
       }
     );
-      
-
-    
   }
 
-  
-  onNewRegnCertformSubmit(value : any){
+
+  onNewRegnCertformSubmit(value: any) {
     console.log(value)
     this.submitted = true;
-    if( this.newRegCertformGroup.valid){
-      this.router.navigate(['claims/new-regn-cert-details'],{state :{body:value}});
+    if (this.newRegCertformGroup.valid) {
+      this.router.navigate(['claims/new-regn-cert-details'], { state: { body: value } });
     }
-    
+
   }
 
   radioChecked(e: any, e1: any) {
@@ -173,12 +169,12 @@ export class NewRegnCertificateComponent {
     this.submitted = false;
     this.newRegCertformGroup.reset();
     this.listOfFiles = [];
-}
+  }
 
-  onFileChanged(event?: any){
+  onFileChanged(event?: any) {
     for (let i = 0; i <= event.target.files.length - 1; i++) {
       let selectedFile = event.target.files[i];
-   
+
       if (this.listOfFiles.indexOf(selectedFile.name) === -1) {
         this.fileList.push(selectedFile);
         console.log();
@@ -201,10 +197,10 @@ export class NewRegnCertificateComponent {
     const sizes = ['Bytes', 'KB', 'MB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
-}
-claimData(){
-  
-}
+  }
+  claimData() {
+
+  }
 
 
 }
