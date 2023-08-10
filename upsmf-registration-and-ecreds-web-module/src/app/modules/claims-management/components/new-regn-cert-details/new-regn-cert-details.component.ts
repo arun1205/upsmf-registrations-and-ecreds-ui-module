@@ -31,6 +31,8 @@ export class NewRegnCertDetailsComponent {
   listOfCourseFiles: any[] = [];
   courseFileList: File[] = [];
   stateData: any;
+  selectedLink: string='Candidate Details';
+  
 
   constructor(private formBuilder: FormBuilder,
     private location: Location,private baseService: BaseServiceService,
@@ -95,6 +97,7 @@ export class NewRegnCertDetailsComponent {
           passDate: new FormControl('08/08/2023', [
           Validators.required])
         });
+        
     }
 
     newRegCertDetailsformGroupSubmit(value: any) {
@@ -106,13 +109,27 @@ export class NewRegnCertDetailsComponent {
       
     }
     onSubmit(value:any){
-      console.log(value)
+      // console.log(value)
       var applicant_details = this?.newRegCertDetailsformGroup?.value;
       var course_details = this?.newRegCourseDetailsformGroup?.value;
       var data = this.stateData;
-      console.log("first form",data)
-      console.log(applicant_details)
-      console.log(data)
+      // console.log("first form",data)
+      // console.log(applicant_details)
+      // console.log("course",course_details)
+      const joinDate = new Date(course_details.joinDate);
+      const passDate = new Date(course_details.passDate);
+      const jMonth = joinDate.getMonth();
+      const pMonth = passDate.getMonth();
+      const joinYear = joinDate.getFullYear();
+      const passYear = joinDate.getFullYear();
+
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const joinMonth = months[jMonth];
+    const passMonth = months[pMonth];
+
      
       var updateStudent ={
         
@@ -127,14 +144,16 @@ export class NewRegnCertDetailsComponent {
         gender: applicant_details.gender,
         courseName: data.body.claimType,
         nursingCollage: course_details.collegeName,
-        joiningMonth: course_details.joinDate,
-        // joiningYear: course_details.joinDate,
-        passingMonth: course_details.passDate,
-        // passingYear: course_details.pass,
+
+        joiningMonth: joinMonth,
+        joiningYear: joinYear,
+        passingMonth: passMonth,
+        passingYear: passYear,
         finalYearRollNo: course_details.rollNo,
-        // examBody: string
+        examBody: course_details.examBody
 
       }
+      console.log(updateStudent)
       this.baseService.updateStudent$(updateStudent).pipe(
         mergeMap((response) => {
           console.log("first", response)
@@ -212,8 +231,12 @@ export class NewRegnCertDetailsComponent {
     // delete file from FileList
     this.courseFileList.splice(index, 1);
   }
+  selectLink(link: string) {
+    this.selectedLink = link;
+  }
 
   showInfo(option : any){
+    this.selectLink(option);
     console.log(option)
     switch (option) {
       case 'Payment Details':

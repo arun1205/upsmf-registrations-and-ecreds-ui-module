@@ -53,22 +53,51 @@ export class NewRegnCertificateComponent {
   createForm() {
 
     this.newRegCertformGroup = this.formBuilder.group({
-      rollNo: new FormControl('', [
+      rollNo: new FormControl({ disabled: true, value: '' }, [
         Validators.required]),
       claimType: new FormControl('', [
         Validators.required]),
-      qualificationType: new FormControl('', [
-        Validators.required]),
+      qualificationType: new FormControl({ disabled: true, value: '' },[
+        Validators.required] ),
       councilName: new FormControl('', [
         Validators.required]),
       origin: new FormControl('', [
         Validators.required]),
-      endDate: new FormControl('', [
-        Validators.required,this.validateMinAge(20) as ValidatorFn]),
-      degree: new FormControl('', [
+      endDate: new FormControl({ disabled: true, value: '' }, [
+        Validators.required,this.validateMinAge(15) as ValidatorFn]),
+      degree: new FormControl({ disabled: true, value: '' },[
         Validators.required]),
     });
+    (this.origin.valueChanges).subscribe(checked =>{
+      if(this.origin.value === 'From UP'){
+        checked ? this.degree.enable() : this.degree.disable()
+      }
+    });
+    // this.degree.valueChanges.subscribe(checked =>{
+    //   console.log(checked)
+    //   console.log(this.degree.value)
+    //   if(this.degree.value === 'Diploma'){
+    //     checked ? this.qualification.enable(): this.qualification.disable();
+    //     checked ? this.rollNo.enable() : this.rollNo.disable();
+    //     checked ? this.dob.enable() :this.dob.disable();
+    //   }
+    // });
 
+  }
+  get origin(){
+    return this.newRegCertformGroup.get('origin') as FormControl;
+  }
+  get degree(){
+    return this.newRegCertformGroup.get('degree') as FormControl;
+  }
+  get qualification(){
+    return this.newRegCertformGroup.get('qualification') as FormControl;
+  }
+  get rollNo(){
+    return this.newRegCertformGroup.get('rollNo')  as FormControl;
+  }
+  get dob(){
+    return this.newRegCertformGroup.get('endDate') as FormControl;
   }
   validateMinAge(minAge: number) {
     return (control: FormControl) => {
@@ -97,9 +126,13 @@ export class NewRegnCertificateComponent {
         console.log(response);
 
       },
+      (error) => {
+        console.error('Error response:', error);
+      }
+    );
       
 
-    )
+    
   }
 
   

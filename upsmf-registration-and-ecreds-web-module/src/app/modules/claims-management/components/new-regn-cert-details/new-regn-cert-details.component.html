@@ -10,9 +10,9 @@
             <mat-drawer-container>
                 <mat-drawer  #drawer class="drawer" mode="side" opened="true">
                         <mat-nav-list>
-                            <mat-list-item *ngFor="let link of links" [activated]="link.isActive">
+                            <mat-list-item *ngFor="let link of links" [activated]="link.isActive" [ngClass]="{ 'active-link': selectedLink === link }">
 
-                                <span (click)="showInfo(link)">
+                                <span (click)="showInfo(link)"  >
                                     <a routerLinkActive="active-list-item">{{ link }}</a>
                                 </span>
                             </mat-list-item>
@@ -63,7 +63,7 @@
 
                                     <!-- </div> -->
 
-                                    <div style="width: 17.5rem" class=" flex flex-column px2" [ngClass]="{ 'invalid-field': submitted && newRegCertDetailsformGroup.controls['gender'].errors }">
+                                    <div [ngClass]="{ 'invalid-field': submitted && newRegCertDetailsformGroup.controls['gender'].errors }">
                                         <!-- <div class=" mt3 "> -->
                                             <h4 >Gender </h4>
                                             <mat-radio-group color="primary"  formControlName="gender">
