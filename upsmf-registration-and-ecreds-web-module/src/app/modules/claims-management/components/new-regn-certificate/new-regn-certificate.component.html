@@ -48,7 +48,7 @@
                         <!-- </div> -->
                         <!-- <div class="flex flex-row  mb3 "> -->
                           <!--   <div class="claim-form-column"> -->
-                            <div class="origin" [ngClass]="{ 'invalid-field': submitted && newRegCertformGroup.controls['origin'].errors }">
+                            <div class="origin" [ngClass]="{ 'invalid-field applicant-details': submitted && newRegCertformGroup.controls['origin'].errors }">
                             <!-- <div class=" mt3 "> -->
                                 <h4 >Origin </h4>
                                 <mat-radio-group color="primary"  name="origin" aria-label="Origin" formControlName="origin"  >
@@ -69,16 +69,16 @@
                                 <h4 >Select type of course</h4>
                                 <mat-form-field appearance="outline">
                                     <mat-label>Select type of course </mat-label>
-                                    <mat-select (selectionChange)="degreeSelected($event)" formControlName="degree">
-                                        <span *ngFor='let degree of degreesTypesArray;let i = index'>
-                                            <mat-option [value]="degree">{{degree}}</mat-option>
+                                    <mat-select (selectionChange)="degreeSelected($event)" formControlName="courseType">
+                                        <span *ngFor='let courseType of courseTypesArray;let i = index'>
+                                            <mat-option [value]="courseType">{{courseType}}</mat-option>
                                         </span>
                                     </mat-select>
-                                    <mat-error *ngIf="newRegCertformGroup.controls['degree'].invalid">
+                                    <mat-error *ngIf="newRegCertformGroup.controls['courseType'].invalid">
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-                            <div class="from-up" *ngIf = "this.newRegCertformGroup.controls['degree'].value === 'Diploma'">
+                            <div class="from-up" *ngIf = "this.newRegCertformGroup.controls['courseType'].value === 'Diploma'">
                                 <div class="applicant-details" >
                                     <h4>Qualification</h4>
                                     <mat-form-field appearance="outline">
@@ -100,7 +100,7 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="applicant-details" *ngIf = "this.newRegCertformGroup.controls['origin'].value === 'From UP'&& this.newRegCertformGroup.controls['degree'].value === 'Diploma'">
+                                <div class="applicant-details">
                                     <h4 class=>Date of Birth</h4>
                                 <mat-form-field  appearance="outline">
                                 
