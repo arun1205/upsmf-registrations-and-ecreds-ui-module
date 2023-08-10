@@ -2,7 +2,7 @@
     "URLS": {
         "LOGIN": "/user/login",
         "CLAIMS": {
-            "GET_ALL_CLAIMS": "/api/v1/Regulator/claims",
+            "GET_ALL_CLAIMS": "api/v1/Regulator/claims",
             "CREATE_TICKET":"/tickets/addTicket",
             "UPDATE_TICKET":"/tickets/updateTicketBasic"
         },

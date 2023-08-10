@@ -60,11 +60,11 @@ export interface ClaimsTableData {
     courseName: string,
     nursingCollage: string,
     joiningMonth: string,
-    // joiningYear: string,
+    joiningYear:  number,
     passingMonth: string,
-    // passingYear: number,
-    finalYearRollNo: number,
-    // examBody: string    
+    passingYear: number,
+    finalYearRollNo:string,
+    examBody: string    
   }
   export interface claimDetails {
     entityName:string,
