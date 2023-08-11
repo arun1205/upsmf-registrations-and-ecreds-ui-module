@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { claimDetails, claimcolumn, studentDetails,BasicCandidateDetails } from '../interfaces/interfaces';
+import { claimDetails, StudentDetails } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -15,7 +15,6 @@ export class BaseServiceService  extends HttpService   {
    headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'Authorization': `Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ6eE80ak9FNWNjQjhGeXhuZnlIaGZNY1NYNDd0UXRCSWl4ellIbnBWdzlRIn0.eyJleHAiOjE2OTE4MzkzOTgsImlhdCI6MTY5MTc1Mjk5OCwianRpIjoiNTU4YzVjOWEtYjYzOC00NzAyLWFlNTItNGUwMGE2YTI3N2M0IiwiaXNzIjoiaHR0cDovL3JlZ2lzdHJhdGlvbi51cGhyaC5pbjo4MDgwL2F1dGgvcmVhbG1zL3N1bmJpcmQtcmMiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiOWM0YzNkZmEtMTE1Yy00NmFlLTgyY2EtNmE3NDFjYjMzNzBjIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicmVnaXN0cnktZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiODM4NGMwMWYtNWFkMC00MTQ0LWJhYTAtNTMyMzdkNDA4Y2I4IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJTdHVkZW50RnJvbVVQIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsImRlZmF1bHQtcm9sZXMtbmRlYXIiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6ImFydW4ubmFpckBleGFtcGxlLmNvbSIsImVudGl0eSI6WyJTdHVkZW50RnJvbVVQIl0sImVtYWlsIjoiYXJ1bi5uYWlyQGV4YW1wbGUuY29tIn0.JgelJRLpgCn8Xpk_bYm-8uruaF6flkLBN6fpx19P6sXSuQS4lc-WOWBxevIHvoNaf4XNOPl8wB8yRUvVEJeCy5VsjFQo847pwt7LCvUwnZpy-nD8y0TAvFaFmg24m6QKSwPf4QwGP4CLCUJftMzScpR7pFZhkvwDZjJyjmD9ztQ3DMDPBycnQC263xhN-LZYKQx4Dd_jEd-O706dsISN5XGM9Exlby_jr7P1XMGuwjVBniVXZKKtBaGhb_mJfhnr0s3kxOHBLt_BVFJZYmDjuGPL8XfcuC9N4WRhDEHnr25Rc8_VHaXsKECtE4iUb327x0_yBIvFMpPW4Y0mBPzN-w`
    };
  //baseUrl: string;
   constructor(private httpClient: HttpClient,private configService: ConfigService) { 
@@ -61,7 +60,7 @@ export class BaseServiceService  extends HttpService   {
     }
     return this.post(reqParam);
   }
-  inviteStudent$(body: studentDetails): Observable<any>{
+  inviteStudent$(body: StudentDetails): Observable<any>{
     console.log(body)
     const reqParam: RequestParam = {
       url: this.configService.urlConFig.URLS.STUDENT.INVITE_STUDENT, 
@@ -92,7 +91,7 @@ export class BaseServiceService  extends HttpService   {
      
      }
 
-     updateStudent$(osid:string , body: any){
+     updateStudent$(osid:string , body: StudentDetails): Observable<any>{
       console.log(body)
          const reqParam: RequestParam = {
            url: this.configService.urlConFig.URLS.STUDENT.UPDATE + osid,  
