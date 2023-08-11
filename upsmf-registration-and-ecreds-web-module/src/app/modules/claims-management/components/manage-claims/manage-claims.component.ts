@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TableColumn, ClaimsTableData } from '../../../../interfaces/interfaces';
 
 import { BaseServiceService } from 'src/app/services/base-service.service';
+import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 
 @Component({
   selector: 'app-manage-claims',
@@ -146,14 +147,57 @@ export class ManageClaimsComponent {
   }
 
   getclaims() {
-    this.baseService.getClaims$().subscribe(
+/*     this.baseService.getClaims$().subscribe(
       (response) =>{
         console.log(response);
 
-      },
-      
+      }, 
+    ) */
 
-    )
+    const body = {
+      "aadhaarNo": "some_aadhaar_no",
+      "council": "upsmfac",
+      "courseName": "Nursing Course",
+      "dateOfBirth": "1990-01-01",
+      "email": "45@example12366.com",
+      "examBody": "Some Exam Body",
+      "fathersName": "Jack Doe",
+      "finalYearRollNo": "1234",
+      "gender": "male",
+      "date":"1990-01-01",
+      "joiningMonth": "January",
+      "joiningYear": "2018",
+      "mothersName": "Jane Doe",
+      "name": "John Doe",
+      "nursingCollage": "Some Nursing College",
+      "passingMonth": "December",
+      "passingYear": "2021",
+      "phoneNumber": "09876735",
+      "registrationType": "SomeRegistrationType",
+      "barCode": "123457",
+      "doc-proof":"qwer.doc",
+      "paymentStatus":"SUCCESS",
+      "candidatePic":"arun.jpg",
+      "feeReciptNo":"12345678"
+  }
+ 
+     this.baseService.inviteStudent$(body)
+  /*   .pipe(
+      mergeMap((resp: any) => {
+        console.log(resp.result.StudentFromUP.osid)
+       // return resp;
+        return this.baseService.makeClaim$(resp.result.StudentFromUP.osid);
+      }
+      ))  */
+      .subscribe(
+        (response) => {
+          console.log(response.result.StudentFromUP.osid);
+
+        },
+      )
+
+
+
     this.isDataLoading = true;
     setTimeout(() => {
       this.isDataLoading = false;

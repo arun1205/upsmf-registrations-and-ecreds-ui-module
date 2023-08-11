@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
@@ -29,6 +29,7 @@ import { GoodStandingForeignVerificationComponent } from './components/good-stan
     ReactiveFormsModule
   ],
   providers: [
+    DatePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })

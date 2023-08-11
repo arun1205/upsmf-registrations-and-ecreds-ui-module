@@ -17,7 +17,6 @@ export class BaseInterceptorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       tap(e => {
-        console.log(e)
         if (request.method == "POST" || request.method == "PUT")
           if (e instanceof HttpResponse && e.status == 200) {
             this.snackBar.open('Action completed successfully !!', 'close', {

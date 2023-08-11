@@ -2,28 +2,28 @@ export interface ClaimsTableData {
     status: string;
     attachedDocs?: Array<string>;
     claimType?:string;
-    id: string,
-    entity: string,
-    entityId: string,
-    createdAt: string,
-    updatedAt: string,
-    attestedOn: string,
-    attestorEntity: string,
-    requestorName: string,
-    attestationId: string,
-    attestationName: string,
-    attestorUserId: string,
-    closed: boolean
-    notes?: string
+    id: string;
+    entity: string;
+    entityId: string;
+    createdAt: string;
+    updatedAt: string;
+    attestedOn: string;
+    attestorEntity: string;
+    requestorName: string;
+    attestationId: string;
+    attestationName: string;
+    attestorUserId: string;
+    closed: boolean;
+    notes?: string;
   }
 
   export interface UsersTableData {
     status: string;
     name: string;
     email:string;
-    id: string,
-    phoneNumber: string,
-    role: string,
+    id: string;
+    phoneNumber: string;
+    role: string;
   }
 
   export interface TableColumn {
@@ -42,34 +42,36 @@ export interface ClaimsTableData {
     exams: [];
   }
   export interface claimcolumn {
-    councilName:string,
-      claimType:string,
-      origin:string,
-      degree:string,
+    entityName: string;
+    entityId: string;
+    name: string;
+    propertiesOSID: {
+        Student: string[];
+    }
   }
   export interface studentDetails {
-    registrationType: string,
-    council: string,
-    email: string,
-    mothersName: string,
-    fathersName: string,
-    dateOfBirth: string,
-    // date: string,
-    aadhaarNo: string,
-    gender: string,
-    courseName: string,
-    nursingCollage: string,
-    joiningMonth: string,
-    joiningYear:  number,
-    passingMonth: string,
-    passingYear: number,
-    finalYearRollNo:string,
-    examBody: string    
+    aadhaarNo: string;
+      council: string;
+      courseName: string;
+      dateOfBirth: string;
+      email: string;
+      examBody:string;
+      fathersName:string;
+      finalYearRollNo: string;
+      gender: string;
+      joiningMonth: string;
+      joiningYear: string;
+      mothersName: string;
+      name:string;
+      nursingCollage: string;
+      passingMonth: string;
+      passingYear: string;
+      phoneNumber: string;
+      registrationType: string;
   }
   export interface claimDetails {
-    entityName:string,
-    entityId: string,
-    name:string,
+    entityName:string;
+    entityId: string;
+    name:string;
     propertiesOSID:object;
   }
-  

@@ -113,6 +113,8 @@ export class NewRegnCertificateComponent {
     };
   }
 
+  
+
   onSubmit(value: any) {
     var makeClaimBody = {
       councilName: this.newRegCertformGroup.value.councilName,
@@ -120,7 +122,7 @@ export class NewRegnCertificateComponent {
       origin: this.newRegCertformGroup.value.origin,
       degree: this.newRegCertformGroup.value.courseType,
     }
-    this.baseService.makeClaim$(makeClaimBody).subscribe(
+  /*   this.baseService.makeClaim$(makeClaimBody).subscribe(
       (response) => {
         console.log(response);
 
@@ -128,7 +130,7 @@ export class NewRegnCertificateComponent {
       (error) => {
         console.error('Error response:', error);
       }
-    );
+    ); */
   }
 
 
