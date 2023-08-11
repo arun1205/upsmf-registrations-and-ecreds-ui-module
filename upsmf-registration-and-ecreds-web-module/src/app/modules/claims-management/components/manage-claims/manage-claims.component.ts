@@ -147,14 +147,14 @@ export class ManageClaimsComponent {
   }
 
   getclaims() {
-/*     this.baseService.getClaims$().subscribe(
+   this.baseService.getClaims$().subscribe(
       (response) =>{
         console.log(response);
 
       }, 
-    ) */
+    ) 
 
-    const body = {
+ /*    const body = {
       "aadhaarNo": "some_aadhaar_no",
       "council": "upsmfac",
       "courseName": "Nursing Course",
@@ -179,22 +179,22 @@ export class ManageClaimsComponent {
       "paymentStatus":"SUCCESS",
       "candidatePic":"arun.jpg",
       "feeReciptNo":"12345678"
-  }
+  } */
  
-     this.baseService.inviteStudent$(body)
-  /*   .pipe(
+   /*   this.baseService.inviteStudent$(body)
+    .pipe(
       mergeMap((resp: any) => {
         console.log(resp.result.StudentFromUP.osid)
        // return resp;
         return this.baseService.makeClaim$(resp.result.StudentFromUP.osid);
       }
-      ))  */
+      ))  
       .subscribe(
         (response) => {
           console.log(response.result.StudentFromUP.osid);
 
         },
-      )
+      )*/
 
 
 
