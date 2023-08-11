@@ -34,14 +34,30 @@
                                     <!-- </div> -->
 
                                     <!-- <div class="ml4 flex flex-column"> -->
-                                        <h4>Mother's Name</h4>
+                                        <h4>Mobile Number</h4>
                                         <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Mother's Name" formControlName="motherName">
-                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['motherName'].invalid">
+                                            <input matInput placeholder="Mobile Number" formControlName="mobNumber">
+                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['mobNumber'].invalid">
                                             </mat-error>
                                         </mat-form-field>
+                                      
                                     <!-- </div> -->
+                                    <div>
+                                        <div>
+                                            <h4>Email ID </h4>
+                                            <mat-form-field appearance="outline" >
+                                                <input matInput placeholder="Email ID" formControlName="email">
+                                                <mat-error *ngIf="newRegCertDetailsformGroup.controls['email'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                      
 
+                                    </div>
+                                    <mat-hint>Type in Name, mobile number and email ID</mat-hint>
+                                    <mat-divider>
+                                       
+                                    </mat-divider>
                                     <!-- <div class="ml4 flex flex-column"> -->
                                         <h4>Father's Name</h4>
                                         <mat-form-field appearance="outline" >
@@ -51,18 +67,26 @@
                                         </mat-form-field>
                                     <!-- </div> -->
 
-                                    <!-- <div class="ml4 flex flex-column"> -->
-                                        <!-- <h4>Date Of Birth</h4>
+                                  
+                                    <div>
+                                        <h4>Mother's Name</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Mother's Name" formControlName="motherName">
+                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['motherName'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                      <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>Date Of Birth</h4>
                                         <mat-form-field appearance="outline">
 
                                             <mat-label>Choose a date</mat-label>
                                             <input matInput [matDatepicker]="picker" formControlName="dob">
                                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                                             <mat-datepicker #picker></mat-datepicker>
-                                        </mat-form-field> -->
+                                        </mat-form-field>
 
                                     <!-- </div> -->
-
                                     <div [ngClass]="{ 'invalid-field': submitted && newRegCertDetailsformGroup.controls['gender'].errors }">
                                         <!-- <div class=" mt3 "> -->
                                             <h4 >Gender </h4>
@@ -141,25 +165,8 @@
                                                 </mat-form-field>
                                             </div>
                                     </div>
-                                    <div class="applicant-details">
-                                        <h4>Mobile Number</h4>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Mobile Number" formControlName="mobNumber">
-                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['mobNumber'].invalid">
-                                            </mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="applicant-details">
-                                        <div>
-                                            <h4>Email ID </h4>
-                                            <mat-form-field appearance="outline" >
-                                                <input matInput placeholder="Email ID" formControlName="email">
-                                                <mat-error *ngIf="newRegCertDetailsformGroup.controls['email'].invalid">
-                                                </mat-error>
-                                            </mat-form-field>
-                                        </div>
-
-                                    </div>
+                                    
+                                    
                                     <div class="applicant-details">
                                         <div>
                                             <h4>Aadhar Number </h4>
@@ -212,16 +219,17 @@
                                         </div>
                                         
                         
-                                        <div class="button-group">
+                                        <div class="button-group" >
                                             <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()">Cancel</button>
-                                            <button  class="button" mat-raised-button color="primary"  ><mat-icon matSuffix>arrow_right_alt</mat-icon>Next</button>
+                                            <button  class="button" mat-raised-button color="primary"  ><mat-icon matSuffix>arrow_right_alt</mat-icon>{{buttonText}}</button>
                                         </div>
                                     </div>
                                 </form>
 
 
 
-                                <form [formGroup]="newRegCourseDetailsformGroup" *ngIf="!candidateDetails">
+                                <form [formGroup]="newRegCourseDetailsformGroup" *ngIf="!candidateDetails"
+                                (ngSubmit)="onNewRegCourseDetailsformSubmit(newRegCourseDetailsformGroup.value)">
                                     <div class="applicant-details">
                                         <h4>Course Name</h4>
                                         <mat-form-field appearance="outline">
@@ -333,7 +341,7 @@
                         
                                         <div class="button-group">
                                             <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()">Cancel</button>
-                                            <button  class="button" mat-raised-button color="primary" (click)="onSubmit(newRegCourseDetailsformGroup)" ><mat-icon matSuffix>arrow_right_alt</mat-icon>Next</button>
+                                            <button  class="button" mat-raised-button color="primary" ><mat-icon matSuffix>arrow_right_alt</mat-icon>Next</button>
                                         </div>
                                     </div>
                                 </form>

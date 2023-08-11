@@ -41,9 +41,10 @@ export class HttpService {
     };
     return this.http.post<ServerResponse>(this.baseUrl + requestParam.url, requestParam.data, httpOptions).pipe(
       mergeMap((data: ServerResponse) => {
-        if (data.statusInfo.statusCode !== 200) {
+        console.log(data)
+      /*   if (data.statusInfo.status !== 200) {
           return throwError(() => new Error(data.statusInfo?.errorMessage));
-        }
+        } */
         return observableOf(data);
       }));
   }
@@ -61,7 +62,7 @@ export class HttpService {
     };
     return this.http.patch<ServerResponse>(this.baseUrl + requestParam.url, requestParam.data, httpOptions).pipe(
       mergeMap((data: ServerResponse) => {
-        if (data.statusInfo.statusCode !== 200) {
+        if (data.statusInfo.status !== 200) {
           return throwError(() => new Error(data.statusInfo?.errorMessage));
         }
         return observableOf(data);
@@ -80,7 +81,7 @@ export class HttpService {
     };
     return this.http.delete<ServerResponse> (this.baseUrl + requestParam.url, httpOptions).pipe(
       mergeMap((data: ServerResponse) => {
-        if (data.statusInfo.statusCode !== 200) {
+        if (data.statusInfo.status !== 200) {
           return throwError(() => new Error(data.statusInfo?.errorMessage));
         }
         return observableOf(data);
@@ -98,9 +99,9 @@ export class HttpService {
     };
     return this.http.put<ServerResponse>(this.baseUrl + requestParam.url, requestParam.data, httpOptions).pipe(
       mergeMap((data: ServerResponse) => {
-        if (data.statusInfo.statusCode !== 200) {
+   /*      if (data.statusInfo.status !== 200) {
           return throwError(() => new Error(data.statusInfo?.errorMessage));
-        }
+        } */
         return observableOf(data);
       }));
   }

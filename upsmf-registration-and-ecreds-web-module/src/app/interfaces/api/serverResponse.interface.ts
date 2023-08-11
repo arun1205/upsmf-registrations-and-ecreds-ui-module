@@ -13,7 +13,7 @@ export interface ServerResponse {
 }
 
 export interface StatusInfo {
-    statusCode: number;
+    status: number;
     statusMessage: string;
     errorMessage?: any;
 }

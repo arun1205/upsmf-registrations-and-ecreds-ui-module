@@ -3,9 +3,13 @@
         "LOGIN": "/user/login",
         "CLAIMS": {
             "GET_ALL_CLAIMS": "api/v1/Regulator/claims",
-            "CREATE_TICKET":"/tickets/addTicket",
-            "UPDATE_TICKET":"/tickets/updateTicketBasic"
+            "MAKE_CLAIM":"api/v1/send?send=true"
         },
-        "GET_ALL_USERS": "/user/getAllUsers?orgId=1"
+        "STUDENT": 
+        {
+            "INVITE" : "api/v1/StudentFromUP/invite/",
+            "GET_STUDENT_DETAILS":"api/v1/StudentFromUP/",
+            "UPDATE":"api/v1/StudentFromUP/"
+        }
     }
 }
