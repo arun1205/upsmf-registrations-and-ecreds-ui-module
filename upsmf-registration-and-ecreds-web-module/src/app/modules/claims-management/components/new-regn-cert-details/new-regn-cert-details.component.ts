@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { DatePipe, Location } from '@angular/common';
 import { BaseServiceService } from 'src/app/services/base-service.service';
 import { Router } from '@angular/router';
+import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 
 @Component({
   selector: 'app-new-regn-cert-details',
@@ -45,6 +46,7 @@ export class NewRegnCertDetailsComponent {
     private router: Router
   ) {
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
+    console.log(this.stateData)
   }
 
   ngOnInit() {
@@ -134,10 +136,10 @@ export class NewRegnCertDetailsComponent {
         
           this.newRegCourseDetailsformGroup.patchValue({
             courseName: response[0]?.courseName,
-            collegeName: response[0]?.collegeName,
+            collegeName: response[0]?.nursingCollage,
             examBody: response[0]?.examBody,
             joinDate: response[0]?.joiningYear+"-" +month+ "-01",
-            rollNum: response[0]?.rollNum,
+            rollNum: response[0]?.finalYearRollNo,
             passDate: response[0]?.passingYear+"-" +month+ "-01",
           });
           
@@ -189,25 +191,42 @@ export class NewRegnCertDetailsComponent {
         "paymentStatus": "SUCCESS",
         "feeReciptNo": "12345678",
         "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
-        "dateOfBirth": this.newRegCertDetailsformGroup.value.dob,
+        "dateOfBirth":this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString() ,
         "barCode": "123457",
-        "nursingCollage": value.fatherName,
+        "nursingCollage": value.collegeName,
         "passingYear": passYear,
-        "courseName": value.fatherName,
+        "courseName": value.courseName,
         "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
-        "registrationType": value.fatherName,
-        "council": value.fatherName,
+        "registrationType": this.stateData.claimType,
+        "council": this.stateData.councilName,
         "mothersName": this.newRegCertDetailsformGroup.value.motherName,
         "name": this.newRegCertDetailsformGroup.value.applicantName,
         "docproof": "qwer.doc"
       }
-        this.baseService.updateStudent$(this.osid, updateStudentBody)
-      .subscribe(
-         (response) => {
-           console.log("second", response)
-   
+
+      this.baseService.updateStudent$(this.osid, updateStudentBody)
+       .pipe(
+         mergeMap((resp: any) => {
+          const makeClaimbody =
+          {
+            entityName: "StudentFromUP",
+            entityId: this.osid,
+            name: "studentUPVerification",
+            propertiesOSID: {
+                studentUPVerification: [
+                  this.osid
+                ]
+            }
+        }
+           return this.baseService.makeClaim$(this.osid,makeClaimbody);
          }
-       );
+         ))  
+         .subscribe(
+           (response) => {
+             console.log(response);
+   
+           },
+         )
     }
   }
 
