@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { claimDetails, StudentDetails } from '../interfaces/interfaces';
+import { ClaimDetails, StudentDetails } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -15,7 +15,7 @@ export class BaseServiceService  extends HttpService   {
    headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-   };
+    'Authorization': `Bearer ${localStorage.getItem("token")}` };
  //baseUrl: string;
   constructor(private httpClient: HttpClient,private configService: ConfigService) { 
     super(httpClient);
@@ -39,20 +39,8 @@ export class BaseServiceService  extends HttpService   {
     return this.httpClient.get<any>("https://api.agify.io/?name=meelad");
   }
 
-  makeClaim$(osid: string ): Observable<any>{
+  makeClaim$(osid: string, body : ClaimDetails ): Observable<any>{
    // console.log(body)
-    const body =
-      {
-        "entityName": "Student",
-        "entityId": osid,
-        "name": "studentVerification",
-        "propertiesOSID": {
-            "Student": [
-              osid
-            ]
-        }
-    }
-    
     const reqParam: RequestParam = {
       url: this.configService.urlConFig.URLS.CLAIMS.MAKE_CLAIM, 
       data: body,
@@ -70,7 +58,7 @@ export class BaseServiceService  extends HttpService   {
     console.log(reqParam)
     return this.post(reqParam);
   }
-  createClaim$(body: claimDetails): Observable<any>{
+  createClaim$(body: ClaimDetails): Observable<any>{
     console.log(body)
     return of({id:"1-fb5333e7-42ea-481b-ab0b-6422c85172ad"});
   }

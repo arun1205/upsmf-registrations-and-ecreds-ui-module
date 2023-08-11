@@ -57,7 +57,7 @@ export interface ClaimsTableData {
     paymentStatus: string;
     feeReciptNo: string;
     aadhaarNo: string;
-    dateOfBirth: string;
+    dateOfBirth: string | undefined;
     barCode: string;
     nursingCollage: string;
     passingYear: number;
@@ -69,7 +69,7 @@ export interface ClaimsTableData {
     name: string;
     docproof: string | string[]; 
   }
-  export interface claimDetails {
+  export interface ClaimDetails {
     entityName:string;
     entityId: string;
     name:string;
