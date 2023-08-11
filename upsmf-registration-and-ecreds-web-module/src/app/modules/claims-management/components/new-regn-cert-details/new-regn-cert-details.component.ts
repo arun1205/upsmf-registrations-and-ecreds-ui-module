@@ -176,7 +176,7 @@ export class NewRegnCertDetailsComponent {
 
       const updateStudentBody =
       {
-        "date": this.datePipe.transform(new Date(), "yyyy-MM-dd"),
+        "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
         "candidatePic": "arun.jpg",
         "joiningYear": joinYear,
         "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
@@ -199,7 +199,7 @@ export class NewRegnCertDetailsComponent {
         "council": value.fatherName,
         "mothersName": this.newRegCertDetailsformGroup.value.motherName,
         "name": this.newRegCertDetailsformGroup.value.applicantName,
-        "doc-proof": "qwer.doc"
+        "docproof": "qwer.doc"
       }
         this.baseService.updateStudent$(this.osid, updateStudentBody)
       .subscribe(

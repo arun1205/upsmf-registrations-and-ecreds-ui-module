@@ -41,33 +41,33 @@ export interface ClaimsTableData {
     examsTableColumns: [];
     exams: [];
   }
-  export interface claimcolumn {
-    entityName: string;
-    entityId: string;
-    name: string;
-    propertiesOSID: {
-        Student: string[];
-    }
-  }
-  export interface studentDetails {
+
+  export interface StudentDetails {
+
+    date: string | undefined;
+    candidatePic: string;
+    joiningYear: number;
+    fathersName:string;
+    gender:string;
+    finalYearRollNo:string;
+    examBody:string;
+    joiningMonth: string;
+    passingMonth: string;
+    email: string;
+    paymentStatus: string;
+    feeReciptNo: string;
     aadhaarNo: string;
-      council: string;
-      courseName: string;
-      dateOfBirth: string;
-      email: string;
-      examBody:string;
-      fathersName:string;
-      finalYearRollNo: string;
-      gender: string;
-      joiningMonth: string;
-      joiningYear: string;
-      mothersName: string;
-      name:string;
-      nursingCollage: string;
-      passingMonth: string;
-      passingYear: string;
-      phoneNumber: string;
-      registrationType: string;
+    dateOfBirth: string;
+    barCode: string;
+    nursingCollage: string;
+    passingYear: number;
+    courseName: string;
+    phoneNumber: string;
+    registrationType:string;
+    council: string;
+    mothersName:string;
+    name: string;
+    docproof: string | string[]; 
   }
   export interface claimDetails {
     entityName:string;
@@ -75,3 +75,5 @@ export interface ClaimsTableData {
     name:string;
     propertiesOSID:object;
   }
+
+
