@@ -7,14 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./new-claims-menu.component.scss']
 })
 export class NewClaimsMenuComponent {
+
+  isStudent: boolean = true;
   cardList:any[]=[
+    
     {
-      title:'Registration Certificate',
-      description: 'Maecenas consectetur ligula sit amet magna ornare lobortis. Fusce lobortis bibendum neque. ' ,
-      type:'regnCert'
-    },
-    {
-      title:'Good Standing Certificate ',
+      title:'Other Certificate',
       description: 'Maecenas consectetur ligula sit amet magna ornare lobortis. Fusce lobortis bibendum neque. ' ,
       type:'goodStandingCert'
     },
@@ -25,13 +23,30 @@ export class NewClaimsMenuComponent {
       type:'ForeignVerifyReq'
     },
 
-    {
-      title:'Renewal Certificate Claim ',
-      description: 'Maecenas consectetur ligula sit amet magna ornare lobortis. Fusce lobortis bibendum neque.  ',
-      type:'renewCertClaim'
-    },
+    // {
+    //   title:'Renewal Certificate Claim ',
+    //   description: 'Maecenas consectetur ligula sit amet magna ornare lobortis. Fusce lobortis bibendum neque.  ',
+    //   type:'renewCertClaim'
+    // },
 
   ]
+  studentCards =  {
+    title:'Registration Certificate',
+    description: 'Maecenas consectetur ligula sit amet magna ornare lobortis. Fusce lobortis bibendum neque. ' ,
+    type:'regnCert'
+  };
+  adminCards = [
+    {
+      title:'Registration Certificate ( From UP)',
+      description: 'Maecenas consectetur ligula sit amet magna ornare lobortis. Fusce lobortis bibendum neque. ' ,
+      type:'regnCertfromUP'
+    },
+    {
+      title:'Registration Certificate (Outside UP)',
+      description: 'Maecenas consectetur ligula sit amet magna ornare lobortis. Fusce lobortis bibendum neque. ' ,
+      type:'regnCertoutsideUP'
+    }
+];
 
   constructor(private router:Router){
 
@@ -40,18 +55,26 @@ export class NewClaimsMenuComponent {
   navigateto(item: any) {
     switch (item.type) {
 
-      case 'regnCert':
-        this.router.navigate(['claims/new-regn-cert'])
-        break;
-      case 'goodStandingCert':
-        this.router.navigate(['claims/good-stand-frgn-cert'])
-        break;
       case 'ForeignVerifyReq':
         this.router.navigate(['claims/good-stand-frgn-cert'])
         break;
-      case 'renewCertClaim':
-        this.router.navigate(['claims/renew-cert-claim'])
+        case 'regnCertfromUP':
+        this.router.navigate(['claims/new-regn-cert-details'])
         break;
+        case 'regnCertoutsideUP':
+        this.router.navigate(['claims/new-regn-cert-details'])
+        break;
+        case 'goodStandingCert':
+        this.router.navigate(['claims/good-stand-frgn-cert'])
+        break;
+        case 'regnCert':
+        this.router.navigate(['claims/new-regn-cert-details'])
+        break;
+
+
+      // case 'renewCertClaim':
+      //   this.router.navigate(['claims/renew-cert-claim'])
+      //   break;
       default:
         return '';
     }
