@@ -1,0 +1,6 @@
+version: '3'
+services:
+  registration-app:
+    image: registration-app:latest
+    ports:
+      - '4300:80'
