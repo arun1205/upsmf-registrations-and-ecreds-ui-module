@@ -30,6 +30,8 @@ export class NewRegnCertDetailsComponent {
 
   listOfCourseFiles: any[] = [];
   courseFileList: File[] = [];
+  isStudent: boolean = true;
+
 
   osid: string;
 
@@ -46,7 +48,9 @@ export class NewRegnCertDetailsComponent {
     private router: Router
   ) {
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
-    console.log(this.stateData)
+    console.log("stateData:",this.stateData)
+    
+
   }
 
   ngOnInit() {
@@ -313,5 +317,17 @@ export class NewRegnCertDetailsComponent {
   navToPreviousPage() {
     console.log("hhh")
     this.location.back()
+  }
+  getStatusColorClass(status: string): string {
+    switch (status) {
+      case 'OPEN':
+        return 'open';
+      case 'CLOSED':
+        return 'closed';
+      case 'REJECTED':
+        return 'rejected';
+      default:
+        return '';
+    }
   }
 }
