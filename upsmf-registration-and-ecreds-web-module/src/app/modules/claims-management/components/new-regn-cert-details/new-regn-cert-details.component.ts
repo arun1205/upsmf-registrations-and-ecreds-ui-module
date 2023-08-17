@@ -11,7 +11,6 @@ import { mergeMap } from 'rxjs/internal/operators/mergeMap';
   styleUrls: ['./new-regn-cert-details.component.scss']
 })
 export class NewRegnCertDetailsComponent {
-  @ViewChild('attachments') attachment: any;
 
   links = ['Candidate Details', 'Course Details', 'Payment Details']
 
@@ -246,8 +245,6 @@ export class NewRegnCertDetailsComponent {
 
 
   onFileChanged(event?: any) {
-    console.log(event);
-    let reader = new FileReader();
     for (let i = 0; i <= event.target.files.length - 1; i++) {
       let selectedFile = event.target.files[i];
 
@@ -256,18 +253,19 @@ export class NewRegnCertDetailsComponent {
         this.listOfFiles.push(selectedFile.name.concat(this.formatBytes(selectedFile.size)));
       }
     }
-    this.uploadFile()
+    this.uploadFiles();
     
   }
 
-  uploadFile(){
-    console.log('ddd',this.listOfFiles)
-    const formData = new FormData();
-    for (var i = 0; i < this.listOfFiles.length; i++) { 
-      formData.append("fileUpload", this.listOfFiles[i]);
-    }
+  uploadFiles(){
+  
+     const formData = new FormData();
+    for (var i = 0; i < this.fileList.length; i++) { 
+      console.log(this.fileList[i])
+      formData.append("files", this.fileList[i]);
+    }  
     this.baseService.uploadFiles$(this.osid, formData).subscribe((data)=>{
-      console.log('daaaa',data)
+      console.log(data)
     })
   }
 

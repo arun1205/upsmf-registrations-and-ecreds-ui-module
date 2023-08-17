@@ -194,13 +194,13 @@
                                             <!-- <div class="flex flex-column mt1"> -->
                                             <!-- </div> -->
                                             <!-- <div class="ml4 flex flex-column right"> -->
-                                                <label for="file-upload" class="custom-file-upload">
-                                                    <a mat-button color="primary">+ Add
+                                                <label for="fileUpload1" class="custom-file-upload">
+                                                    <a mat-button color="primary">+ Add 
                                                         attachment(s) </a>
                                                 </label>
                                                 <mat-hint>docx /pdf files accepted</mat-hint>
-                                                <input id="file-upload" type="file" style="display: none" #attachments
-                                                    (change)="onFileChanged($event)" #fileInput multiple="true" accept=".pdf,.docx" />
+                                                <input id="fileUpload1" type="file" style="display: none" enctype="multipart/form-data"
+                                                    (change)="onFileChanged($event)"  multiple="true" accept=".pdf,.docx" />
                                             <!-- </div> -->
                                         
 
@@ -303,13 +303,13 @@
                                             <!-- <div class="flex flex-column mt1"> -->
                                             <!-- </div> -->
                                             <!-- <div class="ml4 flex flex-column right"> -->
-                                                <label for="file-upload" class="custom-file-upload">
+                                                <label for="file-upload2" class="custom-file-upload">
                                                     <a mat-button color="primary">+ Add
                                                         attachment(s) </a>
                                                 </label>
                                                 <mat-hint>docx /pdf files accepted</mat-hint>
-                                                <input id="file-upload" type="file" style="display: none" #attachments
-                                                    (change)="onFileChanged($event)" #fileInput multiple="true" enctype="multipart/form-data"  accept=".pdf,.docx" />
+                                                <input id="file-upload2" type="file" style="display: none"
+                                                    (change)="onCourseFileChanged($event)" multiple="true" enctype="multipart/form-data"  accept=".pdf,.docx" />
                                             <!-- </div> -->
                                         
 
