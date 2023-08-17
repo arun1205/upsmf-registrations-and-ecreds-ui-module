@@ -15,6 +15,9 @@ export interface ClaimsTableData {
     attestorUserId: string;
     closed: boolean;
     notes?: string;
+    propertyData?:string;
+    conditions?:string;
+    propertyURI?:string;
   }
 
   export interface UsersTableData {
@@ -46,7 +49,7 @@ export interface ClaimsTableData {
 
     date: string | undefined;
     candidatePic: string;
-    joiningYear: number;
+    joiningYear: string;
     fathersName:string;
     gender:string;
     finalYearRollNo:string;
@@ -60,7 +63,7 @@ export interface ClaimsTableData {
     dateOfBirth: string | undefined;
     barCode: string;
     nursingCollage: string;
-    passingYear: number;
+    passingYear: string;
     courseName: string;
     phoneNumber: string;
     registrationType:string;

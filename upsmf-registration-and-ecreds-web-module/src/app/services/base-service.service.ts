@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ClaimDetails, StudentDetails } from '../interfaces/interfaces';
+import { ClaimDetails, ClaimsTableData, StudentDetails } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -90,7 +90,7 @@ export class BaseServiceService  extends HttpService   {
        
        }
 
-  getClaims$(){
+  getClaims$() {
  /*    const headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
