@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ClaimDetails, StudentDetails } from '../interfaces/interfaces';
+import { ClaimDetails, ClaimsTableData, StudentDetails } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -90,7 +90,7 @@ export class BaseServiceService  extends HttpService   {
        
        }
 
-  getClaims$(){
+  getClaims$() {
  /*    const headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -109,6 +109,15 @@ export class BaseServiceService  extends HttpService   {
     }
     return this.get(reqParam);
   
+  }
+
+  uploadFiles$(osid: string, body:any){
+    const reqParam: RequestParam = {
+           url: this.configService.urlConFig.URLS.CLAIMS.UPLOAD_FILES + osid + '/upload/multi-files',  
+           data: body,
+           header: this.headers
+         }
+         return this.put(reqParam);
   }
 
 

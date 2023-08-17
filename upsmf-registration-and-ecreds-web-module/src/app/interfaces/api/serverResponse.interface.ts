@@ -17,3 +17,9 @@ export interface StatusInfo {
     statusMessage: string;
     errorMessage?: any;
 }
+
+export interface Response {
+    status: number;
+    body?: any;
+    error?: string;
+}

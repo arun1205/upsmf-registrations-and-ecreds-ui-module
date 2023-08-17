@@ -31,6 +31,7 @@ export class NewRegnCertDetailsComponent {
   listOfCourseFiles: any[] = [];
   courseFileList: File[] = [];
   isStudent: boolean = true;
+  candidateDetailList:any[]=[];
 
 
   osid: string;
@@ -121,30 +122,38 @@ export class NewRegnCertDetailsComponent {
     this.baseService.getCandidatePersonalDetails$()
       .subscribe(
         (response: any) => {
-          console.log(response[0])
-          this.osid = response[0].osid;
+          this.candidateDetailList = response.responseData
+          console.log(this.candidateDetailList[0])
+          this.osid = this.candidateDetailList[0].osid;
           this.newRegCertDetailsformGroup.patchValue({
-            email: response[0]?.email,
-            mobNumber: response[0]?.phoneNumber,
-            applicantName: response[0]?.name,
-            adhr: response[0]?.aadhaarNo,
-            motherName: response[0]?.mothersName,
-            fatherName: response[0]?.fathersName,
-            dob: response[0]?.dateOfBirth,
-            gender: response[0]?.gender,
+            email: this.candidateDetailList[0]?.email,
+            mobNumber: this.candidateDetailList[0]?.phoneNumber,
+            applicantName: this.candidateDetailList[0]?.name,
+            adhr: this.candidateDetailList[0]?.aadhaarNo,
+            motherName: this.candidateDetailList[0]?.mothersName,
+            fatherName: this.candidateDetailList[0]?.fathersName, 
+            dob: this.candidateDetailList[0]?.dateOfBirth,
+            gender: this.candidateDetailList[0]?.gender,
+            al1: this.candidateDetailList[0]?.address,
+            state: this.candidateDetailList[0].state,
+            pin: this.candidateDetailList[0]?.pincode,
+            district: this.candidateDetailList[0]?.district,
+            country: this.candidateDetailList[0]?.country
+
+            
             // district : response[0]?.district
           });
-          const month = (new Date(Date.parse(response[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
-            "0"+( new Date(Date.parse(response[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
-           new Date(Date.parse(response[0]?.joiningMonth +" 1, 2012")).getMonth()+1
+          const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
+            "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
+           new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
         
           this.newRegCourseDetailsformGroup.patchValue({
-            courseName: response[0]?.courseName,
-            collegeName: response[0]?.nursingCollage,
-            examBody: response[0]?.examBody,
-            joinDate: response[0]?.joiningYear+"-" +month+ "-01",
-            rollNum: response[0]?.finalYearRollNo,
-            passDate: response[0]?.passingYear+"-" +month+ "-01",
+            courseName: this.candidateDetailList[0]?.courseName,
+            collegeName: this.candidateDetailList[0]?.nursingCollage,
+            examBody: this.candidateDetailList[0]?.examBody,
+            joinDate: this.candidateDetailList[0]?.joiningYear+"-" +month+ "-01",
+            rollNum: this.candidateDetailList[0]?.finalYearRollNo,
+            passDate: this.candidateDetailList[0]?.passingYear+"-" +month+ "-01",
           });
           
           console.log(this.newRegCourseDetailsformGroup.value.joinDate)
@@ -179,12 +188,13 @@ export class NewRegnCertDetailsComponent {
   
       const joinMonth = this.months[jMonth];
       const passMonth = this.months[pMonth];
+      console.log('hh',joinMonth, passMonth)
 
       const updateStudentBody =
       {
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
         "candidatePic": "arun.jpg",
-        "joiningYear": joinYear,
+        "joiningYear": joinYear.toString(),
         "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
         "gender": this.newRegCertDetailsformGroup.value.gender,
         "finalYearRollNo": value.rollNum,
@@ -198,7 +208,7 @@ export class NewRegnCertDetailsComponent {
         "dateOfBirth":this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString() ,
         "barCode": "123457",
         "nursingCollage": value.collegeName,
-        "passingYear": passYear,
+        "passingYear": passYear.toString(),
         "courseName": value.courseName,
         "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
         "registrationType": this.stateData.claimType,
@@ -215,7 +225,7 @@ export class NewRegnCertDetailsComponent {
           {
             entityName: "StudentFromUP",
             entityId: this.osid,
-            name: "studentUPVerification",
+            name: "studentVerification",
             propertiesOSID: {
                 studentUPVerification: [
                   this.osid
@@ -237,6 +247,7 @@ export class NewRegnCertDetailsComponent {
 
   onFileChanged(event?: any) {
     console.log(event);
+    let reader = new FileReader();
     for (let i = 0; i <= event.target.files.length - 1; i++) {
       let selectedFile = event.target.files[i];
 
@@ -245,6 +256,19 @@ export class NewRegnCertDetailsComponent {
         this.listOfFiles.push(selectedFile.name.concat(this.formatBytes(selectedFile.size)));
       }
     }
+    this.uploadFile()
+    
+  }
+
+  uploadFile(){
+    console.log('ddd',this.listOfFiles)
+    const formData = new FormData();
+    for (var i = 0; i < this.listOfFiles.length; i++) { 
+      formData.append("fileUpload", this.listOfFiles[i]);
+    }
+    this.baseService.uploadFiles$(this.osid, formData).subscribe((data)=>{
+      console.log('daaaa',data)
+    })
   }
 
   onCourseFileChanged(event?: any) {

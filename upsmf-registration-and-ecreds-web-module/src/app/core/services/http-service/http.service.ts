@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of as observableOf, Observable, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { HttpOptions, RequestParam, ServerResponse } from '../../../interfaces/api';
+import { HttpOptions, RequestParam, ServerResponse, Response } from '../../../interfaces/api';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +27,18 @@ export class HttpService {
     headers: requestParam.header ? requestParam.header : this.getHeader(),
     params: requestParam.param
   };
-  return this.http.get<ServerResponse>(this.baseUrl + requestParam.url, httpOptions);
+  return this.http.get<Response>(this.baseUrl + requestParam.url, httpOptions).pipe(
+    mergeMap((data:Response)=>{
+      // if(data.status !== 200){
+      //   return throwError(() => new Error(data.error));
+      // }
+      const serverRes: ServerResponse ={
+        statusInfo: {status: 200, statusMessage: "success"},
+        responseData: data
+      }
+      return observableOf(serverRes);
+    })
+  );
 }
 
    /**
