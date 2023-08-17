@@ -12,9 +12,8 @@ import { ConfigService, RequestParam, ServerResponse } from '../modules/shared';
 })
 export class BaseServiceService  extends HttpService   {
   override baseUrl: string;
-   headers = {
+   headers  = {
     'Accept': 'application/json',
-    'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem("token")}` };
  //baseUrl: string;
   constructor(private httpClient: HttpClient,private configService: ConfigService) { 
@@ -113,7 +112,7 @@ export class BaseServiceService  extends HttpService   {
 
   uploadFiles$(osid: string, body:any){
     const reqParam: RequestParam = {
-           url: this.configService.urlConFig.URLS.CLAIMS.UPLOAD_FILES + osid + '/upload/multi-files',  
+           url: this.configService.urlConFig.URLS.CLAIMS.UPLOAD_FILES + osid + "/upload/multi-files",  
            data: body,
            header: this.headers
          }
