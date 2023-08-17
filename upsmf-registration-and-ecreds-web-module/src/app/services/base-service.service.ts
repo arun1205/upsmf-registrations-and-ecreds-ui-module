@@ -111,6 +111,15 @@ export class BaseServiceService  extends HttpService   {
   
   }
 
+  uploadFiles$(osid: string, body:any){
+    const reqParam: RequestParam = {
+           url: this.configService.urlConFig.URLS.CLAIMS.UPLOAD_FILES + osid + '/upload/multi-files',  
+           data: body,
+           header: this.headers
+         }
+         return this.put(reqParam);
+  }
+
 
  
 }

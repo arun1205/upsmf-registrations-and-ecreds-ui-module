@@ -3,7 +3,8 @@
         "LOGIN": "/user/login",
         "CLAIMS": {
             "GET_ALL_CLAIMS": "api/v2/StudentFromUP/claims",
-            "MAKE_CLAIM":"api/v1/send?send=true"
+            "MAKE_CLAIM":"api/v1/send?send=true",
+            "UPLOAD_FILES":"api/v1/StudentFromUP/"
         },
         "STUDENT": 
         {

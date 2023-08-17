@@ -247,6 +247,7 @@ export class NewRegnCertDetailsComponent {
 
   onFileChanged(event?: any) {
     console.log(event);
+    let reader = new FileReader();
     for (let i = 0; i <= event.target.files.length - 1; i++) {
       let selectedFile = event.target.files[i];
 
@@ -255,6 +256,19 @@ export class NewRegnCertDetailsComponent {
         this.listOfFiles.push(selectedFile.name.concat(this.formatBytes(selectedFile.size)));
       }
     }
+    this.uploadFile()
+    
+  }
+
+  uploadFile(){
+    console.log('ddd',this.listOfFiles)
+    const formData = new FormData();
+    for (var i = 0; i < this.listOfFiles.length; i++) { 
+      formData.append("fileUpload", this.listOfFiles[i]);
+    }
+    this.baseService.uploadFiles$(this.osid, formData).subscribe((data)=>{
+      console.log('daaaa',data)
+    })
   }
 
   onCourseFileChanged(event?: any) {

@@ -309,7 +309,7 @@
                                                 </label>
                                                 <mat-hint>docx /pdf files accepted</mat-hint>
                                                 <input id="file-upload" type="file" style="display: none" #attachments
-                                                    (change)="onFileChanged($event)" #fileInput multiple="true" accept=".pdf,.docx" />
+                                                    (change)="onFileChanged($event)" #fileInput multiple="true" enctype="multipart/form-data"  accept=".pdf,.docx" />
                                             <!-- </div> -->
                                         
 
