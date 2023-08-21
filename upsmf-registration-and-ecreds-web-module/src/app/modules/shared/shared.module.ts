@@ -7,11 +7,13 @@ import { MaterialModule } from '../../../app/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { ConfigService } from './services/config/config.service';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 @NgModule({
   declarations: [
     SharedTableComponent,
     HeaderComponent,
     SharedSkeletonLoadingComponent,
+    BreadcrumbComponent,
    
   ],
   imports: [
@@ -26,6 +28,7 @@ import { ConfigService } from './services/config/config.service';
     SharedTableComponent,
     HeaderComponent,
     SharedSkeletonLoadingComponent,
+    BreadcrumbComponent
     
   ],
   providers: [ConfigService]

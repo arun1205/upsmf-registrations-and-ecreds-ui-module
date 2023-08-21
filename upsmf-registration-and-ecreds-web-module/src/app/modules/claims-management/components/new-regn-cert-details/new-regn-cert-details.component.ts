@@ -31,6 +31,10 @@ export class NewRegnCertDetailsComponent {
   courseFileList: File[] = [];
   isStudent: boolean = true;
   candidateDetailList:any[]=[];
+  docsUrl:any[]=[];
+  urlData:any[]=[];
+  urlList:any;
+  updatedUrlList:any;
 
 
   osid: string;
@@ -121,41 +125,64 @@ export class NewRegnCertDetailsComponent {
     this.baseService.getCandidatePersonalDetails$()
       .subscribe(
         (response: any) => {
-          this.candidateDetailList = response.responseData
-          console.log(this.candidateDetailList[0])
-          this.osid = this.candidateDetailList[0].osid;
-          this.newRegCertDetailsformGroup.patchValue({
-            email: this.candidateDetailList[0]?.email,
-            mobNumber: this.candidateDetailList[0]?.phoneNumber,
-            applicantName: this.candidateDetailList[0]?.name,
-            adhr: this.candidateDetailList[0]?.aadhaarNo,
-            motherName: this.candidateDetailList[0]?.mothersName,
-            fatherName: this.candidateDetailList[0]?.fathersName, 
-            dob: this.candidateDetailList[0]?.dateOfBirth,
-            gender: this.candidateDetailList[0]?.gender,
-            al1: this.candidateDetailList[0]?.address,
-            state: this.candidateDetailList[0].state,
-            pin: this.candidateDetailList[0]?.pincode,
-            district: this.candidateDetailList[0]?.district,
-            country: this.candidateDetailList[0]?.country
-
+          if(response.responseData.length){
+            this.candidateDetailList = response.responseData
+            console.log(this.candidateDetailList[0])
+            this.osid = this.candidateDetailList[0].osid;
+            this.urlData = this.candidateDetailList[0].docproof;
+            console.log('urlDaaaa',this.urlData)
+            if(this.urlData.length){
+              this.listOfFiles = this.urlData?.map(url => {
+                const parts = url.split('=');
+                const fileNameWithQueryParams = parts[1];
+                const fileName = fileNameWithQueryParams.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop(); 
+                const getuploadObject = {
+                  name:extractLastPart,
+                  url:url
+                } 
+                return getuploadObject;         
+              });
+            }
             
-            // district : response[0]?.district
-          });
-          const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
-            "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
-           new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
-        
-          this.newRegCourseDetailsformGroup.patchValue({
-            courseName: this.candidateDetailList[0]?.courseName,
-            collegeName: this.candidateDetailList[0]?.nursingCollage,
-            examBody: this.candidateDetailList[0]?.examBody,
-            joinDate: this.candidateDetailList[0]?.joiningYear+"-" +month+ "-01",
-            rollNum: this.candidateDetailList[0]?.finalYearRollNo,
-            passDate: this.candidateDetailList[0]?.passingYear+"-" +month+ "-01",
-          });
+            console.log(this.listOfFiles)
+            
+            // this.listOfFiles = this.candidateDetailList[0].docproof;
+            this.newRegCertDetailsformGroup.patchValue({
+              email: this.candidateDetailList[0]?.email,
+              mobNumber: this.candidateDetailList[0]?.phoneNumber,
+              applicantName: this.candidateDetailList[0]?.name,
+              adhr: this.candidateDetailList[0]?.aadhaarNo,
+              motherName: this.candidateDetailList[0]?.mothersName,
+              fatherName: this.candidateDetailList[0]?.fathersName, 
+              dob: this.candidateDetailList[0]?.dateOfBirth,
+              gender: this.candidateDetailList[0]?.gender,
+              al1: this.candidateDetailList[0]?.address,
+              state: this.candidateDetailList[0].state,
+              pin: this.candidateDetailList[0]?.pincode,
+              district: this.candidateDetailList[0]?.district,
+              country: this.candidateDetailList[0]?.country
+  
+  
+              
+              // district : response[0]?.district
+            });
+            const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
+              "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
+             new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
           
-          console.log(this.newRegCourseDetailsformGroup.value.joinDate)
+            this.newRegCourseDetailsformGroup.patchValue({
+              courseName: this.candidateDetailList[0]?.courseName,
+              collegeName: this.candidateDetailList[0]?.nursingCollage,
+              examBody: this.candidateDetailList[0]?.examBody,
+              joinDate: this.candidateDetailList[0]?.joiningYear+"-" +month+ "-01",
+              rollNum: this.candidateDetailList[0]?.finalYearRollNo,
+              passDate: this.candidateDetailList[0]?.passingYear+"-" +month+ "-01",
+            });
+            
+            console.log(this.newRegCourseDetailsformGroup.value.joinDate)
+          }
+         
 
           /*     this.listOfFiles =  */
         }
@@ -188,7 +215,7 @@ export class NewRegnCertDetailsComponent {
       const joinMonth = this.months[jMonth];
       const passMonth = this.months[pMonth];
       console.log('hh',joinMonth, passMonth)
-
+      this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
       const updateStudentBody =
       {
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
@@ -214,9 +241,9 @@ export class NewRegnCertDetailsComponent {
         "council": this.stateData.councilName,
         "mothersName": this.newRegCertDetailsformGroup.value.motherName,
         "name": this.newRegCertDetailsformGroup.value.applicantName,
-        "docproof": "qwer.doc"
+        "docproof": this.urlList
       }
-
+     console.log('updateStudentBody',updateStudentBody)
       this.baseService.updateStudent$(this.osid, updateStudentBody)
        .pipe(
          mergeMap((resp: any) => {
@@ -243,6 +270,10 @@ export class NewRegnCertDetailsComponent {
     }
   }
 
+  navigateToUrl(item:any){
+    window.open(item, "_blank");
+  }
+
 
   onFileChanged(event?: any) {
     for (let i = 0; i <= event.target.files.length - 1; i++) {
@@ -250,7 +281,8 @@ export class NewRegnCertDetailsComponent {
 
       if (this.listOfFiles.indexOf(selectedFile.name) === -1) {
         this.fileList.push(selectedFile);
-        this.listOfFiles.push(selectedFile.name.concat(this.formatBytes(selectedFile.size)));
+        // this.listOfFiles.push(selectedFile.name);
+      
       }
     }
     this.uploadFiles();
@@ -266,7 +298,24 @@ export class NewRegnCertDetailsComponent {
     }  
     this.baseService.uploadFiles$(this.osid, formData).subscribe((data)=>{
       console.log(data)
+      this.docsUrl = data.result;
+      console.log('docsUrl',this.docsUrl)
+     const uploadObj = this.docsUrl.map(url => {
+        const parts = url.split('=');
+        const fileNameWithQueryParams = parts[1];
+        const fileName = fileNameWithQueryParams.split('/').pop();
+        const extractLastPart = fileName?.split('_').pop(); 
+        const getuploadObject = {
+          name:extractLastPart,
+          url:url
+        } 
+        return getuploadObject;         
+      });
+     console.log('uO',uploadObj)
+     this.listOfFiles.push(...uploadObj)
+     console.log('this.listOfFiles',this.listOfFiles)
     })
+    
   }
 
   onCourseFileChanged(event?: any) {
@@ -284,6 +333,8 @@ export class NewRegnCertDetailsComponent {
   removeSelectedFile(index: any) {
     // Delete the item from fileNames list
     this.listOfFiles.splice(index, 1);
+    this.updatedUrlList = this.listOfFiles.map(item=> item.url)
+    console.log(this.updatedUrlList)
     // delete file from FileList
     this.fileList.splice(index, 1);
   }
