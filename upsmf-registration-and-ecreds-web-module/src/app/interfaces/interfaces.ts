@@ -71,6 +71,15 @@ export interface ClaimsTableData {
     mothersName:string;
     name: string;
     docproof: string | string[]; 
+    address?:string,
+    state?: string
+,   district?:string,
+    country?:string,
+    pincode?:string,
+    credType?:string,
+    examYear?:string,
+    centerCode?:string
+
   }
   export interface ClaimDetails {
     entityName:string;
