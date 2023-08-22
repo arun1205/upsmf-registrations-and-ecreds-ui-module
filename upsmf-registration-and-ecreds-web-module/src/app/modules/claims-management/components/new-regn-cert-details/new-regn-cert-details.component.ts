@@ -4,6 +4,8 @@ import { DatePipe, Location } from '@angular/common';
 import { BaseServiceService } from 'src/app/services/base-service.service';
 import { Router } from '@angular/router';
 import { mergeMap } from 'rxjs/internal/operators/mergeMap';
+import { allStateList } from 'src/models/statemodel';
+import {credentialsType} from 'src/models/credentialsTypemodel'
 
 @Component({
   selector: 'app-new-regn-cert-details',
@@ -35,6 +37,9 @@ export class NewRegnCertDetailsComponent {
   urlData:any[]=[];
   urlList:any;
   updatedUrlList:any;
+  urlDataResponse:string;
+  docsResponseUrl:string;
+  convertUrlList:string;
 
 
   osid: string;
@@ -43,22 +48,42 @@ export class NewRegnCertDetailsComponent {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
+  stateList:any[]=[]
+  credTypeList:any[] =[];
+
+  
   stateData: any;
   selectedLink: string = 'Candidate Details';
+  requestTypesArray = ['Orignal','Correction','Name change','Dublicate'];
 
 
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe,
     private location: Location, private baseService: BaseServiceService,
     private router: Router
   ) {
+    this.stateList = allStateList;
+    this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     console.log("stateData:",this.stateData)
+    this.stateData =  this.stateData.body
     
 
   }
 
   ngOnInit() {
     this.initForm();
+
+  }
+
+  requestTypeSelected(e:Event){
+    console.log(e)
+  }
+
+  stateTypeSelected(e:Event){
+    console.log(e)
+  }
+
+  credTypeSelected(e:Event){
 
   }
 
@@ -73,11 +98,11 @@ export class NewRegnCertDetailsComponent {
         Validators.required]),
       dob: new FormControl('', [
         Validators.required]),
-      al1: new FormControl('Saharanpur', [
+      al1: new FormControl('', [
         Validators.required]),
-      al2: new FormControl('Saharanpur', [
+      al2: new FormControl('', [
         Validators.required]),
-      district: new FormControl('Saharanpur', [
+      district: new FormControl('', [
         Validators.required]),
       state: new FormControl('UP', [
         Validators.required]),
@@ -85,7 +110,7 @@ export class NewRegnCertDetailsComponent {
         Validators.required, Validators.minLength(6),
         Validators.pattern("^[0-9]*$")]
       ),
-      country: new FormControl('India', [
+      country: new FormControl('', [
         Validators.required]),
       adhr: new FormControl('', [
         Validators.required]),
@@ -97,6 +122,8 @@ export class NewRegnCertDetailsComponent {
       mobNumber: new FormControl('', [
         Validators.required,
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
+        credType: new FormControl('', [
+          Validators.required]),
     });
 
     this.newRegCourseDetailsformGroup = this.formBuilder.group({
@@ -112,7 +139,9 @@ export class NewRegnCertDetailsComponent {
         Validators.required,
         Validators.pattern("^[0-9]*$")]),
       passDate: new FormControl('', [
-        Validators.required])
+        Validators.required]),
+        requestType: new FormControl('', [
+          Validators.required])
     });
 
     this.getCandidatePersonalDetails();
@@ -129,25 +158,30 @@ export class NewRegnCertDetailsComponent {
             this.candidateDetailList = response.responseData
             console.log(this.candidateDetailList[0])
             this.osid = this.candidateDetailList[0].osid;
-            this.urlData = this.candidateDetailList[0].docproof;
-            console.log('urlDaaaa',this.urlData)
-            if(this.urlData.length){
-              this.listOfFiles = this.urlData?.map(url => {
-                const parts = url.split('=');
-                const fileNameWithQueryParams = parts[1];
-                const fileName = fileNameWithQueryParams.split('/').pop();
-                const extractLastPart = fileName?.split('_').pop(); 
-                const getuploadObject = {
-                  name:extractLastPart,
-                  url:url
-                } 
-                return getuploadObject;         
-              });
+            this.urlDataResponse = this.candidateDetailList[0].docproof;
+            if(!!this.urlDataResponse){
+              this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              console.log('urlDaaaa',this.urlData)
+              if(this.urlData.length){
+                this.listOfFiles = this.urlData?.map(url => {
+                  const parts = url.split('=');
+                  const fileNameWithQueryParams = parts[1];
+                  const fileName = fileNameWithQueryParams.split('/').pop();
+                  const extractLastPart = fileName?.split('_').pop(); 
+                  const getuploadObject = {
+                    name:extractLastPart,
+                    url:url
+                  } 
+                  return getuploadObject;         
+                });
+              }
             }
+           
             
             console.log(this.listOfFiles)
             
             // this.listOfFiles = this.candidateDetailList[0].docproof;
+            console.log('canndidateList',this.candidateDetailList[0])
             this.newRegCertDetailsformGroup.patchValue({
               email: this.candidateDetailList[0]?.email,
               mobNumber: this.candidateDetailList[0]?.phoneNumber,
@@ -158,10 +192,12 @@ export class NewRegnCertDetailsComponent {
               dob: this.candidateDetailList[0]?.dateOfBirth,
               gender: this.candidateDetailList[0]?.gender,
               al1: this.candidateDetailList[0]?.address,
+              al2: this.candidateDetailList[0]?.address,
               state: this.candidateDetailList[0].state,
               pin: this.candidateDetailList[0]?.pincode,
               district: this.candidateDetailList[0]?.district,
-              country: this.candidateDetailList[0]?.country
+              country: this.candidateDetailList[0]?.country,
+              credType: this.candidateDetailList[0]?.credType
   
   
               
@@ -178,6 +214,7 @@ export class NewRegnCertDetailsComponent {
               joinDate: this.candidateDetailList[0]?.joiningYear+"-" +month+ "-01",
               rollNum: this.candidateDetailList[0]?.finalYearRollNo,
               passDate: this.candidateDetailList[0]?.passingYear+"-" +month+ "-01",
+              requestType: this.candidateDetailList[0]?.requestType
             });
             
             console.log(this.newRegCourseDetailsformGroup.value.joinDate)
@@ -216,6 +253,8 @@ export class NewRegnCertDetailsComponent {
       const passMonth = this.months[pMonth];
       console.log('hh',joinMonth, passMonth)
       this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+      //convert to string with commaa separated
+      this.convertUrlList = this.urlList.join(',')
       const updateStudentBody =
       {
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
@@ -223,6 +262,11 @@ export class NewRegnCertDetailsComponent {
         "joiningYear": joinYear.toString(),
         "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
         "gender": this.newRegCertDetailsformGroup.value.gender,
+        "address":this.newRegCertDetailsformGroup.value.al1,
+        "state": this.newRegCertDetailsformGroup.value.state,
+        "district": this.newRegCertDetailsformGroup.value.district,
+        "country": this.newRegCertDetailsformGroup.value.country,
+        "pincode":this.newRegCertDetailsformGroup.value.pin,
         "finalYearRollNo": value.rollNum,
         "examBody": value.examBody,
         "joiningMonth": joinMonth,
@@ -241,7 +285,11 @@ export class NewRegnCertDetailsComponent {
         "council": this.stateData.councilName,
         "mothersName": this.newRegCertDetailsformGroup.value.motherName,
         "name": this.newRegCertDetailsformGroup.value.applicantName,
-        "docproof": this.urlList
+        "credType":this.newRegCertDetailsformGroup.value.credType ,
+        "examYear":'',
+        "centerCode":'',
+        "requestType":value.requestType,
+        "docproof": this.convertUrlList
       }
      console.log('updateStudentBody',updateStudentBody)
       this.baseService.updateStudent$(this.osid, updateStudentBody)
@@ -253,7 +301,7 @@ export class NewRegnCertDetailsComponent {
             entityId: this.osid,
             name: "studentVerification",
             propertiesOSID: {
-                studentUPVerification: [
+              StudentFromUP: [
                   this.osid
                 ]
             }
@@ -298,8 +346,10 @@ export class NewRegnCertDetailsComponent {
     }  
     this.baseService.uploadFiles$(this.osid, formData).subscribe((data)=>{
       console.log(data)
-      this.docsUrl = data.result;
+      this.docsResponseUrl = data.result;
+      this.docsUrl = this.docsResponseUrl.split(',').filter(url=>url.trim() !== "")
       console.log('docsUrl',this.docsUrl)
+      
      const uploadObj = this.docsUrl.map(url => {
         const parts = url.split('=');
         const fileNameWithQueryParams = parts[1];

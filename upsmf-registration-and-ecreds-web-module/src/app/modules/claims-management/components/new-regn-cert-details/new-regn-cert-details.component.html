@@ -95,6 +95,19 @@
                                                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>
+                                            <div>
+                                                <h4>Credentials Type </h4>
+                                                <mat-form-field appearance="outline">
+                                                    <!-- <input matInput placeholder="State" formControlName="state"> -->
+                                                    <mat-select (selectionChange)="credTypeSelected($event)" formControlName="credType">
+                                                        <span *ngFor='let cred of credTypeList;let i = index'>
+                                                            <mat-option [value]="cred">{{cred}}</mat-option>
+                                                        </span>
+                                                      </mat-select>
+                                                    <mat-error *ngIf="newRegCertDetailsformGroup.controls['credType'].invalid">
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
 
                                         <!-- </div> -->
                                         <div [ngClass]="{ 'invalid-field': submitted && newRegCertDetailsformGroup.controls['gender'].errors }">
@@ -148,11 +161,28 @@
                                                 <div class="address-details">
                                                     <h4>State </h4>
                                                     <mat-form-field appearance="outline">
-                                                        <input matInput placeholder="State" formControlName="state">
+                                                        <!-- <input matInput placeholder="State" formControlName="state"> -->
+                                                        <mat-select (selectionChange)="stateTypeSelected($event)" formControlName="state">
+                                                            <span *ngFor='let state of stateList;let i = index'>
+                                                                <mat-option [value]="state">{{state}}</mat-option>
+                                                            </span>
+                                                          </mat-select>
                                                         <mat-error *ngIf="newRegCertDetailsformGroup.controls['state'].invalid">
                                                         </mat-error>
                                                     </mat-form-field>
                                                 </div>
+                                                <!-- <div class="address-details">
+                                                    <h4>Credentials Type </h4>
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-select (selectionChange)="credTypeSelected($event)" formControlName="credType">
+                                                            <span *ngFor='let cred of credTypeList;let i = index'>
+                                                                <mat-option [value]="cred">{{cred}}</mat-option>
+                                                            </span>
+                                                          </mat-select>
+                                                        <mat-error *ngIf="newRegCertDetailsformGroup.controls['credType'].invalid">
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div> -->
 
                                         </div>
                                         <div class="place-details">
@@ -242,6 +272,19 @@
                                 <form [formGroup]="newRegCourseDetailsformGroup" *ngIf="!candidateDetails"
                                 (ngSubmit)="onNewRegCourseDetailsformSubmit(newRegCourseDetailsformGroup.value)">
                                     <div class="full-details">
+
+                                        <div class="applicant-details slc">
+                                            <h4>Request Type</h4>
+                                            <mat-form-field appearance ="outline">
+                                                <mat-label>Request Type</mat-label>
+                                              <mat-select (selectionChange)="requestTypeSelected($event)" formControlName="requestType">
+                                                <span *ngFor='let requesttype of requestTypesArray;let i = index'>
+                                                    <mat-option [value]="requesttype">{{requesttype}}</mat-option>
+                                                </span>
+                                              </mat-select>
+                                        </mat-form-field>
+                                        </div>
+
                                         <div class="applicant-details">
                                             <h4>Course Name</h4>
                                             <mat-form-field appearance="outline">
