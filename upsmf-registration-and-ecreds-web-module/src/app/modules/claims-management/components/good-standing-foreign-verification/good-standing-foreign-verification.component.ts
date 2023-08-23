@@ -158,13 +158,15 @@ export class GoodStandingForeignVerificationComponent {
         Validators.required,
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
     });
-    if(this.stateData.customData.type === 'goodStandingCert'){
-      this.getCandidatePersonalDetails();
 
-    }
-    else{
-      this.getCandidatePersonalDetailsForeign();
-    }
+    {{ this.stateData.customData.type === 'ForeignVerifyReq' ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
+    // if(this.stateData.customData.type === 'goodStandingCert'){
+    //   this.getCandidatePersonalDetails();
+
+    // }
+    // else{
+    //   this.getCandidatePersonalDetailsForeign();
+    // }
   }
 
   showInfo(option: any) {
