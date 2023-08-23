@@ -87,5 +87,40 @@ export interface ClaimsTableData {
     name:string;
     propertiesOSID:object;
   }
+  export interface StudentDetailsGoodStanding{
+    name:string;
+    fathersName:string;
+    presentAddress:string;
+    phoneNumber:string;
+    email:string;
+    trainingCenter:string;
+    council:string
+    workPlace:string;
+    date:string | undefined;
+    refNo:string;
+    validityOfRegistration:string;
+    dob:string | undefined;
+    docproof:string | string[];
+    candidatePic:string;
+    paymentStatus:string;
+  }
+  export interface StudentDetailsForeignVerification{
+    name:string;
+    fathersName:string;
+    address:string;
+    phoneNumber:string;
+    email:string;
+    trainingCenter:string;
+    council:string
+    workPlace:string;
+    date:string | undefined;
+    refNo:string;
+    validityOfRegistration:string;
+    dob:string | undefined;
+    docproof:string | string[];
+    candidatePic:string;
+    paymentStatus:string;
+
+  }
 
 

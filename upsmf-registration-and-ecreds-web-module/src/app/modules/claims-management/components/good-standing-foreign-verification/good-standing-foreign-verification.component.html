@@ -2,7 +2,7 @@
 <div class="full-container">
     <div class="certificate-container">
         <div class="certificate-header">
-            <h2>New Good Standing Certificate</h2>
+            <h2>{{ this.stateData.customData.type === 'ForeignVerifyReq' ?  'New Foreign Verification request Certificate' : 'New Good Standing Certificate'     }}</h2>
         </div>
         
         <div class="certificate-details">
@@ -19,7 +19,7 @@
                     </div>
                 </mat-drawer>
                 <div class="content">
-                    <form *ngIf="candidateDetails &&  activity | async"
+                    <form *ngIf="candidateDetails "
                     [formGroup]="goodStandingForeignVerificationformGroup" 
                     (ngSubmit)="onGoodStandingForeignVerificationformSubmit(goodStandingForeignVerificationformGroup.value)">
                         <div class="applicant-details">
