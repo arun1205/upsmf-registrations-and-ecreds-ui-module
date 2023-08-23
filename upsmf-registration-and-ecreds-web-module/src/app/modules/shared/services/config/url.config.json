@@ -3,6 +3,7 @@
         "LOGIN": "/user/login",
         "CLAIMS": {
             "GET_ALL_CLAIMS": "api/v2/StudentFromUP/claims",
+            "GET_ALL_CLAIMS_ADMIN": "api/v1/Regulator/claims",
             "MAKE_CLAIM":"api/v1/send?send=true",
             "UPLOAD_FILES":"api/v1/StudentFromUP/"
         },
@@ -10,8 +11,13 @@
         {
             "INVITE" : "api/v1/StudentFromUP/invite/",
             "GET_STUDENT_DETAILS":"api/v1/StudentFromUP/",
+            "GET_STUDENT_DETAILS_REGULATOR":"api/v1/Regulator/claims/",
+            "GET_STUDENT_DETAILS_GOODSTANDING":"api/v1/StudentGoodstanding/",
+            "GET_STUDENT_DETAILS_FOREIGNVARIFIVATION":"api/v1/StudentForeignVerification/",
             "UPDATE":"api/v1/StudentFromUP/",
-            "GET_COURSES":"/claims/api/v1/courses"
+            "GET_COURSES":"/claims/api/v1/courses",
+            "UPDATE_GOODSTANDING":"api/v1/StudentGoodstanding/",
+            "UPDATE_FOREIGNVERIFICATION":"api/v1/StudentForeignVerification/"
         }
     }
 }

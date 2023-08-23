@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ClaimDetails, ClaimsTableData, StudentDetails } from '../interfaces/interfaces';
+import { ClaimDetails, ClaimsTableData, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -77,6 +77,42 @@ export class BaseServiceService  extends HttpService   {
        return this.get(reqParam);
      
      }
+     getCandidatePersonalDetailsRegulator$(osid:string){
+      const reqParam: RequestParam = {
+        url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_REGULATOR + osid, 
+        header: this.headers
+       }
+       return this.get(reqParam); 
+
+     }
+     getCandidatePersonalDetailsGoodstanding$(){
+
+      const reqParam: RequestParam = {
+        url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_GOODSTANDING,  
+        /* data:{
+         "name": "Arun ",
+         "phoneNumber": "9887478248",
+         "email": "arun.nair@example.com"
+     }, */
+        header: this.headers
+      }
+      return this.get(reqParam);
+    
+    }
+    getCandidatePersonalDetailsForeignVerification$(){
+
+      const reqParam: RequestParam = {
+        url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_FOREIGNVARIFIVATION,  
+        /* data:{
+         "name": "Arun ",
+         "phoneNumber": "9887478248",
+         "email": "arun.nair@example.com"
+     }, */
+        header: this.headers
+      }
+      return this.get(reqParam);
+    
+    }
 
      updateStudent$(osid:string , body: StudentDetails): Observable<any>{
       console.log(body)
@@ -88,6 +124,31 @@ export class BaseServiceService  extends HttpService   {
          return this.put(reqParam);
        
        }
+       updateStudentGoodStanding$(osid:string, body: StudentDetailsGoodStanding): Observable<any>{
+        const reqParam:RequestParam={
+          url:this.configService.urlConFig. URLS.STUDENT.UPDATE_GOODSTANDING + osid,
+          data:body,
+          header:this.headers
+        }
+        return this.put(reqParam);
+
+      }
+      updateStudentForeignVerification$(osid:string, body: StudentDetailsForeignVerification): Observable<any>{
+        const reqParam:RequestParam={
+          url:this.configService.urlConFig. URLS.STUDENT.UPDATE_FOREIGNVERIFICATION + osid,
+          data:body,
+          header:this.headers
+        }
+        return this.put(reqParam);
+
+      }
+      getClaimsAdmin$(){
+        const reqParam: RequestParam = {
+          url: this.configService.urlConFig.URLS.CLAIMS.GET_ALL_CLAIMS_ADMIN,  
+          header: this.headers
+        }
+        return this.get(reqParam);
+      }
 
   getClaims$() {
  /*    const headers = {
