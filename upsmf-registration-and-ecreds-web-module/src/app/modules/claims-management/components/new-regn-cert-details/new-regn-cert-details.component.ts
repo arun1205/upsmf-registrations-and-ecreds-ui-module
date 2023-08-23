@@ -65,7 +65,7 @@ export class NewRegnCertDetailsComponent {
     this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     console.log("stateData:",this.stateData)
-    this.stateData =  this.stateData.body
+    this.stateData =  this.stateData?.body
     
 
   }
@@ -140,8 +140,9 @@ export class NewRegnCertDetailsComponent {
         Validators.pattern("^[0-9]*$")]),
       passDate: new FormControl('', [
         Validators.required]),
-        requestType: new FormControl('', [
-          Validators.required])
+      requestType: new FormControl('', [
+          Validators.required]),
+       diplomaNumber: new FormControl('')
     });
 
     this.getCandidatePersonalDetails();
@@ -289,7 +290,9 @@ export class NewRegnCertDetailsComponent {
         "examYear":'',
         "centerCode":'',
         "requestType":value.requestType,
-        "docproof": this.convertUrlList
+        "docproof": this.convertUrlList,
+        "regNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
+        "diplomaNumber": value.diplomaNumber
       }
      console.log('updateStudentBody',updateStudentBody)
       this.baseService.updateStudent$(this.osid, updateStudentBody)

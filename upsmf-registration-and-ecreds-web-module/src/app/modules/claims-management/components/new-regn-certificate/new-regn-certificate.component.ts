@@ -53,7 +53,7 @@ export class NewRegnCertificateComponent {
   createForm() {
 
     this.newRegCertformGroup = this.formBuilder.group({
-      rollNo: new FormControl({ disabled: true, value: '' }, [
+      regNo: new FormControl({ disabled: true, value: '' }, [
         Validators.required]),
       claimType: new FormControl('', [
         Validators.required]),
@@ -63,8 +63,8 @@ export class NewRegnCertificateComponent {
         Validators.required]),
       origin: new FormControl('', [
         Validators.required]),
-      endDate: new FormControl({ disabled: true, value: '' }, [
-        Validators.required, this.validateMinAge(15) as ValidatorFn]),
+      // endDate: new FormControl({ disabled: true, value: '' }, [
+      //   Validators.required, this.validateMinAge(15) as ValidatorFn]),
       courseType: new FormControl({ disabled: true, value: '' }, [
         Validators.required]),
     });
@@ -74,11 +74,11 @@ export class NewRegnCertificateComponent {
     this.courseType.valueChanges.subscribe(value => {
       if (value === "Diploma") {
         this.qualificationType?.enable();
-        this.rollNo?.enable();
+        this.regNo?.enable();
         this.dob?.enable();
       } else {
         this.qualificationType?.disable();
-        this.rollNo?.disable();
+        this.regNo?.disable();
         this.dob?.disable();
       }
     });
@@ -93,8 +93,8 @@ export class NewRegnCertificateComponent {
   get qualificationType() {
     return this.newRegCertformGroup.get('qualificationType') as FormControl;
   }
-  get rollNo() {
-    return this.newRegCertformGroup.get('rollNo') as FormControl;
+  get regNo() {
+    return this.newRegCertformGroup.get('regNo') as FormControl;
   }
   get dob() {
     return this.newRegCertformGroup.get('endDate') as FormControl;
