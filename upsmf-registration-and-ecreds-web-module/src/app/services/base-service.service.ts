@@ -6,6 +6,7 @@ import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
 import { ConfigService, RequestParam, ServerResponse } from '../modules/shared';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -63,10 +64,11 @@ export class BaseServiceService  extends HttpService   {
   }
 
   
-  getCandidatePersonalDetails$(){
+  getCandidatePersonalDetails$(endpointUrl:any){
 
        const reqParam: RequestParam = {
-         url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS,  
+        //  url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS,  
+         url: endpointUrl,  
          /* data:{
           "name": "Arun ",
           "phoneNumber": "9887478248",
@@ -78,10 +80,10 @@ export class BaseServiceService  extends HttpService   {
      
      }
 
-     updateStudent$(osid:string , body: StudentDetails): Observable<any>{
+     updateStudent$(osid:string , body: StudentDetails,endPointUrl:any): Observable<any>{
       console.log(body)
          const reqParam: RequestParam = {
-           url: this.configService.urlConFig.URLS.STUDENT.UPDATE + osid,  
+           url: endPointUrl + osid ,  
            data: body,
            header: this.headers
          }
@@ -110,13 +112,26 @@ export class BaseServiceService  extends HttpService   {
   
   }
 
-  uploadFiles$(osid: string, body:any){
+  uploadFiles$(osid: string, body:any, endPointUrl:any){
     const reqParam: RequestParam = {
-           url: this.configService.urlConFig.URLS.CLAIMS.UPLOAD_FILES + osid + "/upload/multi-files",  
+           url: endPointUrl + osid + "/upload/multi-files",  
            data: body,
            header: this.headers
          }
          return this.put(reqParam);
+  }
+
+  getUserRole(){
+    var token:any
+    token =localStorage.getItem('token')
+    let tokenId:any = ''
+    tokenId = token
+   console.log('accessTOken',tokenId)
+   const helper = new JwtHelperService();
+   const decoded= helper.decodeToken(tokenId);
+   console.log(decoded)
+   return decoded.entity
+   
   }
 
 

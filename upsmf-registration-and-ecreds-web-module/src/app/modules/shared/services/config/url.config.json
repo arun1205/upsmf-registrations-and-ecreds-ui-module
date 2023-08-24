@@ -11,7 +11,9 @@
             "INVITE" : "api/v1/StudentFromUP/invite/",
             "GET_STUDENT_DETAILS":"api/v1/StudentFromUP/",
             "UPDATE":"api/v1/StudentFromUP/",
-            "GET_COURSES":"/claims/api/v1/courses"
+            "GET_COURSES":"/claims/api/v1/courses",
+            "GET_STUDENT_DETAILS_OUTSIDE_UP":"api/v1/StudentOutsideUP/",
+            "OUTSIDE_UP_UPDATE":"api/v1/StudentOutsideUP/"
         }
     }
 }
