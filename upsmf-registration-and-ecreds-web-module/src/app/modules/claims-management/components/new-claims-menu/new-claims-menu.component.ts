@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-claims-menu',
@@ -53,19 +53,25 @@ export class NewClaimsMenuComponent {
   }
 
   navigateto(item: any) {
+    let navigationExtras: NavigationExtras = {};
+
+    
     switch (item.type) {
 
       case 'ForeignVerifyReq':
-        this.router.navigate(['claims/good-stand-frgn-cert'])
+        case 'goodStandingCert':
+          navigationExtras = {
+            state: {
+              customData: { type: item.type }
+            }
+          };
+          this.router.navigate(['claims/good-stand-frgn-cert'], navigationExtras);
         break;
         case 'regnCertfromUP':
         this.router.navigate(['claims/new-regn-cert-details'])
         break;
         case 'regnCertoutsideUP':
         this.router.navigate(['claims/new-regn-cert-details'])
-        break;
-        case 'goodStandingCert':
-        this.router.navigate(['claims/good-stand-frgn-cert'])
         break;
         case 'regnCert':
         this.router.navigate(['claims/new-regn-cert'])
@@ -78,6 +84,10 @@ export class NewClaimsMenuComponent {
       default:
         return '';
     }
+    
+
     return;
+
+
   }
 }
