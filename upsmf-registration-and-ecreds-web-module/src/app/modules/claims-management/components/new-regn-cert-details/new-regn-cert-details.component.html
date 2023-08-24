@@ -381,7 +381,49 @@
 
                                             </div>
                                         </div>
-
+                                        <div *ngIf="this.userRole === 'StudentOutsideUP'">
+                                            <h3>Note: Fill the details in this section as you already registered with any other State Medical Council</h3>
+                                            <div class="applicant-details">
+                                                <h4>State</h4>
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>select state</mat-label>
+                                                    <!-- <input matInput placeholder="State" formControlName="state"> -->
+                                                    <mat-select (selectionChange)="stateTypeSelected($event)" formControlName="stateName">
+                                                        <span *ngFor='let state of stateList;let i = index'>
+                                                            <mat-option [value]="state">{{state}}</mat-option>
+                                                        </span>
+                                                    </mat-select>
+                                                    <!-- <mat-error *ngIf="newRegCertDetailsformGroup.controls['state'].invalid">
+                                                                                                                                </mat-error> -->
+                                                </mat-form-field>
+                                            </div>
+                                        
+                                            <div class="applicant-details">
+                                                <h4>Council</h4>
+                                                <mat-form-field appearance="outline">
+                                                    <input matInput placeholder="Council" formControlName="newCouncil">
+                                        
+                                                </mat-form-field>
+                                            </div>
+                                        
+                                            <div class="applicant-details">
+                                                <h4>Registration Number</h4>
+                                                <mat-form-field appearance="outline">
+                                                    <input matInput placeholder="Registration Number" formControlName="otherRegnNo">
+                                        
+                                                </mat-form-field>
+                                            </div>
+                                        
+                                            <div class="applicant-details">
+                                                <h4>Date</h4>
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Choose a date</mat-label>
+                                                    <input matInput formControlName="date">
+                                                    <mat-datepicker #pickerpassingDate></mat-datepicker>
+                                        
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
                                     
                                         <!-- <div class="buttons">
                                             <div class="button-group">

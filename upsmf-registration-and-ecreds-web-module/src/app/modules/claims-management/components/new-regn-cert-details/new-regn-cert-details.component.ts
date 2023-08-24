@@ -5,7 +5,8 @@ import { BaseServiceService } from 'src/app/services/base-service.service';
 import { Router } from '@angular/router';
 import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 import { allStateList } from 'src/models/statemodel';
-import {credentialsType} from 'src/models/credentialsTypemodel'
+import {credentialsType} from 'src/models/credentialsTypemodel';
+import { ConfigService } from 'src/app/modules/shared';
 
 @Component({
   selector: 'app-new-regn-cert-details',
@@ -40,6 +41,7 @@ export class NewRegnCertDetailsComponent {
   urlDataResponse:string;
   docsResponseUrl:string;
   convertUrlList:string;
+  getMakeClaimbody:any;
 
 
   osid: string;
@@ -50,6 +52,8 @@ export class NewRegnCertDetailsComponent {
   ];
   stateList:any[]=[]
   credTypeList:any[] =[];
+  userRole:any;
+  endPointUrl:any;
 
   
   stateData: any;
@@ -59,8 +63,19 @@ export class NewRegnCertDetailsComponent {
 
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe,
     private location: Location, private baseService: BaseServiceService,
-    private router: Router
+    private router: Router,
+    private configService: ConfigService
   ) {
+   this.userRole = this.baseService.getUserRole()[0]
+   console.log(this.userRole)
+    // var token:any
+    //  token =localStorage.getItem('token')
+    //  let tokenId:any = ''
+    //  tokenId = token
+    // console.log('accessTOken',tokenId)
+    // const helper = new JwtHelperService();
+    // const decoded= helper.decodeToken(tokenId);
+    // console.log(decoded)
     this.stateList = allStateList;
     this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
@@ -73,6 +88,25 @@ export class NewRegnCertDetailsComponent {
   ngOnInit() {
     this.initForm();
 
+  }
+
+  getEndPoint(){
+    switch (this.userRole) {
+
+      case 'StudentOutsideUP':
+        this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
+        break;
+        case 'StudentFromUP':
+        this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+        break;
+        case 'Regulator':
+        // this.router.navigate(['claims/new-regn-cert'])
+        break;
+
+      default:
+        return '';
+    }
+    return
   }
 
   requestTypeSelected(e:Event){
@@ -88,7 +122,7 @@ export class NewRegnCertDetailsComponent {
   }
 
   initForm() {
-
+ 
     this.newRegCertDetailsformGroup = this.formBuilder.group({
       applicantName: new FormControl('', [
         Validators.required]),
@@ -142,9 +176,13 @@ export class NewRegnCertDetailsComponent {
         Validators.required]),
       requestType: new FormControl('', [
           Validators.required]),
-       diplomaNumber: new FormControl('')
+       diplomaNumber: new FormControl(''),
+       stateName:new FormControl(''),
+       date: new FormControl(''),
+       newCouncil: new FormControl(''),
+       otherRegnNo: new FormControl('')
     });
-
+    this.getEndPoint();
     this.getCandidatePersonalDetails();
 
   }
@@ -152,7 +190,7 @@ export class NewRegnCertDetailsComponent {
   getCandidatePersonalDetails() {
     console.log("getting getCandidatePersonalDetails")
 
-    this.baseService.getCandidatePersonalDetails$()
+    this.baseService.getCandidatePersonalDetails$(this.endPointUrl)
       .subscribe(
         (response: any) => {
           if(response.responseData.length){
@@ -292,24 +330,55 @@ export class NewRegnCertDetailsComponent {
         "requestType":value.requestType,
         "docproof": this.convertUrlList,
         "regNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
-        "diplomaNumber": value.diplomaNumber
+        "diplomaNumber": value.diplomaNumber,
+        "courseState": value.stateName ? value.stateName : "NA",
+        "courseCouncil": value.newCouncil ?  value.newCouncil: "NA",
+        "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
+        "nurseRegDate": value.date? value.date : "NA"
       }
      console.log('updateStudentBody',updateStudentBody)
-      this.baseService.updateStudent$(this.osid, updateStudentBody)
+      this.baseService.updateStudent$(this.osid, updateStudentBody, this.endPointUrl)
        .pipe(
          mergeMap((resp: any) => {
-          const makeClaimbody =
-          {
-            entityName: "StudentFromUP",
+          this.getMakeClaimbody = {
+            // entityName: "StudentFromUP",
             entityId: this.osid,
             name: "studentVerification",
-            propertiesOSID: {
-              StudentFromUP: [
-                  this.osid
-                ]
-            }
+            // propertiesOSID: {
+            //   StudentFromUP: [
+            //       this.osid
+            //     ]
+            // }
         }
-           return this.baseService.makeClaim$(this.osid,makeClaimbody);
+           switch(this.userRole){
+            case 'StudentOutsideUP':
+              this.getMakeClaimbody = {
+                ...this.getMakeClaimbody,
+                entityName: "StudentOutsideUP",
+                propertiesOSID: {
+                  StudentOutsideUP: [
+                      this.osid
+                    ]
+                }
+              }
+              break;
+
+            case 'StudentFromUP':
+              this.getMakeClaimbody = {
+                ...this.getMakeClaimbody,
+                entityName: "StudentFromUP",
+                propertiesOSID: {
+                  StudentFromUP: [
+                      this.osid
+                    ]
+                }
+
+              }
+              break;
+
+           }
+
+           return this.baseService.makeClaim$(this.osid,this.getMakeClaimbody);
          }
          ))  
          .subscribe(
@@ -347,7 +416,7 @@ export class NewRegnCertDetailsComponent {
       console.log(this.fileList[i])
       formData.append("files", this.fileList[i]);
     }  
-    this.baseService.uploadFiles$(this.osid, formData).subscribe((data)=>{
+    this.baseService.uploadFiles$(this.osid, formData, this.endPointUrl).subscribe((data)=>{
       console.log(data)
       this.docsResponseUrl = data.result;
       this.docsUrl = this.docsResponseUrl.split(',').filter(url=>url.trim() !== "")

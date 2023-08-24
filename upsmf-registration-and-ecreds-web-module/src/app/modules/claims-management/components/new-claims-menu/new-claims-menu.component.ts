@@ -74,7 +74,7 @@ export class NewClaimsMenuComponent {
         this.router.navigate(['claims/new-regn-cert-details'])
         break;
         case 'regnCert':
-        this.router.navigate(['claims/new-regn-cert-details'])
+        this.router.navigate(['claims/new-regn-cert'])
         break;
 
 
