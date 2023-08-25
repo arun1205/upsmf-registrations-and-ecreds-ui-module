@@ -7,6 +7,7 @@ import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 import { allStateList } from 'src/models/statemodel';
 import {credentialsType} from 'src/models/credentialsTypemodel';
 import { ConfigService } from 'src/app/modules/shared';
+import { HttpService } from 'src/app/core/services/http-service/http.service';
 
 @Component({
   selector: 'app-new-regn-cert-details',
@@ -64,7 +65,8 @@ export class NewRegnCertDetailsComponent {
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe,
     private location: Location, private baseService: BaseServiceService,
     private router: Router,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private http: HttpService
   ) {
    this.userRole = this.baseService.getUserRole()[0]
    console.log(this.userRole)
@@ -86,6 +88,7 @@ export class NewRegnCertDetailsComponent {
   }
 
   ngOnInit() {
+    console.log(this.baseService.generate_uuidv4())
     this.initForm();
 
   }
@@ -524,5 +527,45 @@ export class NewRegnCertDetailsComponent {
       default:
         return '';
     }
+  }
+
+  handlePayment(){
+    const postData = {
+      endpoint: "https://eazypayuat.icicibank.com/EazyPG",
+      returnUrl: "https://payment.uphrh.in/api/v1/user/payment",
+      paymode: "9",
+      secret: "",
+      merchantId: "600547",
+      mandatoryFields: {
+        referenceNo: this.baseService.generate_uuidv4(),
+        submerchantId: "45",
+        transactionAmount: "1000",
+        invoiceId: "x1",
+        invoiceDate: "x",
+        invoiceTime: "x",
+        merchantId: "x",
+        payerType: "Institute",
+        payerId: 'instituteId',
+        transactionId: "x",
+        transactionDate: "x",
+        transactionTime: "x",
+        transactionStatus: "x",
+        refundId: "x",
+        refundDate: "x",
+        refundTime: "x",
+        refundStatus: "x",
+      },
+
+      optionalFields: "",
+
+    };
+    this.http.getPaymentUrl(postData).subscribe((data)=>{
+      console.log(data)
+      if(data){
+        window.open(data?.redirectUrl, '_blank')
+
+      }
+    }
+    )
   }
 }

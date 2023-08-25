@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { of as observableOf, Observable, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { HttpOptions, RequestParam, ServerResponse, Response } from '../../../interfaces/api';
+import { environment } from 'src/environments/environment';
+import { paymentPostData } from 'src/app/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +16,7 @@ export class HttpService {
    * Contains base Url for api end points
    */
   baseUrl: string;
+  paymentUrl:string = environment.paymentUrl;
   
   constructor(private http: HttpClient) {}
 
@@ -133,5 +136,12 @@ export class HttpService {
       } else {
         return { ...default_headers };
       }
+    }
+
+
+    // Payment gateway Service
+
+    getPaymentUrl(body: paymentPostData):Observable<any>{
+      return this.http.post(this.paymentUrl,body) 
     }
 }

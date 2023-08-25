@@ -8,10 +8,13 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from '../../src/app/material/material.module';
 
 import { BaseInterceptorInterceptor } from './services/base-interceptor.interceptor';
+import { PaymentSuccessFailureComponent } from './payment-success-failure/payment-success-failure.component';
+import { SharedModule } from './modules/shared';
 
 @NgModule({
   declarations: [
     AppComponent,
+    PaymentSuccessFailureComponent,
   ],
   imports: [
     BrowserModule,
@@ -19,6 +22,7 @@ import { BaseInterceptorInterceptor } from './services/base-interceptor.intercep
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
+    SharedModule
     
   ],
   providers: [ { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptorInterceptor, multi: true }

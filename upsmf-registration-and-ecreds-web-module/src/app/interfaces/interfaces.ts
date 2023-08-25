@@ -123,4 +123,33 @@ export interface ClaimsTableData {
 
   }
 
+  export interface paymentPostData {
+      endpoint: string,
+      returnUrl: string,
+      paymode: string,
+      secret: string,
+      merchantId: string,
+      mandatoryFields: {
+        referenceNo: string,
+        submerchantId: string,
+        transactionAmount: string,
+        invoiceId: string,
+        invoiceDate: string,
+        invoiceTime: string,
+        merchantId: string,
+        payerType: string,
+        payerId: string,
+        transactionId: string,
+        transactionDate: string,
+        transactionTime: string,
+        transactionStatus: string,
+        refundId: string,
+        refundDate: string,
+        refundTime: string,
+        refundStatus: string,
+      },
+
+      optionalFields: string,
+  }
+
 
