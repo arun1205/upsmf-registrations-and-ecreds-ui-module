@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './modules/user-authentication/components/login-page/login-page.component';
+import { PaymentSuccessFailureComponent } from './payment-success-failure/payment-success-failure.component';
 
 
 const routes: Routes = [
   {
     path: '', component: LoginPageComponent, pathMatch: 'full'
+  },
+  {
+    path:'payment-response', component: PaymentSuccessFailureComponent
   },
   {
     path: 'claims', loadChildren: () => import('./modules/claims-management/claims-management.module').then(m => m.ClaimsManagementModule)
@@ -16,6 +20,7 @@ const routes: Routes = [
     {
     path: 'users', loadChildren: () => import('./modules/user-management/user-management.module').then(m => m.UserManagementModule)
   }
+  
 ];
 
 @NgModule({

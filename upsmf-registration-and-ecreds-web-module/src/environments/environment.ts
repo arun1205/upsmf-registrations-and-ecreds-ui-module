@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'https://registration.uphrh.in/',
+  paymentUrl: 'https://payment.uphrh.in/payment/generatelink'
 };
 
 /*
