@@ -28,6 +28,28 @@ export interface ClaimsTableData {
     phoneNumber: string;
     role: string;
   }
+  export interface DashBoardData{
+    no:string;
+    type:string;
+    totalclaim:string
+    pending:string;
+    rejected:string;
+    payment:string;
+    issue:string;
+    approval:string;
+    claimpending:string
+    
+  }
+  export interface ClaimDashBoardData{
+    
+      no:string,
+      name:string,
+      type:string,
+      id:string,
+      claimdate:string,
+      prdate:string,
+      status:string
+    }
 
   export interface TableColumn {
     columnDef: string;
