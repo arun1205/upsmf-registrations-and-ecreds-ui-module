@@ -204,7 +204,7 @@ export class BaseServiceService  extends HttpService   {
    const helper = new JwtHelperService();
    const decoded= helper.decodeToken(tokenId);
    console.log(decoded)
-   return decoded.preferred_username
+   return decoded.entity
    
   }
 

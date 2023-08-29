@@ -76,7 +76,7 @@ export class NewRegnCertDetailsComponent {
     private http: HttpService,
     private route:  ActivatedRoute
   ) {
-  this.userEmail = this.baseService.getUserRole()
+  this.userEmail = this.baseService.getUserRole()[0]
    console.log(this.userEmail)
     // var token:any
     //  token =localStorage.getItem('token')
