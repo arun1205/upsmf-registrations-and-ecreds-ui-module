@@ -19,6 +19,9 @@ const routes: Routes = [
   },
     {
     path: 'users', loadChildren: () => import('./modules/user-management/user-management.module').then(m => m.UserManagementModule)
+  },
+  {
+    path: 'super-admin', loadChildren: () => import('./modules/super-admin-management/super-admin-management.module').then(m => m.SuperAdminManagementModule)
   }
   
 ];
