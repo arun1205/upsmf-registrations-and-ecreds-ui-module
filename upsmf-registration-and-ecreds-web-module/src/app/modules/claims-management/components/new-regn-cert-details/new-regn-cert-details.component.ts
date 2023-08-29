@@ -2,11 +2,11 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, Location } from '@angular/common';
 import { BaseServiceService } from 'src/app/services/base-service.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 import { allStateList } from 'src/models/statemodel';
 import {credentialsType} from 'src/models/credentialsTypemodel';
-import { ConfigService } from 'src/app/modules/shared';
+import { BreadcrumbItem, ConfigService } from 'src/app/modules/shared';
 import { HttpService } from 'src/app/core/services/http-service/http.service';
 
 @Component({
@@ -43,7 +43,10 @@ export class NewRegnCertDetailsComponent {
   docsResponseUrl:string;
   convertUrlList:string;
   getMakeClaimbody:any;
-
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Claim Registration Certificate', url: '/claims/new' },
+    { label: 'Claim Details', url: '/claims/new-regn-cert' }
+  ];
 
   osid: string;
 
@@ -55,6 +58,9 @@ export class NewRegnCertDetailsComponent {
   credTypeList:any[] =[];
   userRole:any;
   endPointUrl:any;
+  courseList:any[]=[];
+  courseUrl:string = ''
+  paymentResponse:any;
 
   
   stateData: any;
@@ -66,9 +72,10 @@ export class NewRegnCertDetailsComponent {
     private location: Location, private baseService: BaseServiceService,
     private router: Router,
     private configService: ConfigService,
-    private http: HttpService
+    private http: HttpService,
+    private route:  ActivatedRoute
   ) {
-   this.userRole = this.baseService.getUserRole()[0]
+  this.userRole = this.baseService.getUserRole()[0]
    console.log(this.userRole)
     // var token:any
     //  token =localStorage.getItem('token')
@@ -83,6 +90,7 @@ export class NewRegnCertDetailsComponent {
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     console.log("stateData:",this.stateData)
     this.stateData =  this.stateData?.body
+    console.log(this.stateData?.origin)
     
 
   }
@@ -91,16 +99,35 @@ export class NewRegnCertDetailsComponent {
     console.log(this.baseService.generate_uuidv4())
     this.initForm();
 
+    this.route.queryParams.subscribe((param)=>{
+      if(param['resData']){
+        this.paymentResponse = JSON.parse(param['resData'])
+        this.paymentDetails = this.paymentResponse.isPayment
+      }
+      })
+      console.log(this.osid)
+    
+  }
+
+  getCourses(courseUrl:string){
+    this.baseService.getCourses(courseUrl).subscribe((data)=>{
+      console.log('data',data)
+      this.courseList = data.responseData['result']
+    })
   }
 
   getEndPoint(){
-    switch (this.userRole) {
+    switch (this.stateData?.origin) {
 
       case 'StudentOutsideUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
+        this.courseUrl= this.configService.urlConFig.URLS.STUDENT.GET_COURSES
+        this.getCourses(this.courseUrl)
         break;
         case 'StudentFromUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+        this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
+        this.getCourses(this.courseUrl)
         break;
         case 'Regulator':
         // this.router.navigate(['claims/new-regn-cert'])
@@ -337,56 +364,57 @@ export class NewRegnCertDetailsComponent {
         "courseState": value.stateName ? value.stateName : "NA",
         "courseCouncil": value.newCouncil ?  value.newCouncil: "NA",
         "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
-        "nurseRegDate": value.date? value.date : "NA"
+        "nurseRegDate": value.date? value.date : "NA",
       }
      console.log('updateStudentBody',updateStudentBody)
+     const paymentData = {
+      osId : this.osid,
+      origin: this.stateData?.origin,
+      endPointUrl:this.endPointUrl
+     }
+     localStorage.setItem('payData', JSON.stringify(paymentData))
       this.baseService.updateStudent$(this.osid, updateStudentBody, this.endPointUrl)
-       .pipe(
-         mergeMap((resp: any) => {
-          this.getMakeClaimbody = {
-            // entityName: "StudentFromUP",
-            entityId: this.osid,
-            name: "studentVerification",
-            // propertiesOSID: {
-            //   StudentFromUP: [
-            //       this.osid
-            //     ]
-            // }
-        }
-           switch(this.userRole){
-            case 'StudentOutsideUP':
-              this.getMakeClaimbody = {
-                ...this.getMakeClaimbody,
-                entityName: "StudentOutsideUP",
-                propertiesOSID: {
-                  StudentOutsideUP: [
-                      this.osid
-                    ]
-                }
-              }
-              break;
+      //  .pipe(
+      //    mergeMap((resp: any) => {
+      //     this.getMakeClaimbody = {
+      //       entityId: this.osid,
+      //       name: "studentVerification",
+      //   }
+      //      switch(this.stateData?.origin){
+      //       case 'StudentOutsideUP':
+      //         this.getMakeClaimbody = {
+      //           ...this.getMakeClaimbody,
+      //           entityName: "StudentOutsideUP",
+      //           propertiesOSID: {
+      //             StudentOutsideUP: [
+      //                 this.osid
+      //               ]
+      //           }
+      //         }
+      //         break;
 
-            case 'StudentFromUP':
-              this.getMakeClaimbody = {
-                ...this.getMakeClaimbody,
-                entityName: "StudentFromUP",
-                propertiesOSID: {
-                  StudentFromUP: [
-                      this.osid
-                    ]
-                }
+      //       case 'StudentFromUP':
+      //         this.getMakeClaimbody = {
+      //           ...this.getMakeClaimbody,
+      //           entityName: "StudentFromUP",
+      //           propertiesOSID: {
+      //             StudentFromUP: [
+      //                 this.osid
+      //               ]
+      //           }
 
-              }
-              break;
+      //         }
+      //         break;
 
-           }
+      //      }
 
-           return this.baseService.makeClaim$(this.osid,this.getMakeClaimbody);
-         }
-         ))  
+      //      return this.baseService.makeClaim$(this.osid,this.getMakeClaimbody);
+      //    }
+      //    ))  
          .subscribe(
            (response) => {
              console.log(response);
+            this.paymentDetails= true;
    
            },
          )
@@ -544,7 +572,7 @@ export class NewRegnCertDetailsComponent {
         invoiceDate: "x",
         invoiceTime: "x",
         merchantId: "x",
-        payerType: "Institute",
+        payerType: "registration",
         payerId: 'instituteId',
         transactionId: "x",
         transactionDate: "x",
@@ -556,7 +584,7 @@ export class NewRegnCertDetailsComponent {
         refundStatus: "x",
       },
 
-      optionalFields: "",
+      optionalFields: "registration",
 
     };
     this.http.getPaymentUrl(postData).subscribe((data)=>{

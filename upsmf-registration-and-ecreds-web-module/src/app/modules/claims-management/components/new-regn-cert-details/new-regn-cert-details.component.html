@@ -1,4 +1,6 @@
 <app-header></app-header>
+<app-breadcrumb [breadcrumbItems]="breadcrumbItems"></app-breadcrumb>
+
 <div class="full-container">
     <div class="certificate-container">
         <div class="certificate-header">
@@ -287,10 +289,18 @@
 
                                         <div class="applicant-details">
                                             <h4>Course Name</h4>
-                                            <mat-form-field appearance="outline">
+                                            <mat-form-field appearance ="outline">
+                                                <mat-label>Course Name</mat-label>
+                                              <mat-select (selectionChange)="requestTypeSelected($event)" formControlName="courseName">
+                                                <span *ngFor='let course of courseList;let i = index'>
+                                                    <mat-option [value]="course">{{course}}</mat-option>
+                                                </span>
+                                              </mat-select>
+                                        </mat-form-field>
+                                            <!-- <mat-form-field appearance="outline">
                                                 <input matInput placeholder="Course Name" formControlName="courseName">
                                             
-                                            </mat-form-field>
+                                            </mat-form-field> -->
                                         </div>
 
                                         <div class="applicant-details">

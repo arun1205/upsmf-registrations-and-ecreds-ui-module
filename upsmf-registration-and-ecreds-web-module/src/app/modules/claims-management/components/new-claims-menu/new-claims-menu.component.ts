@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { BreadcrumbItem } from 'src/app/modules/shared';
 
 @Component({
   selector: 'app-new-claims-menu',
@@ -46,6 +47,11 @@ export class NewClaimsMenuComponent {
       description: 'Maecenas consectetur ligula sit amet magna ornare lobortis. Fusce lobortis bibendum neque. ' ,
       type:'regnCertoutsideUP'
     }
+];
+
+breadcrumbItems: BreadcrumbItem[] = [
+  { label: 'Claims List', url: '/claims/manage' },
+  { label: 'Claim Registration Certificate', url: '/claims/new' }
 ];
 
   constructor(private router:Router){

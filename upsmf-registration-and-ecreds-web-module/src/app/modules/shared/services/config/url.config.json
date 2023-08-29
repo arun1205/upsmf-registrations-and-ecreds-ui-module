@@ -15,7 +15,7 @@
             "GET_STUDENT_DETAILS_GOODSTANDING":"api/v1/StudentGoodstanding/",
             "GET_STUDENT_DETAILS_FOREIGNVARIFIVATION":"api/v1/StudentForeignVerification/",
             "UPDATE":"api/v1/StudentFromUP/",
-            "GET_COURSES":"/claims/api/v1/courses",
+            "GET_COURSES":"api/v1/category/StudentFromUP/",
             "GET_STUDENT_DETAILS_OUTSIDE_UP":"api/v1/StudentOutsideUP/",
             "OUTSIDE_UP_UPDATE":"api/v1/StudentOutsideUP/",
             "UPDATE_GOODSTANDING":"api/v1/StudentGoodstanding/",

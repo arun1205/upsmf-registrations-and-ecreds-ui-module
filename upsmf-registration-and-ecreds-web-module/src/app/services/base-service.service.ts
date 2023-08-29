@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ClaimDetails, ClaimsTableData, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding } from '../interfaces/interfaces';
+import { ClaimDetails, ClaimsTableData, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding, studentUpdate } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -126,6 +126,8 @@ export class BaseServiceService  extends HttpService   {
          return this.put(reqParam);
        
        }
+
+       
        updateStudentGoodStanding$(osid:string, body: StudentDetailsGoodStanding): Observable<any>{
         const reqParam:RequestParam={
           url:this.configService.urlConFig. URLS.STUDENT.UPDATE_GOODSTANDING + osid,
@@ -195,6 +197,15 @@ export class BaseServiceService  extends HttpService   {
    
   }
 
+  getCourses(courseUrl:string){
+    const reqParam: RequestParam = {
+      url: courseUrl,
+      header: this.headers
+    }
+    return this.get(reqParam);
+  
+  }
+
    generate_uuidv4(){
     var dt = new Date().getTime();
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -205,6 +216,17 @@ export class BaseServiceService  extends HttpService   {
     });
   
   };
+
+  updateStudentData$(osid:string , body: studentUpdate,endPointUrl:any): Observable<any>{
+    console.log(body)
+       const reqParam: RequestParam = {
+         url: endPointUrl + osid ,  
+         data: body,
+         header: this.headers
+       }
+       return this.put(reqParam);
+     
+     }
 
   
  

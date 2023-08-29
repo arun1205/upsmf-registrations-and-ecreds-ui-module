@@ -9,4 +9,7 @@ import { BreadcrumbItem } from '../../interfaces';
 export class BreadcrumbComponent {
 
   @Input() breadcrumbItems: BreadcrumbItem[];
+  constructor(){
+    console.log(this.breadcrumbItems)
+  }
 }
