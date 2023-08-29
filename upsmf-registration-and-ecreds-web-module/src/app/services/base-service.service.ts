@@ -127,6 +127,17 @@ export class BaseServiceService  extends HttpService   {
        
        }
 
+       postStudent$(body: StudentDetails,endPointUrl:any): Observable<any>{
+        console.log(body)
+           const reqParam: RequestParam = {
+             url: endPointUrl,  
+             data: body,
+             header: this.headers
+           }
+           return this.post(reqParam);
+         
+         }
+
        
        updateStudentGoodStanding$(osid:string, body: StudentDetailsGoodStanding): Observable<any>{
         const reqParam:RequestParam={

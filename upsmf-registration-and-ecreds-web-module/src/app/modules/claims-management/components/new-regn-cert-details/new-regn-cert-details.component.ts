@@ -57,6 +57,7 @@ export class NewRegnCertDetailsComponent {
   stateList:any[]=[]
   credTypeList:any[] =[];
   userRole:any;
+  userEmail:any;
   endPointUrl:any;
   courseList:any[]=[];
   courseUrl:string = ''
@@ -75,8 +76,8 @@ export class NewRegnCertDetailsComponent {
     private http: HttpService,
     private route:  ActivatedRoute
   ) {
-  this.userRole = this.baseService.getUserRole()[0]
-   console.log(this.userRole)
+  this.userEmail = this.baseService.getUserRole()[0]
+   console.log(this.userEmail)
     // var token:any
     //  token =localStorage.getItem('token')
     //  let tokenId:any = ''
@@ -121,7 +122,7 @@ export class NewRegnCertDetailsComponent {
 
       case 'StudentOutsideUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
-        this.courseUrl= this.configService.urlConFig.URLS.STUDENT.GET_COURSES
+        this.courseUrl= this.configService.urlConFig.URLS.STUDENT.GET_COURSES_OUTSIDE
         this.getCourses(this.courseUrl)
         break;
         case 'StudentFromUP':
@@ -192,7 +193,7 @@ export class NewRegnCertDetailsComponent {
 
     this.newRegCourseDetailsformGroup = this.formBuilder.group({
       courseName: new FormControl('', [
-        Validators.required]),
+       ]),
       collegeName: new FormControl('', [
         Validators.required]),
       examBody: new FormControl('', [
@@ -293,6 +294,7 @@ export class NewRegnCertDetailsComponent {
           /*     this.listOfFiles =  */
         }
       );
+      
   }
 
   newRegCertDetailsformGroupSubmit(value: any) {
@@ -365,59 +367,44 @@ export class NewRegnCertDetailsComponent {
         "courseCouncil": value.newCouncil ?  value.newCouncil: "NA",
         "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
         "nurseRegDate": value.date? value.date : "NA",
+        "claimType":"registration",
+        "certificateNo": "NA"
       }
      console.log('updateStudentBody',updateStudentBody)
-     const paymentData = {
-      osId : this.osid,
-      origin: this.stateData?.origin,
-      endPointUrl:this.endPointUrl
-     }
-     localStorage.setItem('payData', JSON.stringify(paymentData))
-      this.baseService.updateStudent$(this.osid, updateStudentBody, this.endPointUrl)
-      //  .pipe(
-      //    mergeMap((resp: any) => {
-      //     this.getMakeClaimbody = {
-      //       entityId: this.osid,
-      //       name: "studentVerification",
-      //   }
-      //      switch(this.stateData?.origin){
-      //       case 'StudentOutsideUP':
-      //         this.getMakeClaimbody = {
-      //           ...this.getMakeClaimbody,
-      //           entityName: "StudentOutsideUP",
-      //           propertiesOSID: {
-      //             StudentOutsideUP: [
-      //                 this.osid
-      //               ]
-      //           }
-      //         }
-      //         break;
-
-      //       case 'StudentFromUP':
-      //         this.getMakeClaimbody = {
-      //           ...this.getMakeClaimbody,
-      //           entityName: "StudentFromUP",
-      //           propertiesOSID: {
-      //             StudentFromUP: [
-      //                 this.osid
-      //               ]
-      //           }
-
-      //         }
-      //         break;
-
-      //      }
-
-      //      return this.baseService.makeClaim$(this.osid,this.getMakeClaimbody);
-      //    }
-      //    ))  
+   
+     if(this.osid){
+      const paymentData = {
+        osId : this.osid,
+        origin: this.stateData?.origin,
+        endPointUrl:this.endPointUrl
+       }
+       localStorage.setItem('payData', JSON.stringify(paymentData))
+          this.baseService.updateStudent$(this.osid, updateStudentBody, this.endPointUrl)
          .subscribe(
            (response) => {
              console.log(response);
             this.paymentDetails= true;
+            
    
            },
          )
+     } else {
+      this.baseService.postStudent$(updateStudentBody, this.endPointUrl).subscribe((data)=>{
+        console.log(data)
+        if(data.result['StudentOutsideUP']) {
+          this.paymentDetails= true;
+           this.osid = data?.result?.StudentOutsideUP['osid']
+
+           const paymentData = {
+            osId : this.osid,
+            origin: this.stateData?.origin,
+            endPointUrl:this.endPointUrl
+           }
+           localStorage.setItem('payData', JSON.stringify(paymentData))
+        }
+
+      })
+     }
     }
   }
 
