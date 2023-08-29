@@ -174,4 +174,8 @@ export interface ClaimsTableData {
       optionalFields: string,
   }
 
+  export interface studentUpdate {
+    paymentStatus: string
+  }
+
 

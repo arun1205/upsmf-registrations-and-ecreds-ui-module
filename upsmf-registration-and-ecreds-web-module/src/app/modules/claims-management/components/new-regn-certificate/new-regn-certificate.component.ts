@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, NgForm, ValidatorFn, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { BaseServiceService } from 'src/app/services/base-service.service';
+import { BreadcrumbItem } from 'src/app/modules/shared/interfaces';
 
 
 @Component({
@@ -22,7 +23,16 @@ export class NewRegnCertificateComponent {
 
 
   originTypesArray = [
-    'From UP', 'Outside UP'
+    {
+      name:'From UP',
+      key: 'StudentFromUP'
+    },
+    {
+      name:'Outside UP',
+      key: 'StudentOutsideUP'
+    }
+
+    // 'From UP', 'Outside UP'
   ]
   councilsTypesArray = [
     'Paramedical', 'Nursing'
@@ -40,6 +50,11 @@ export class NewRegnCertificateComponent {
     'degree', 'Diploma'
   ]
 
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Claim Registration Certificate', url: '/claims/new' },
+    { label: 'Claim Details', url: '/claims/new-regn-cert' }
+  ];
+
 
 
   @Input() newRegCertformGroup: FormGroup;
@@ -48,6 +63,14 @@ export class NewRegnCertificateComponent {
 
   ngOnInit() {
     this.createForm();
+    this.getCourses()
+  }
+
+  getCourses(){
+    this.baseService.getCourses('DIPLOMA').subscribe((data)=>{
+      console.log('data',data.responseData['result'])
+      this.qualificationsTypesArray = data?.responseData['result']
+    })
   }
 
   createForm() {
@@ -69,7 +92,7 @@ export class NewRegnCertificateComponent {
         Validators.required]),
     });
     (this.origin.valueChanges).subscribe(value => {
-      value === 'From UP' ? this.courseType.enable() : this.courseType.disable()
+      value === 'StudentFromUP' ? this.courseType.enable() : this.courseType.disable()
     });
     this.courseType.valueChanges.subscribe(value => {
       if (value === "Diploma") {

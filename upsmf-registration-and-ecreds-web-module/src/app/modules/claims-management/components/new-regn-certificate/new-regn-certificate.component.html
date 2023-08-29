@@ -1,4 +1,5 @@
 <app-header></app-header>
+<app-breadcrumb [breadcrumbItems]="breadcrumbItems"></app-breadcrumb>
 <div class="main-container">
     <div class="claim-details-container">
         <div class="header">
@@ -53,8 +54,8 @@
                                 <h4 >Origin </h4>
                                 <mat-radio-group color="primary"  name="origin" aria-label="Origin" formControlName="origin"  >
                                     <span *ngFor='let origin of originTypesArray;let i = index' >
-                                        <mat-radio-button [value]="origin"  
-                                            (change)="radioChecked(origin,i)">{{origin}}</mat-radio-button>
+                                        <mat-radio-button [value]="origin.key"  
+                                            (change)="radioChecked(origin,i)">{{origin.name}}</mat-radio-button>
                                     </span>
 
                                 </mat-radio-group>
@@ -65,7 +66,7 @@
                         <!-- </div> -->
 
                         <!-- <div class="flex flex-row  ml4 mt2"> -->
-                            <div class="applicant-details" *ngIf = "this.newRegCertformGroup.controls['origin'].value === 'From UP'">
+                            <div class="applicant-details" *ngIf = "this.newRegCertformGroup.controls['origin'].value === 'StudentFromUP'">
                                 <h4 >Select type of course</h4>
                                 <mat-form-field appearance="outline">
                                     <mat-label>Select type of course </mat-label>
