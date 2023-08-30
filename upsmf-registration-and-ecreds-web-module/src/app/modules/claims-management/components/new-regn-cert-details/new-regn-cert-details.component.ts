@@ -8,6 +8,9 @@ import { allStateList } from 'src/models/statemodel';
 import {credentialsType} from 'src/models/credentialsTypemodel';
 import { BreadcrumbItem, ConfigService } from 'src/app/modules/shared';
 import { HttpService } from 'src/app/core/services/http-service/http.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { DialogBoxComponent } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-new-regn-cert-details',
@@ -49,11 +52,26 @@ export class NewRegnCertDetailsComponent {
   ];
 
   osid: string;
+  entity:string;
 
   months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
+  monthMap:{ [key: string]: string } = {
+    "January": "01",
+    "February": "02",
+    "March": "03",
+    "April": "04",
+    "May": "05",
+    "June": "06",
+    "July": "07",
+    "August": "08",
+    "September": "09",
+    "October": "10",
+    "November": "11",
+    "December": "12"
+  };
   stateList:any[]=[]
   credTypeList:any[] =[];
   userRole:any;
@@ -74,7 +92,8 @@ export class NewRegnCertDetailsComponent {
     private router: Router,
     private configService: ConfigService,
     private http: HttpService,
-    private route:  ActivatedRoute
+    private route:  ActivatedRoute,
+    public dialog: MatDialog,
   ) {
   this.userEmail = this.baseService.getUserRole()[0]
    console.log(this.userEmail)
@@ -220,15 +239,18 @@ export class NewRegnCertDetailsComponent {
 
   getCandidatePersonalDetails() {
     console.log("getting getCandidatePersonalDetails")
-
-    this.baseService.getCandidatePersonalDetails$(this.endPointUrl)
+    this.osid=this.stateData?.id
+    this.entity= this.stateData?.entity
+    console.log("entity",this.entity)
+    if(this.entity==="StudentFromUP"){
+      this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
-          if(response.responseData.length){
-            this.candidateDetailList = response.responseData
-            console.log(this.candidateDetailList[0])
-            this.osid = this.candidateDetailList[0].osid;
-            this.urlDataResponse = this.candidateDetailList[0].docproof;
+          // if(response.responseData.length){
+            const candidateDetailList = JSON.parse(response.responseData.claim.propertyData)
+            console.log("cad",response)
+            this.osid = response.responseData.claim.osid;
+            this.urlDataResponse = candidateDetailList.docproof;
             if(!!this.urlDataResponse){
               this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               console.log('urlDaaaa',this.urlData)
@@ -251,23 +273,25 @@ export class NewRegnCertDetailsComponent {
             console.log(this.listOfFiles)
             
             // this.listOfFiles = this.candidateDetailList[0].docproof;
-            console.log('canndidateList',this.candidateDetailList[0])
+            console.log('canndidateList',this.candidateDetailList)
             this.newRegCertDetailsformGroup.patchValue({
-              email: this.candidateDetailList[0]?.email,
-              mobNumber: this.candidateDetailList[0]?.phoneNumber,
-              applicantName: this.candidateDetailList[0]?.name,
-              adhr: this.candidateDetailList[0]?.aadhaarNo,
-              motherName: this.candidateDetailList[0]?.mothersName,
-              fatherName: this.candidateDetailList[0]?.fathersName, 
-              dob: this.candidateDetailList[0]?.dateOfBirth,
-              gender: this.candidateDetailList[0]?.gender,
-              al1: this.candidateDetailList[0]?.address,
-              al2: this.candidateDetailList[0]?.address,
-              state: this.candidateDetailList[0].state,
-              pin: this.candidateDetailList[0]?.pincode,
-              district: this.candidateDetailList[0]?.district,
-              country: this.candidateDetailList[0]?.country,
-              credType: this.candidateDetailList[0]?.credType
+              email: candidateDetailList.email,
+              mobNumber: candidateDetailList.phoneNumber,
+              applicantName: candidateDetailList.name,
+              adhr: candidateDetailList.aadhaarNo,
+              motherName: candidateDetailList.mothersName,
+              fatherName: candidateDetailList.fathersName, 
+              dob: candidateDetailList.dateOfBirth,
+              gender: candidateDetailList.gender,
+              al1: candidateDetailList.address,
+              al2: candidateDetailList.address,
+              state: candidateDetailList.state,
+              pin: candidateDetailList.pincode,
+              district: candidateDetailList.district,
+              country: candidateDetailList.country,
+              credType: candidateDetailList.credType,
+              
+
   
   
               
@@ -277,23 +301,112 @@ export class NewRegnCertDetailsComponent {
               "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
              new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
           
+
+             const joinM = candidateDetailList.joiningMonth;
+             console.log("month",joinM)
+             const jm = this.monthMap[joinM]
+             console.log("mon",jm)
+             const passM = candidateDetailList  .passingMonth;
+             console.log("month",joinM)
+             const pm = this.monthMap[joinM]
+             console.log("mon",pm)
+
             this.newRegCourseDetailsformGroup.patchValue({
-              courseName: this.candidateDetailList[0]?.courseName,
-              collegeName: this.candidateDetailList[0]?.nursingCollage,
-              examBody: this.candidateDetailList[0]?.examBody,
-              joinDate: this.candidateDetailList[0]?.joiningYear+"-" +month+ "-01",
-              rollNum: this.candidateDetailList[0]?.finalYearRollNo,
-              passDate: this.candidateDetailList[0]?.passingYear+"-" +month+ "-01",
-              requestType: this.candidateDetailList[0]?.requestType
+              courseName: candidateDetailList.courseName,
+              collegeName: candidateDetailList.nursingCollage,
+              examBody: candidateDetailList.examBody,
+              
+              joinDate: candidateDetailList.joiningYear+"-" +jm+ "-01",
+              rollNum: candidateDetailList.finalYearRollNo,
+              passDate: candidateDetailList.passingYear+"-" +pm+ "-01",
+              requestType: candidateDetailList.requestType
             });
             
             console.log(this.newRegCourseDetailsformGroup.value.joinDate)
-          }
+          // }
          
 
           /*     this.listOfFiles =  */
         }
       );
+
+    }
+    else{
+
+      this.baseService.getCandidatePersonalDetails$()
+        .subscribe(
+          (response: any) => {
+            if(response.responseData.length){
+              this.candidateDetailList = response.responseData
+              console.log(this.candidateDetailList[0])
+              this.osid = this.candidateDetailList[0].osid;
+              this.urlDataResponse = this.candidateDetailList[0].docproof;
+              if(!!this.urlDataResponse){
+                this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+                console.log('urlDaaaa',this.urlData)
+                if(this.urlData.length){
+                  this.listOfFiles = this.urlData?.map(url => {
+                    const parts = url.split('=');
+                    const fileNameWithQueryParams = parts[1];
+                    const fileName = fileNameWithQueryParams.split('/').pop();
+                    const extractLastPart = fileName?.split('_').pop(); 
+                    const getuploadObject = {
+                      name:extractLastPart,
+                      url:url
+                    } 
+                    return getuploadObject;         
+                  });
+                }
+              }
+            
+              
+              console.log(this.listOfFiles)
+              
+              // this.listOfFiles = this.candidateDetailList[0].docproof;
+              console.log('canndidateList',this.candidateDetailList[0])
+              this.newRegCertDetailsformGroup.patchValue({
+                email: this.candidateDetailList[0]?.email,
+                mobNumber: this.candidateDetailList[0]?.phoneNumber,
+                applicantName: this.candidateDetailList[0]?.name,
+                adhr: this.candidateDetailList[0]?.aadhaarNo,
+                motherName: this.candidateDetailList[0]?.mothersName,
+                fatherName: this.candidateDetailList[0]?.fathersName, 
+                dob: this.candidateDetailList[0]?.dateOfBirth,
+                gender: this.candidateDetailList[0]?.gender,
+                al1: this.candidateDetailList[0]?.address,
+                al2: this.candidateDetailList[0]?.address,
+                state: this.candidateDetailList[0].state,
+                pin: this.candidateDetailList[0]?.pincode,
+                district: this.candidateDetailList[0]?.district,
+                country: this.candidateDetailList[0]?.country,
+                credType: this.candidateDetailList[0]?.credType
+    
+    
+                
+                // district : response[0]?.district
+              });
+              const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
+                "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
+              new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
+            
+              this.newRegCourseDetailsformGroup.patchValue({
+                courseName: this.candidateDetailList[0]?.courseName,
+                collegeName: this.candidateDetailList[0]?.nursingCollage,
+                examBody: this.candidateDetailList[0]?.examBody,
+                joinDate: this.candidateDetailList[0]?.joiningYear+"-" +month+ "-01",
+                rollNum: this.candidateDetailList[0]?.finalYearRollNo,
+                passDate: this.candidateDetailList[0]?.passingYear+"-" +month+ "-01",
+                requestType: this.candidateDetailList[0]?.requestType
+              });
+              
+              console.log(this.newRegCourseDetailsformGroup.value.joinDate)
+            }
+          
+
+            /*     this.listOfFiles =  */
+          }
+        );
+        }
       
   }
 
@@ -307,6 +420,19 @@ export class NewRegnCertDetailsComponent {
   }
   onNewRegCourseDetailsformSubmit(value: any) {
     this.submitted = true;
+    const osid=this.stateData?.id
+    console.log("osis",osid)
+    if(this.entity==="StudentFromUP"){
+      const approveBody={
+        action:"GRANT_CLAIM",
+        note:"Registration Certificate"
+      }
+      this.baseService.approveClaim$(osid,approveBody)
+      .subscribe((response)=>{
+        console.log(response)
+      })
+    }
+    else{
     if (this.newRegCourseDetailsformGroup.valid) {
 
       console.log(this.newRegCertDetailsformGroup.value)
@@ -406,6 +532,7 @@ export class NewRegnCertDetailsComponent {
       })
      }
     }
+  }
   }
 
   navigateToUrl(item:any){
@@ -521,10 +648,37 @@ export class NewRegnCertDetailsComponent {
   }
 
   onReset() {
+    if(this.entity==="StudentFromUP"){
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
+         disableClose: true ,
+        width: '40rem',
+        height:'25rem'
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        const reason = result;
+
+        console.log("res",reason);
+        const approveBody={
+          action:"REJECT_CLAIM",
+          note:reason
+        }
+        const osid=this.stateData?.id
+        this.baseService.approveClaim$(osid,approveBody)
+        .subscribe((response)=>{
+          console.log(response)
+        })
+  
+      });
+      
+     
+    }
+    else{
     console.log("onReset")
     this.submitted = false;
     this.newRegCertDetailsformGroup.reset();
     this.listOfFiles = [];
+    }
   }
 
   navToPreviousPage() {

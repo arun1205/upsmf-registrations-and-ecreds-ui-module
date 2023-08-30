@@ -66,6 +66,11 @@ export interface ClaimsTableData {
     examsTableColumns: [];
     exams: [];
   }
+  export interface ApproveClaim{
+    action:string,
+    note:string
+  }
+
 
   export interface StudentDetails {
 

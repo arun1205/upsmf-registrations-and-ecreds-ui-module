@@ -33,6 +33,9 @@ const routes: Routes = [
   {
     path: ':id', component: NewRegnCertDetailsComponent, pathMatch: 'full',
   },
+  {
+    path: 'foreign-goodstanding/:id', component: GoodStandingForeignVerificationComponent, pathMatch: 'full',
+  },
 
 ];
 

@@ -8,12 +8,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { ConfigService } from './services/config/config.service';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
 @NgModule({
   declarations: [
     SharedTableComponent,
     HeaderComponent,
     SharedSkeletonLoadingComponent,
     BreadcrumbComponent,
+    DialogBoxComponent
    
   ],
   imports: [

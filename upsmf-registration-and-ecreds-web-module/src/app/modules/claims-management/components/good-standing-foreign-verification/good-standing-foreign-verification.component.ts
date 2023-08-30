@@ -7,6 +7,8 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { mergeMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogBoxComponent } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
 
 @Component({
   selector: 'app-good-standing-foreign-verification',
@@ -24,11 +26,21 @@ export class GoodStandingForeignVerificationComponent {
   fileList: File[] = [];
   candidateDetailList:any[]=[];
 
-
+  docsUrl:any[]=[];
+  urlData:any[]=[];
+  convertUrlList:string;
+  urlList:any;
+  updatedUrlList:any;
+  userRole:any;
+  userEmail:any;
+  urlDataResponse:string;
+  entity:string;
   osid: string;
   stateData: any;
   customData: any;
   type: string;
+  endPointUrl:any;
+  paymentDetails: boolean = false;
 
   profQualificationArray = ['ANM', 'Midwife', 'HW', 'Nurse', 'Bsc Nursing'];
 
@@ -36,9 +48,12 @@ export class GoodStandingForeignVerificationComponent {
 
   constructor(private formBuilder: FormBuilder, private baseService: BaseServiceService,
     private router: Router,private datePipe: DatePipe,
+    public dialog: MatDialog,
   ) { 
+    this.userEmail = this.baseService.getUserRole()[0]
+   console.log(this.userEmail)
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
-    console.log("stateData:",this.stateData?.customData?.type)
+    console.log("stateData:",this.stateData)
   }
 
   ngOnInit() {
@@ -47,6 +62,7 @@ export class GoodStandingForeignVerificationComponent {
 
   getCandidatePersonalDetails() {
     console.log("getting getCandidatePersonalDetails")
+    
 
     this.baseService.getCandidatePersonalDetailsGoodstanding$()
       .subscribe(
@@ -84,6 +100,60 @@ export class GoodStandingForeignVerificationComponent {
   }
   getCandidatePersonalDetailsForeign() {
     console.log("getting getCandidatePersonalDetails")
+    console.log("getting getCandidatePersonalDetails")
+    this.osid=this.stateData?.body?.id
+    this.entity= this.stateData?.body?.entity
+    console.log("entity",this.entity)
+    if(this.entity==="studentForeignVerification"){
+      this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
+      .subscribe(
+        (response: any) => {
+          console.log("data",response)
+          const candidateDetailList=JSON.parse(response.responseData.claim.propertyData)
+          console.log("...",candidateDetailList)
+          this.urlDataResponse = candidateDetailList.docproof;
+          if(!!this.urlDataResponse){
+            this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+            console.log('urlDaaaa',this.urlData)
+            if(this.urlData.length){
+              this.listOfFiles = this.urlData?.map(url => {
+                const parts = url.split('=');
+                const fileNameWithQueryParams = parts[1];
+                const fileName = fileNameWithQueryParams.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop(); 
+                const getuploadObject = {
+                  name:extractLastPart,
+                  url:url
+                } 
+                return getuploadObject;         
+              });
+            }
+          }
+          this.goodStandingForeignVerificationformGroup.patchValue({
+            maidenName:candidateDetailList.name,
+            email: candidateDetailList.email,
+            mobNumber: candidateDetailList.phoneNumber,
+            applicantName: candidateDetailList.name,
+            adhr: candidateDetailList.aadhaarNo,
+            motherName: candidateDetailList.mothersName,
+            fatherName: candidateDetailList.fathersName, 
+            dob: candidateDetailList.dob,
+            gender: candidateDetailList.gender,
+            al1: candidateDetailList.address,
+            al2: candidateDetailList.address,
+            // state: this.candidateDetailList[0].state,
+            pin: candidateDetailList.pincode,
+            district: candidateDetailList.district,
+            country: candidateDetailList.country,
+            placeOfWork:candidateDetailList.workPlace,
+            tcName:candidateDetailList.trainingCenter,
+            regnNum:candidateDetailList.registrationNumber,
+          });
+        });
+    }
+    
+
+   else{
 
     this.baseService.getCandidatePersonalDetailsForeignVerification$()
       .subscribe(
@@ -117,6 +187,7 @@ export class GoodStandingForeignVerificationComponent {
 
         }
       );
+   }
   }
 
   initForm() {
@@ -158,8 +229,13 @@ export class GoodStandingForeignVerificationComponent {
         Validators.required,
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
     });
+    if(this.userRole==="Regulator"){
+      {{(this.stateData.body.entity==="studentForeignVerification"?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     )}} 
+    }
+    else{
+      {{ (this.stateData?.customData?.type === 'ForeignVerifyReq') ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
 
-    {{ this.stateData.customData.type === 'ForeignVerifyReq' ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
+    }
     // if(this.stateData.customData.type === 'goodStandingCert'){
     //   this.getCandidatePersonalDetails();
 
@@ -203,8 +279,25 @@ export class GoodStandingForeignVerificationComponent {
   }
 
   onGoodStandingForeignVerificationformSubmit(value: any) {
-    console.log(value)
-    if ((this.stateData.customData.type === 'goodStandingCert')) {
+    const osid=this.stateData?.body?.id
+    console.log("id....",osid)
+    
+    if(this.entity==="studentForeignVerification"){
+      const approveBody={
+        action:"GRANT_CLAIM",
+        note:"Registration Certificate"
+      }
+      this.baseService.approveClaim$(osid,approveBody)
+      .subscribe((response)=>{
+        console.log(response)
+      })
+
+    }
+
+    else if ((this.stateData.customData.type === 'goodStandingCert')) {
+      this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+        //convert to string with commaa separated
+        this.convertUrlList = this.urlList.join(',')
       // this.candidateDetails = false;
       const updateStudentGoodstandingBody={
         "name":this.goodStandingForeignVerificationformGroup.value.maidenName,
@@ -219,7 +312,7 @@ export class GoodStandingForeignVerificationComponent {
         "refNo": "REF789012",
         "validityOfRegistration": "2023-12-31",
         "dob": "1990-05-15",
-        "docproof": "qwer.doc",
+        "docproof": this.convertUrlList,
         "candidatePic": "pic1.jpg",
         "paymentStatus": "SUCCESS",
         "marriedName":this.goodStandingForeignVerificationformGroup.value.mrdName,
@@ -229,31 +322,54 @@ export class GoodStandingForeignVerificationComponent {
       
       }
       console.log("goodBody",updateStudentGoodstandingBody)
-      this.baseService.updateStudentGoodStanding$(this.osid, updateStudentGoodstandingBody)
-       .pipe(
-         mergeMap((resp: any) => {
-          const makeClaimbody =
-          {
-            entityName: "StudentGoodstanding",
-            entityId: this.osid,
-            name: "studentGoodstandingVerification",
-            propertiesOSID: {
-              studentGoodstandingVerification: [
-                  this.osid
-                ]
-            }
+      if(this.osid){
+        const paymentData={
+          osId : this.osid,
+          origin: this.stateData?.origin,
+          endPointUrl:this.endPointUrl
+
         }
-           return this.baseService.makeClaim$(this.osid,makeClaimbody);
-         }
-         ))  
+        localStorage.setItem('payData', JSON.stringify(paymentData))
+        this.baseService.updateStudentGoodStanding$(this.osid, updateStudentGoodstandingBody)
+       .subscribe(
+         (response) => {
+           console.log(response);
+          this.paymentDetails= true;
+          
+ 
+         },
+       )
+      }
+      else{
+        this.baseService.postStudentGoodStanding$( updateStudentGoodstandingBody)
+      //  .pipe(
+      //    mergeMap((resp: any) => {
+      //     const makeClaimbody =
+      //     {
+      //       entityName: "StudentGoodstanding",
+      //       entityId: this.osid,
+      //       name: "studentGoodstandingVerification",
+      //       propertiesOSID: {
+      //         studentGoodstandingVerification: [
+      //             this.osid
+      //           ]
+      //       }
+      //   }
+      //      return this.baseService.makeClaim$(this.osid,makeClaimbody);
+      //    }
+      //    ))  
          .subscribe(
            (response) => {
              console.log("good resp",response);
+             
    
            },
          )
+
+      }
+      
     }
-    else{
+    else {
       const updateStudentForeignVerificationBody={
         "name":this.goodStandingForeignVerificationformGroup.value.maidenName,
         "fathersName": this.goodStandingForeignVerificationformGroup.value.fatherName,
@@ -268,7 +384,7 @@ export class GoodStandingForeignVerificationComponent {
         "refNo": "REF789012",
         "validityOfRegistration": "2023-12-31",
         "dob": "1990-05-15",
-        "docproof": "qwer.doc",
+        "docproof": this.convertUrlList,
         "candidatePic": "pic1.jpg",
         "paymentStatus": "SUCCESS"
       }
@@ -301,6 +417,31 @@ export class GoodStandingForeignVerificationComponent {
   }
 
   onReset() {
+    if(this.entity==="studentForeignVerification"){
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
+         disableClose: true ,
+        width: '40rem',
+        height:'25rem'
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        const reason = result;
+
+        console.log("res",reason);
+        const approveBody={
+          action:"REJECT_CLAIM",
+          note:reason
+        }
+        const osid=this.stateData?.id
+        this.baseService.approveClaim$(osid,approveBody)
+        .subscribe((response)=>{
+          console.log(response)
+        })
+  
+      });
+      
+     
+    }
     console.log("onReset")
     this.submitted = false;
     this.goodStandingForeignVerificationformGroup.reset();

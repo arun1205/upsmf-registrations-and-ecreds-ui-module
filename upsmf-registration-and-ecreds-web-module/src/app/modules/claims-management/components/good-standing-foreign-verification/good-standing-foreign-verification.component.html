@@ -1,8 +1,11 @@
 <app-header></app-header>
 <div class="full-container">
     <div class="certificate-container">
-        <div class="certificate-header">
-            <h2>{{ this.stateData.customData.type === 'ForeignVerifyReq' ?  'New Foreign Verification request Certificate' : 'New Good Standing Certificate'     }}</h2>
+        <div class="certificate-header" *ngIf="this.userRole==='Regulator'">
+            <h2>{{ (this.stateData.body.entity==="studentForeignVerification") ?  'New Foreign Verification request Certificate' : 'New Good Standing Certificate'     }}</h2>
+        </div>
+        <div class="certificate-header" >
+            <h2 >{{(this.stateData?.customData?.type === 'ForeignVerifyReq') ?  'New Foreign Verification request Certificate' : 'New Good Standing Certificate'    }}</h2>
         </div>
         
         <div class="certificate-details">
@@ -211,9 +214,9 @@
                             </div>
                             
             
-                            <div class="button-group">
-                                <button class="button" mat-stroked-button color="primary" >Cancel</button>
-                                <button  class="button" mat-raised-button color="primary"  ><mat-icon matSuffix>arrow_right_alt</mat-icon>Next</button>
+                            <div class="button-group" >
+                                <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"> {{ this.userRole==="Regulator" ? 'Reject' :'Cancel' }}<mat-icon>{{ this.userRole==="Regulator" ? 'close' : '' }}</mat-icon></button>
+                                <button  class="button" mat-raised-button color="primary" >{{ this.userRole==="Regulator" ? 'Approve' :'Next' }}<mat-icon>{{  this.userRole==="Regulator" ? 'check' : '' }}</mat-icon><mat-icon >{{ !(this.entity==="StudentFromUP" || this.entity==="StudentOutsideUP")? 'arrow_right_alt' :''}}</mat-icon></button>
                             </div>
                         </div>
                     </form>
