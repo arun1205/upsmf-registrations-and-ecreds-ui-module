@@ -453,8 +453,8 @@
                                             
                             
                                             <div class="button-group" >
-                                                <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"> {{ isStudent ? 'Cancel' :'Reject' }}<mat-icon>{{ !isStudent ? 'close' : '' }}</mat-icon></button>
-                                                <button  class="button" mat-raised-button color="primary" >{{ isStudent ? 'Next' :'Approve' }}<mat-icon>{{ !isStudent ? 'check' : '' }}</mat-icon><mat-icon >{{ isStudent ? 'arrow_right_alt' :''}}</mat-icon></button>
+                                                <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"> {{ this.userRole==="Regulator" ? 'Cancel' :'Reject' }}<mat-icon>{{ this.userRole==="Regulator" ? '' : 'close' }}</mat-icon></button>
+                                                <button  class="button" mat-raised-button color="primary" >{{ this.userRole==="Regulator" ? 'Next' :'Approve' }}<mat-icon>{{  this.userRole==="Regulator" ? '' : 'check' }}</mat-icon><mat-icon >{{ !(this.entity==="StudentFromUP" || this.entity==="StudentOutsideUP")? 'arrow_right_alt' :''}}</mat-icon></button>
                                             </div>
                                             <!-- <div class="button-group" *ngIf="!isStudent">
                                                 <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"><mat-icon>close</mat-icon>Reject</button>

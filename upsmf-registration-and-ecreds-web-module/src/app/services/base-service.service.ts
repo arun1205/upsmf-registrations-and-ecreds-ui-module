@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ClaimDetails, ClaimsTableData, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding, studentUpdate } from '../interfaces/interfaces';
+import { ApproveClaim, ClaimDetails, ClaimsTableData, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding, studentUpdate } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -64,11 +64,11 @@ export class BaseServiceService  extends HttpService   {
   }
 
   
-  getCandidatePersonalDetails$(endpointUrl:any){
+  getCandidatePersonalDetails$(){
 
        const reqParam: RequestParam = {
-        //  url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS,  
-         url: endpointUrl,  
+         url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS,  
+        //  url: endpointUrl,  
          /* data:{
           "name": "Arun ",
           "phoneNumber": "9887478248",
@@ -115,6 +115,14 @@ export class BaseServiceService  extends HttpService   {
       return this.get(reqParam);
     
     }
+    approveClaim$(osid:string,body:ApproveClaim):Observable<any>{
+      const reqParam: RequestParam={
+        url : this.configService.urlConFig.URLS.ADMIN.GRANT_CLAIM + osid + "/attest",
+        data : body,
+        header : this.headers
+      }
+      return this.post(reqParam);
+    }
 
      updateStudent$(osid:string , body: StudentDetails,endPointUrl:any): Observable<any>{
       console.log(body)
@@ -139,13 +147,22 @@ export class BaseServiceService  extends HttpService   {
          }
 
        
-       updateStudentGoodStanding$(osid:string, body: StudentDetailsGoodStanding): Observable<any>{
+       postStudentGoodStanding$( body: StudentDetailsGoodStanding): Observable<any>{
+        const reqParam:RequestParam={
+          url:this.configService.urlConFig. URLS.STUDENT.UPDATE_GOODSTANDING,
+          data:body,
+          header:this.headers
+        }
+        return this.put(reqParam);
+
+      }
+      updateStudentGoodStanding$(osid:string, body: StudentDetailsGoodStanding): Observable<any>{
         const reqParam:RequestParam={
           url:this.configService.urlConFig. URLS.STUDENT.UPDATE_GOODSTANDING + osid,
           data:body,
           header:this.headers
         }
-        return this.put(reqParam);
+        return this.post(reqParam);
 
       }
       updateStudentForeignVerification$(osid:string, body: StudentDetailsForeignVerification): Observable<any>{
@@ -154,7 +171,7 @@ export class BaseServiceService  extends HttpService   {
           data:body,
           header:this.headers
         }
-        return this.put(reqParam);
+        return this.post(reqParam);
 
       }
       getClaimsAdmin$(){
@@ -238,6 +255,13 @@ export class BaseServiceService  extends HttpService   {
        return this.put(reqParam);
      
      }
+     getRegistrationClaimsAdmin$(){
+      const reqParam: RequestParam = {
+        url: this.configService.urlConFig.URLS.ADMIN.GET_ALL_CLAIMS_ADMIN,  
+        header: this.headers
+      }
+      return this.get(reqParam);
+    }
 
   
  
