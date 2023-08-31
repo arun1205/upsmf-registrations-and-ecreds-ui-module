@@ -5,11 +5,13 @@ import { SuperAdminManagementRoutingModule } from './super-admin-management-rout
 import { DasboardComponent } from './dasboard/dasboard.component';
 import { SharedModule } from '../shared';
 import { MaterialModule } from 'src/app/material/material.module';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
 
 
 @NgModule({
   declarations: [
-    DasboardComponent
+    DasboardComponent,
+    AdminHomeComponent
   ],
   imports: [
     CommonModule,

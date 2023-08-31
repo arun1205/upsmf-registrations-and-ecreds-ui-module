@@ -9,7 +9,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SelfRegistrationComponent } from './components/self-registration/self-registration.component';
 import { PasswordPageComponent } from './components/password-page/password-page.component';
 
-
 @NgModule({
   declarations: [
     LoginPageComponent,

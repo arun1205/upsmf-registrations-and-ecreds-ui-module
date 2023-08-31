@@ -5,17 +5,17 @@ import { PaymentSuccessFailureComponent } from './payment-success-failure/paymen
 
 
 const routes: Routes = [
+  // {
+  //   path: '', component: LoginPageComponent, pathMatch: 'full'
+  // },
   {
-    path: '', component: LoginPageComponent, pathMatch: 'full'
+    path: '', loadChildren: () => import('./modules/user-authentication/user-authentication.module').then(m => m.UserAuthenticationModule)
   },
   {
     path:'payment-response', component: PaymentSuccessFailureComponent
   },
   {
     path: 'claims', loadChildren: () => import('./modules/claims-management/claims-management.module').then(m => m.ClaimsManagementModule)
-  },
-  {
-    path: 'authentication', loadChildren: () => import('./modules/user-authentication/user-authentication.module').then(m => m.UserAuthenticationModule)
   },
     {
     path: 'users', loadChildren: () => import('./modules/user-management/user-management.module').then(m => m.UserManagementModule)

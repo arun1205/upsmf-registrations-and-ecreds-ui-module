@@ -8,14 +8,14 @@
                 <h2 class="login-text">Login</h2>
                 <div class="login-inputs" >
                    
-                    <form class="login-section" [formGroup]="loginForm" (ngSubmit)="signInForm()">
+                    <form class="login-section" [formGroup]="loginForm" (ngSubmit)="signInForm(loginForm.value)">
                         <div class="input-container">
-                            <h4>User name / Mobile No</h4>
+                            <h4>Email Id</h4>
                             <mat-form-field appearance="outline" class="text-class">
-                                <mat-label>User name / Mobile No</mat-label>
+                                <mat-label>Email Id</mat-label>
                                 <input matInput placeholder="Enter Email" formControlName="emailphno" type="email" >
                             </mat-form-field>
-                            <label style="color:red" *ngIf="loginForm.get('emailphno')?.hasError('invalidInput') ">Invalid email or phone number.</label>
+                            <label style="color:red" *ngIf="loginForm.get('emailphno')?.hasError('invalidInput') ">Invalid email.</label>
 
                         </div>
 
@@ -32,6 +32,8 @@
                         
                         
                     </form>
+                    <div class="mt2">OR</div>
+                        <h5 class="hint-msg" (click)="navigateToSignupPage()">Sign Up</h5>
                 </div>
             </div>
             

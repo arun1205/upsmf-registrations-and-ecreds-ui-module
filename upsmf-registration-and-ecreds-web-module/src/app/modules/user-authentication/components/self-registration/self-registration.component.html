@@ -55,18 +55,18 @@
         </div>
         <div class="register-main-container">
             <div class="register-content">
-                <h2 class="register-text">Login</h2>
+                <h2 class="register-text">Sign Up</h2>
                 <div class="register-inputs" >
                    
-                    <form class="register-section" [formGroup]="registerForm" (ngSubmit)="otpForm()">
-                        <div class="input-container">
+                    <form class="register-section" [formGroup]="registerForm" (ngSubmit)="signUpform(registerForm.value)">
+                        <!-- <div class="input-container">
                             <h4>Roll No</h4>
                             <mat-form-field appearance="outline" class="text-class">
                                 <mat-label>Roll No</mat-label>
                                 <input matInput placeholder="Enter Roll No" formControlName="rollno" type="text" >
                             </mat-form-field>
 
-                        </div>
+                        </div> -->
                         <div class="input-container">
                             <h4>Name</h4>
                             <mat-form-field appearance="outline" class="text-class">
@@ -76,35 +76,65 @@
 
                         </div>
                         
-                        <div class="input-container">
+                        <!-- <div class="input-container">
                             <h4>Institute Name</h4>
                             <mat-form-field appearance="outline" class="text-class">
                                 <mat-label>Institute Name</mat-label>
                                 <input matInput placeholder="Enter Institute Name" formControlName="instname" type="text" >
                             </mat-form-field>
 
-                        </div>
-                        <div class="input-container">
+                        </div> -->
+                        <!-- <div class="input-container">
                             <h4>Institute Id</h4>
                             <mat-form-field appearance="outline" class="text-class">
                                 <mat-label>Institute Id</mat-label>
                                 <input matInput placeholder="Enter Institute Id" formControlName="instid" type="text" >
                             </mat-form-field>
 
+                        </div> -->
+                        <div class="input-container">
+                            <h4>Email Id</h4>
+                            <mat-form-field appearance="outline" class="text-class">
+                                <mat-label>Email Id</mat-label>
+                                <input matInput type="email" placeholder="Enter Email" formControlName="emailphno">
+                            </mat-form-field>
+
                         </div>
                         <div class="input-container">
-                            <h4>User name / Mobile No</h4>
+                            <h4>Mobile No</h4>
                             <mat-form-field appearance="outline" class="text-class">
-                                <mat-label>User name / Mobile No</mat-label>
-                                <input matInput placeholder="Enter Email" formControlName="emailphno" type="text" >
+                                <mat-label>Mobile No</mat-label>
+                                <input matInput placeholder="Enter phone number " formControlName="phoneNumber" >
                             </mat-form-field>
-                            <label style="color:red" *ngIf="registerForm.get('emailphno')?.hasError('invalidInput') ">Invalid email or phone number.</label>
+                            <label style="color:red" *ngIf="registerForm.get('phoneNumber')?.hasError('invalidInput') ">Invalid email or phone number.</label>
+
+                        </div>
+
+                        <div class="input-container">
+                            <h4>Password</h4>
+                            <mat-form-field appearance="outline" class="text-class">
+                                <mat-label>Password</mat-label>
+                                <input matInput placeholder="Enter Password" formControlName="secretToken" type="password" >
+                            </mat-form-field>
+                            <label style="color:red" *ngIf="registerForm.get('secretToken')?.touched && registerForm.get('secretToken')?.hasError('invalidPassword')"> Password must have at least 8 characters, one uppercase letter, and one digit</label>
+                            <!-- <div *ngIf="registrationForm.controls.password.hasError('invalidPassword')">
+                                Password must have at least 8 characters, one uppercase letter, and one digit.
+                              </div> -->
+
+                        </div>
+
+                        <div class="input-container">
+                            <h4>Confirm Password</h4>
+                            <mat-form-field appearance="outline" class="text-class">
+                                <mat-label> Confirm Password</mat-label>
+                                <input matInput placeholder="Enter Password" formControlName="confirmPassword" type="password" >
+                            </mat-form-field>
 
                         </div>
 
                       
-                        <div class="input-container" style="margin-top:6%;">
-                            <button class="text-class action-btns" [disabled]="!registerForm.valid" type="submit" mat-raised-button color="primary">GET OTP</button>
+                        <div class="input-container" style="margin-top:2%;">
+                            <button class="text-class action-btns" [disabled]="!registerForm.valid" type="submit" mat-raised-button color="primary">Sign Up</button>
                         </div>
                         
                         
