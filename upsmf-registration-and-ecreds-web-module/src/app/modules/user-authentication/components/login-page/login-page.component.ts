@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -10,7 +11,8 @@ import { Router } from '@angular/router';
 export class LoginPageComponent {
   loginForm: FormGroup;
 
-  constructor(private router:Router){
+  constructor(private router:Router,
+    private authService: AuthService){
     this.loginForm = new FormGroup({
       emailphno: new FormControl('', [Validators.required, this.emailOrPhoneValidator()]),
       password: new FormControl('',Validators.required)
@@ -35,8 +37,21 @@ export class LoginPageComponent {
     };
   }
 
-  signInForm(){
+  signInForm(value:any){
     console.log(this.loginForm)
+    const {emailphno, password}= value
+    this.authService.login(emailphno, password).subscribe({
+      next:(res)=>{
+        console.log('loginREs',res)
+       if(res){
+          this.router.navigate(['/claims/manage'])
+       }
+      }
+    })
+  }
+
+  navigateToSignupPage(){
+    this.router.navigate(['/registration'])
   }
   
 

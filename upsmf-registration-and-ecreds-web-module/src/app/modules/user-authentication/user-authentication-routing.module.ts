@@ -6,7 +6,10 @@ import { PasswordPageComponent } from './components/password-page/password-page.
 
 const routes: Routes = [
   {
-    path:'login',component:LoginPageComponent,pathMatch: 'full'
+    path:'',redirectTo: 'login', pathMatch: 'full'
+  },
+  {
+    path:'login', component: LoginPageComponent
   },
   {
     path:'registration',component:SelfRegistrationComponent,pathMatch: 'full'

@@ -144,4 +144,36 @@ export class HttpService {
     getPaymentUrl(body: paymentPostData):Observable<any>{
       return this.http.post(this.paymentUrl,body) 
     }
+
+    //signUp post
+    SignuUpost(requestParam: RequestParam): Observable<ServerResponse> {
+      const httpOptions: HttpOptions = {
+        // headers: requestParam.header ? this.getHeader(requestParam.header) : this.getHeader(),
+        params: requestParam.param
+      };
+      return this.http.post<ServerResponse>(requestParam.url, requestParam.data, httpOptions).pipe(
+        mergeMap((data: ServerResponse) => {
+          console.log(data)
+        /*   if (data.statusInfo.status !== 200) {
+            return throwError(() => new Error(data.statusInfo?.errorMessage));
+          } */
+          return observableOf(data);
+        }));
+    }
+
+    loginPost(requestParam: RequestParam): Observable<ServerResponse> {
+      const httpOptions: HttpOptions = {
+         headers: requestParam.header ? this.getHeader(requestParam.header) : this.getHeader(),
+        params: requestParam.param
+      };
+      return this.http.post<ServerResponse>(requestParam.url, requestParam.data, httpOptions).pipe(
+        mergeMap((data: ServerResponse) => {
+          console.log(data)
+        /*   if (data.statusInfo.status !== 200) {
+            return throwError(() => new Error(data.statusInfo?.errorMessage));
+          } */
+          return observableOf(data);
+        }));
+    }
+    
 }

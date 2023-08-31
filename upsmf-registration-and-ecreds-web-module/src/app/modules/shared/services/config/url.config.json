@@ -1,6 +1,7 @@
 {
     "URLS": {
-        "LOGIN": "/user/login",
+        "LOGIN": "/api/v1/user/keycloak/usrlogin",
+        "SIGN_UP":"api/v1/StudentFromUP/invite",
         "CLAIMS": {
             "GET_ALL_CLAIMS": "api/v2/StudentFromUP/claims",
             "GET_ALL_CLAIMS_ADMIN": "api/v1/Regulator/claims",
