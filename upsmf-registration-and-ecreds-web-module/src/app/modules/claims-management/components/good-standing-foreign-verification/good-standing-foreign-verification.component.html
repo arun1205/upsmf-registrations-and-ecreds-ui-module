@@ -223,8 +223,8 @@
                                 
                 
                                 <div class="button-group" >
-                                    <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"> {{ this.userEmail==="Regulator" ? 'Reject' :'Cancel' }}<mat-icon>{{ this.userEmail==="Regulator" ? 'close' : '' }}</mat-icon></button>
-                                    <button  class="button" mat-raised-button color="primary" >{{ this.userEmail==="Regulator" ? 'Approve' :'Next' }}<mat-icon>{{  this.userEmail==="Regulator" ? 'check' : '' }}</mat-icon><mat-icon >{{ !(this.entity==="StudentFromUP" || this.entity==="StudentOutsideUP")? 'arrow_right_alt' :''}}</mat-icon></button>
+                                    <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"> {{ this.userEmail==="Regulator" ? 'Download Letter to EC' :'Cancel' }}<mat-icon></mat-icon></button>
+                                    <button  class="button" mat-raised-button color="primary" >{{ this.userEmail==="Regulator" ? 'Sent Email to EC' :'Next' }}<mat-icon></mat-icon><mat-icon >{{ !(this.entity==="StudentFromUP" || this.entity==="StudentOutsideUP")? 'arrow_right_alt' :''}}</mat-icon></button>
                                 </div>
                             </div>
                         </form>
