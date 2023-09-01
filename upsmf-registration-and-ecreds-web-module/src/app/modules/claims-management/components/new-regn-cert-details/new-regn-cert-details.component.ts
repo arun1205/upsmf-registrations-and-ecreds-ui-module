@@ -554,7 +554,7 @@ export class NewRegnCertDetailsComponent {
             council: details.council,
             email: this.newRegCertDetailsformGroup.value.email,
             examBody: value.examBody,
-            docProof: "http://localhost:8082/api/v1/files/download?fileName=issuance/StudentForeignVerification_1-2ed44f89-63e1-4be1-a456-073feef222e5_BABY-224300001-R.pdf",
+            docProof: this.convertUrlList,
             diplomaNumber: value.diplomaNumber,
             nursingCollage: value.collegeName,
             courseState:"aaaaa",
