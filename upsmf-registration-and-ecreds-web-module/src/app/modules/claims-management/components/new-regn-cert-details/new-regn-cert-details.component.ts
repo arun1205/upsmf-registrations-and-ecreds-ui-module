@@ -9,8 +9,9 @@ import {credentialsType} from 'src/models/credentialsTypemodel';
 import { BreadcrumbItem, ConfigService } from 'src/app/modules/shared';
 import { HttpService } from 'src/app/core/services/http-service/http.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { DialogBoxComponent } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
+import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-new-regn-cert-details',
@@ -96,7 +97,7 @@ export class NewRegnCertDetailsComponent {
     public dialog: MatDialog,
   ) {
   this.userEmail = this.baseService.getUserRole()[0]
-   console.log(this.userEmail)
+   console.log("role",this.userEmail)
     // var token:any
     //  token =localStorage.getItem('token')
     //  let tokenId:any = ''
@@ -331,6 +332,95 @@ export class NewRegnCertDetailsComponent {
       );
 
     }
+    else if(this.entity==="StudentOutsideUP"){
+      this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
+      .subscribe(
+        (response: any) => {
+          // if(response.responseData.length){
+            const candidateDetailList = JSON.parse(response.responseData.claim.propertyData)
+            console.log("cad",response)
+            this.osid = response.responseData.claim.osid;
+            this.urlDataResponse = candidateDetailList.docproof;
+            if(!!this.urlDataResponse){
+              this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              console.log('urlDaaaa',this.urlData)
+              if(this.urlData.length){
+                this.listOfFiles = this.urlData?.map(url => {
+                  const parts = url.split('=');
+                  const fileNameWithQueryParams = parts[1];
+                  const fileName = fileNameWithQueryParams.split('/').pop();
+                  const extractLastPart = fileName?.split('_').pop(); 
+                  const getuploadObject = {
+                    name:extractLastPart,
+                    url:url
+                  } 
+                  return getuploadObject;         
+                });
+              }
+            }
+           
+            
+            console.log(this.listOfFiles)
+            
+            // this.listOfFiles = this.candidateDetailList[0].docproof;
+            console.log('canndidateList',this.candidateDetailList)
+            this.newRegCertDetailsformGroup.patchValue({
+              email: candidateDetailList.email,
+              mobNumber: candidateDetailList.phoneNumber,
+              applicantName: candidateDetailList.name,
+              adhr: candidateDetailList.aadhaarNo,
+              motherName: candidateDetailList.mothersName,
+              fatherName: candidateDetailList.fathersName, 
+              dob: candidateDetailList.dateOfBirth,
+              gender: candidateDetailList.gender,
+              al1: candidateDetailList.address,
+              al2: candidateDetailList.address,
+              state: candidateDetailList.state,
+              pin: candidateDetailList.pincode,
+              district: candidateDetailList.district,
+              country: candidateDetailList.country,
+              credType: candidateDetailList.credType,
+              
+
+  
+  
+              
+              // district : response[0]?.district
+            });
+            const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
+              "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
+             new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
+          
+
+             const joinM = candidateDetailList.joiningMonth;
+             console.log("month",joinM)
+             const jm = this.monthMap[joinM]
+             console.log("mon",jm)
+             const passM = candidateDetailList  .passingMonth;
+             console.log("month",joinM)
+             const pm = this.monthMap[joinM]
+             console.log("mon",pm)
+
+            this.newRegCourseDetailsformGroup.patchValue({
+              courseName: candidateDetailList.courseName,
+              collegeName: candidateDetailList.nursingCollage,
+              examBody: candidateDetailList.examBody,
+              
+              joinDate: candidateDetailList.joiningYear+"-" +jm+ "-01",
+              rollNum: candidateDetailList.finalYearRollNo,
+              passDate: candidateDetailList.passingYear+"-" +pm+ "-01",
+              requestType: candidateDetailList.requestType
+            });
+            
+            console.log(this.newRegCourseDetailsformGroup.value.joinDate)
+          // }
+         
+
+          /*     this.listOfFiles =  */
+        }
+      );
+
+    }
     else{
 
       this.baseService.getCandidatePersonalDetails$()
@@ -416,6 +506,7 @@ export class NewRegnCertDetailsComponent {
     if (this.newRegCertDetailsformGroup.valid) {
       this.candidateDetails = false;
     }
+    console.log("entity",this.entity)
 
   }
   onNewRegCourseDetailsformSubmit(value: any) {
@@ -432,8 +523,66 @@ export class NewRegnCertDetailsComponent {
         console.log(response)
       })
     }
-    else{
-    if (this.newRegCourseDetailsformGroup.valid) {
+    else if(this.entity==="StudentOutsideUP"){
+      const message = `Enter the email`;
+      const message1 = `Upload Document`;
+
+      const shouldShowFileUpload = true;
+      const resDialog = new DialogModel( message,message1);
+
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
+         disableClose: true ,
+        // width: '40rem',
+        // height:'25rem',
+        data:{message,message1,shouldShowFileUpload}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        // const reason = result;
+        
+
+        console.log("res",result);
+        if(result){
+          this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          const details=JSON.parse(this.stateData.propertyData);
+          console.log("data................",details)
+          //convert to string with commaa separated
+          this.convertUrlList = this.urlList.join(',')
+          const mailBody={
+            outsideEntityMailId:result.reason,
+            name: this.newRegCertDetailsformGroup.value.applicantName,
+            gender: this.newRegCertDetailsformGroup.value.gender,
+            council: details.council,
+            email: this.newRegCertDetailsformGroup.value.email,
+            examBody: value.examBody,
+            docProof: this.convertUrlList,
+            diplomaNumber: value.diplomaNumber,
+            nursingCollage: value.collegeName,
+            courseState:"aaaaa",
+            courseCouncil:"BBB",
+            state: this.newRegCertDetailsformGroup.value.state,
+            country: this.newRegCertDetailsformGroup.value.country,
+            // state: this.newRegCertDetailsformGroup.value.state,
+            attachment:result.file,
+            
+          }
+          this.baseService.sendMailOutsideUp$(mailBody).subscribe((response)=>{
+            console.log(response)
+          })
+    
+        }
+        // if(result){
+        //   const approveBody={
+        //     note:result.reason,
+        //     selectedFile:result.file,
+
+        //   }
+        
+      });
+
+
+    }
+    else{ 
+      if (this.newRegCourseDetailsformGroup.valid) {
 
       console.log(this.newRegCertDetailsformGroup.value)
       console.log(value)
@@ -546,7 +695,7 @@ export class NewRegnCertDetailsComponent {
 
       if (this.listOfFiles.indexOf(selectedFile.name) === -1) {
         this.fileList.push(selectedFile);
-        // this.listOfFiles.push(selectedFile.name);
+        this.listOfFiles.push(selectedFile.name);
       
       }
     }
@@ -649,30 +798,41 @@ export class NewRegnCertDetailsComponent {
 
   onReset() {
     if(this.entity==="StudentFromUP"){
+      const message = `Reason For Rejection`;
+      // const resDialog = new DialogModel( message);
+      const shouldShowFileUpload = false;
+
+
       let dialogRef = this.dialog.open(DialogBoxComponent, {
          disableClose: true ,
         width: '40rem',
-        height:'25rem'
+        height:'25rem',
+        data:{message,shouldShowFileUpload}
       });
   
       dialogRef.afterClosed().subscribe(result => {
         const reason = result;
 
         console.log("res",reason);
-        const approveBody={
-          action:"REJECT_CLAIM",
-          note:reason
+        if(result){
+          const approveBody={
+            action:"REJECT_CLAIM",
+            note:reason
+          }
+          const osid=this.stateData?.id
+          this.baseService.approveClaim$(osid,approveBody)
+          .subscribe((response)=>{
+            console.log(response)
+          })
+    
         }
-        const osid=this.stateData?.id
-        this.baseService.approveClaim$(osid,approveBody)
-        .subscribe((response)=>{
-          console.log(response)
-        })
-  
+        
+      
       });
       
      
     }
+   
     else{
     console.log("onReset")
     this.submitted = false;

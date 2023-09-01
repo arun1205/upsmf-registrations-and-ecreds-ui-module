@@ -1,11 +1,16 @@
 <div mat-dialog-content >
-    
-    <p>Reason For Rejection</p>
+    <div>
+      <p>{{message}}</p>
     <mat-form-field >
       <input matInput [formControl]="form.controls['reason']">
     </mat-form-field>
+    </div>
+    <div *ngIf="shouldShowFileUpload">
+      <p>{{message1}}</p>
+      <input type="file" [formControl]="form.controls['doc']"(change)="onFileSelected($event)" />
+    </div>
   </div>
   <div mat-dialog-actions style="display: flex;justify-content:end;margin-left:4px">
-     <!-- <button mat-button (click)="onNoClick()">No Thanks</button>  -->
+     <button mat-button (click)="onNoClick()">Cancel</button> 
     <button mat-button  cdkFocusInitial (click)="onSubmit()">Submit</button>
   </div>

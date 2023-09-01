@@ -453,8 +453,59 @@
                                             
                             
                                             <div class="button-group" >
-                                                <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"> {{ this.userRole==="Regulator" ? 'Reject' :'Cancel' }}<mat-icon>{{ this.userRole==="Regulator" ? 'close' : '' }}</mat-icon></button>
-                                                <button  class="button" mat-raised-button color="primary" >{{ this.userRole==="Regulator" ? 'Approve' :'Next' }}<mat-icon>{{  this.userRole==="Regulator" ? 'check' : '' }}</mat-icon><mat-icon >{{ !(this.entity==="StudentFromUP" || this.entity==="StudentOutsideUP")? 'arrow_right_alt' :''}}</mat-icon></button>
+                                                <!-- <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"> {{ ((this.userEmail==="Regulator") && this.entity==="StudentFromUP" ) ? 'Reject' :'Cancel' }}{{ ((this.userEmail==="Regulator") && this.entity==="StudentFromUP" ) ? 'Download Letter to EC' :'Cancel' }}<mat-icon>{{ this.userEmail==="Regulator" ? 'close' : '' }}</mat-icon></button> -->
+                                                <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()">
+                                                    <ng-container [ngSwitch]="userEmail">
+                                                        <ng-container *ngSwitchCase="'Regulator'">
+                                                            <ng-container [ngSwitch]="entity">
+                                                                <ng-container *ngSwitchCase="'StudentFromUP'">
+                                                                    Reject
+                                                                    <mat-icon >close</mat-icon> 
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchCase="'StudentOutsideUP'">
+                                                                    Download Letter to EC
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchDefault>
+                                                                    Cancel
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                      <ng-container *ngSwitchDefault>
+                                                        Cancel
+                                                        <mat-icon></mat-icon>
+                                                      </ng-container>
+                                                    </ng-container>
+                                                  </button>
+                                                <!-- <button  class="button" mat-raised-button color="primary" >{{ (this.userEmail==="Regulator" && this.entity==="StudentFromUP") ? 'Approve' :'Next' }}{{ (this.userEmail==="Regulator" && this.entity==="StudentOutsideUP") ? 'Sent Email to EC' :'Next' }}<mat-icon>{{  this.userEmail==="Regulator" ? 'check' : '' }}</mat-icon><mat-icon >{{ !(this.entity==="StudentFromUP" || this.entity==="StudentOutsideUP")? 'arrow_right_alt' :''}}</mat-icon></button> -->
+                                                <button class="button" mat-raised-button color="primary">
+                                                    <ng-container [ngSwitch]="userEmail">
+                                                      <ng-container *ngSwitchCase="'Regulator'">
+                                                        <ng-container [ngSwitch]="entity">
+                                                          <ng-container *ngSwitchCase="'StudentFromUP'">
+                                                            Approve
+                                                            <mat-icon>check</mat-icon>
+                                                          </ng-container>
+                                                          <ng-container *ngSwitchCase="'StudentOutsideUP'">
+                                                            Sent Email to EC
+                                                          </ng-container>
+                                                          <ng-container *ngSwitchDefault>
+                                                            Next
+                                                            <mat-icon *ngIf="!(entity === 'StudentFromUP' || entity === 'StudentOutsideUP')">arrow_right_alt</mat-icon>
+                                                          </ng-container>
+                                                        </ng-container>
+                                                      </ng-container>
+                                                      <ng-container *ngSwitchDefault>
+                                                        Next
+                                                        <mat-icon *ngIf="!(entity === 'StudentFromUP' || entity === 'StudentOutsideUP')">arrow_right_alt</mat-icon>
+                                                      </ng-container>
+                                                    </ng-container>
+                                                  </button>
+                                                  
+                                                  
+                                                  
+                                                  
+                                                  
+                                                  
                                             </div>
                                             <!-- <div class="button-group" *ngIf="!isStudent">
                                                 <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"><mat-icon>close</mat-icon>Reject</button>
