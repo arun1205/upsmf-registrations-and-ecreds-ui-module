@@ -23,7 +23,7 @@ ngOnInit(): void {
  const storedData=  localStorage.getItem('payData')
  if(storedData){
   this.resData = JSON.parse(storedData)
-  console.log(this.resData)
+  console.log("localData",this.resData)
  }
  
   
@@ -36,7 +36,6 @@ ngOnInit(): void {
   
   })
 }
-
   makeClaim() {
     if (this.paymentResponse === 'success' && this.resData) {
       const updateStudent = {
@@ -47,13 +46,13 @@ ngOnInit(): void {
           mergeMap((resp: any) => {
             this.getMakeClaimbody = {
               entityId: this.resData.osId,
-              name: "studentVerification",
             }
             switch (this.resData?.origin) {
               case 'StudentOutsideUP':
                 this.getMakeClaimbody = {
                   ...this.getMakeClaimbody,
                   entityName: "StudentOutsideUP",
+                  name: "studentVerification",
                   propertiesOSID: {
                     StudentOutsideUP: [
                       this.resData.osId
@@ -62,10 +61,24 @@ ngOnInit(): void {
                 }
                 break;
 
-              case 'StudentFromUP':
+              case 'StudentGoodstanding':
+                this.getMakeClaimbody = {
+                  ...this.getMakeClaimbody,
+                  entityName: "StudentGoodstanding",
+                  name: "studentGoodstandingVerification",
+                  propertiesOSID: {
+                    studentGoodstandingVerification: [
+                      this.resData.osId
+                    ]
+                  }
+
+                }
+                break;
+                case 'StudentFromUP':
                 this.getMakeClaimbody = {
                   ...this.getMakeClaimbody,
                   entityName: "StudentFromUP",
+                  name: "studentVerification",
                   propertiesOSID: {
                     StudentFromUP: [
                       this.resData.osId

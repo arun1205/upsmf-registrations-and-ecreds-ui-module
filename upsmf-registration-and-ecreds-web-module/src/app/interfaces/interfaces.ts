@@ -70,6 +70,23 @@ export interface ClaimsTableData {
     action:string,
     note:string
   }
+  export interface SentMailBody{
+    outsideEntityMailId:string,
+    name: string,
+    gender: string,
+    council: string,
+    email: string,
+    examBody: string,
+    docProof: string,
+    diplomaNumber:string,
+    nursingCollage: string,
+    courseState:string,
+    courseCouncil:string,
+    state:string,
+    country:string,
+    // state: this.newRegCertDetailsformGroup.value.state,
+    attachment:string,
+  }
 
 
   export interface StudentDetails {
@@ -129,7 +146,9 @@ export interface ClaimsTableData {
     dob:string | undefined;
     docproof:string | string[];
     candidatePic:string;
-    paymentStatus:string;
+    paymentStatus: string,
+    
+
   }
   export interface StudentDetailsForeignVerification{
     name:string;

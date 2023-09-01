@@ -1,8 +1,10 @@
 .mat-dialog-content {
+  display: flex;
+  flex-direction: column;
     max-width: 500px; /* Adjust the max width as needed */
   }
   mat-form-field{
-    height: 16rem;
+    height: 13rem;
     width: 36rem;
   }
  
