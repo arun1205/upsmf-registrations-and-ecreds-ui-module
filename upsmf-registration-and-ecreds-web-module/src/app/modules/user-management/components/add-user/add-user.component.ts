@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { BaseServiceService } from 'src/app/services/base-service.service';
 
 @Component({
   selector: 'app-add-user',
@@ -14,8 +15,10 @@ export class AddUserComponent {
 
   roleTypesArray = ["Admin", "Secretary", "Grievance Nodal", "Nodal Officer"]
   activeStatusArray = ["Active ", "Inactive"];
-  constructor(private formBuilder: FormBuilder,
-  ) { }
+  constructor(private formBuilder: FormBuilder,private baseService: BaseServiceService,
+  ) {
+    
+   }
 
   ngOnInit() {
     this.createForm();

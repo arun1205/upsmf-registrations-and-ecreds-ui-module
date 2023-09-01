@@ -22,6 +22,8 @@ export class BaseServiceService  extends HttpService   {
     this.baseUrl = environment.apiUrl;
   }
 
+ 
+
   
 
   loadActivity$() : Observable<any> {

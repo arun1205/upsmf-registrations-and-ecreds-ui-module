@@ -159,6 +159,7 @@ export class ViewClaimListComponent {
       (res) =>{
         this.claims = res.responseData.content
         console.log('this.claims', this.claims);
+        
         if(this.stateData?.type==="regnCertfromUP"){
           this.pendingClaims = this.claims.filter(claim => (claim['status'] === 'OPEN')&&(claim['entity']==='StudentFromUP'));
           this.approvedClaims = this.claims.filter(claim => (claim['status'] === 'APPROVED')&&(claim['entity']==='StudentFromUP'));
@@ -182,7 +183,15 @@ export class ViewClaimListComponent {
           // this.baseService.get
           this.pendingClaims = this.claims.filter(claim => (claim['status'] === 'OPEN')&&(claim['entity']==='studentForeignVerification'));
           this.approvedClaims = this.claims.filter(claim => (claim['status'] === 'APPROVED')&&(claim['entity']==='studentForeignVerification'));
-          this.rejectedClaims = this.claims.filter(claim => claim?.notes);
+          this.rejectedClaims = this.claims.filter(claim => (claim['status'] === 'REJECTED')&&(claim['entity']==='studentForeignVerification'))
+          console.log('pendingClaims', this.pendingClaims)
+          this.isDataLoading = false;
+        }
+        else if(this.stateData?.type==="goodStandingCert"){
+          // this.baseService.get
+          this.pendingClaims = this.claims.filter(claim => (claim['status'] === 'OPEN')&&(claim['entity']==='StudentGoodstanding'));
+          this.approvedClaims = this.claims.filter(claim => (claim['status'] === 'APPROVED')&&(claim['entity']==='StudentGoodstanding'));
+          this.rejectedClaims = this.claims.filter(claim => (claim['status'] === 'REJECTED')&&(claim['entity']==='StudentGoodstanding'));
           console.log('pendingClaims', this.pendingClaims)
           this.isDataLoading = false;
         }

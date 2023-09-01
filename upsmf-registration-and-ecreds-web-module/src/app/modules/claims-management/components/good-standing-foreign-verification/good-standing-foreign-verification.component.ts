@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { mergeMap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogBoxComponent } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
+import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
 import { ConfigService } from 'src/app/modules/shared';
 import { HttpService } from 'src/app/core/services/http-service/http.service';
 
@@ -451,26 +451,124 @@ export class GoodStandingForeignVerificationComponent {
     const osid=this.stateData?.body?.id
     console.log("id....",osid)
     
-    if(this.entity==="studentForeignVerification"){
-      const approveBody={
-        action:"GRANT_CLAIM",
-        note:"Registration Certificate"
-      }
-      this.baseService.approveClaim$(osid,approveBody)
-      .subscribe((response)=>{
-        console.log(response)
-      })
+    if(this.entity==="studentForeignVerification" && this.userEmail==="Regulator"){
+      const message = `Enter the email`;
+      const message1 = `Upload Document`;
+
+      const shouldShowFileUpload = true;
+      const resDialog = new DialogModel( message,message1);
+
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
+         disableClose: true ,
+        // width: '40rem',
+        // height:'25rem',
+        data:{message,message1,shouldShowFileUpload}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        // const reason = result;
+        
+
+        console.log("res",result);
+        if(result){
+          this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          const details=JSON.parse(this.stateData.propertyData);
+          console.log("data................",details)
+          //convert to string with commaa separated
+          this.convertUrlList = this.urlList.join(',')
+          const mailBody={
+            outsideEntityMailId:result.reason,
+            name: this.goodStandingForeignVerificationformGroup.value.applicantName,
+            gender: this.goodStandingForeignVerificationformGroup.value.gender,
+            council: details.council,
+            email: this.goodStandingForeignVerificationformGroup.value.email,
+            examBody: value.examBody,
+            docProof: this.convertUrlList,
+            diplomaNumber: value.diplomaNumber,
+            nursingCollage: value.collegeName,
+            courseState:"aaaaa",
+            courseCouncil:"BBB",
+            state: this.goodStandingForeignVerificationformGroup.value.state,
+            country: this.goodStandingForeignVerificationformGroup.value.country,
+            // state: this.newRegCertDetailsformGroup.value.state,
+            attachment:result.file,
+            
+          }
+          this.baseService.sendMailOutsideUp$(mailBody).subscribe((response)=>{
+            console.log(response)
+          })
+    
+        }
+        
+      });
+
+      // const approveBody={
+      //   action:"GRANT_CLAIM",
+      //   note:"Registration Certificate"
+      // }
+      // this.baseService.approveClaim$(osid,approveBody)
+      // .subscribe((response)=>{
+      //   console.log(response)
+      // })
 
     }
-    else if(this.entity==="StudentGoodstanding"){
-      const approveBody={
-        action:"GRANT_CLAIM",
-        note:"Registration Certificate"
-      }
-      this.baseService.approveClaim$(osid,approveBody)
-      .subscribe((response)=>{
-        console.log(response)
-      })
+    else if(this.entity==="StudentGoodstanding" && this.userEmail==="Regulator"){
+      const message = `Enter the email`;
+      const message1 = `Upload Document`;
+
+      const shouldShowFileUpload = true;
+      const resDialog = new DialogModel( message,message1);
+
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
+         disableClose: true ,
+        // width: '40rem',
+        // height:'25rem',
+        data:{message,message1,shouldShowFileUpload}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        // const reason = result;
+        
+
+        console.log("res",result);
+        if(result){
+          this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          const details=JSON.parse(this.stateData.propertyData);
+          console.log("data................",details)
+          //convert to string with commaa separated
+          this.convertUrlList = this.urlList.join(',')
+          const mailBody={
+            outsideEntityMailId:result.reason,
+            name: this.goodStandingForeignVerificationformGroup.value.applicantName,
+            gender: this.goodStandingForeignVerificationformGroup.value.gender,
+            council: details.council,
+            email: this.goodStandingForeignVerificationformGroup.value.email,
+            examBody: value.examBody,
+            docProof: this.convertUrlList,
+            diplomaNumber: value.diplomaNumber,
+            nursingCollage: value.collegeName,
+            courseState:"aaaaa",
+            courseCouncil:"BBB",
+            state: this.goodStandingForeignVerificationformGroup.value.state,
+            country: this.goodStandingForeignVerificationformGroup.value.country,
+            // state: this.newRegCertDetailsformGroup.value.state,
+            attachment:result.file,
+            
+          }
+          this.baseService.sendMailOutsideUp$(mailBody).subscribe((response)=>{
+            console.log(response)
+          })
+    
+        }
+        
+      });
+
+      // const approveBody={
+      //   action:"GRANT_CLAIM",
+      //   note:"Registration Certificate"
+      // }
+      // this.baseService.approveClaim$(osid,approveBody)
+      // .subscribe((response)=>{
+      //   console.log(response)
+      // })
 
     }
 

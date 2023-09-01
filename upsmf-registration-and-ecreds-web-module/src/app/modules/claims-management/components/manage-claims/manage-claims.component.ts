@@ -153,8 +153,8 @@ export class ManageClaimsComponent {
         this.claims = res.responseData
         console.log('this.claims', this.claims);
         this.pendingClaims = this.claims.filter(claim => claim['status'] === 'OPEN');
-        this.approvedClaims = this.claims.filter(claim => claim['status'] === 'CLOSED');
-        this.rejectedClaims = this.claims.filter(claim => claim?.notes);
+        this.approvedClaims = this.claims.filter(claim => claim['status'] === 'APPROVED');
+        this.rejectedClaims = this.claims.filter(claim => claim['status']==='REJECTED');
         console.log('pendingClaims', this.pendingClaims)
         this.isDataLoading = false;
 

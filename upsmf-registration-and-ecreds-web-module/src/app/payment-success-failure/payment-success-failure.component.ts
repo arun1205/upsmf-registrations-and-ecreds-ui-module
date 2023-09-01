@@ -67,7 +67,7 @@ ngOnInit(): void {
                   entityName: "StudentGoodstanding",
                   name: "studentGoodstandingVerification",
                   propertiesOSID: {
-                    studentGoodstandingVerification: [
+                    StudentGoodstanding: [
                       this.resData.osId
                     ]
                   }
