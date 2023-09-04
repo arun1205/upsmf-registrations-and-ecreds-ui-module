@@ -202,4 +202,33 @@ export interface ClaimsTableData {
     paymentStatus: string
   }
 
+  export interface createUserData {
+    name:string,
+    phoneNumber: string, 
+    email:string,
+    council:string
+  }
+
+  export interface userTableData {
+    id: number,
+    name:string,
+    username:string,
+    phone:number,
+    role:string,
+    status:string,
+    isMenuOption?:boolean,
+    isActive?: boolean,
+    roles?: any
+  }
+
+  export interface DialogData {
+    title: string;
+    content: any;
+    otpSubmitted?: boolean;
+    name?: string;
+    email?: string;
+    phone?: string;
+    ticketId?: number;
+  }
+
 

@@ -161,12 +161,27 @@ export class HttpService {
         }));
     }
 
-    loginPost(requestParam: RequestParam): Observable<ServerResponse> {
+    userPost(requestParam: RequestParam): Observable<ServerResponse> {
       const httpOptions: HttpOptions = {
          headers: requestParam.header ? this.getHeader(requestParam.header) : this.getHeader(),
         params: requestParam.param
       };
       return this.http.post<ServerResponse>(requestParam.url, requestParam.data, httpOptions).pipe(
+        mergeMap((data: ServerResponse) => {
+          console.log(data)
+        /*   if (data.statusInfo.status !== 200) {
+            return throwError(() => new Error(data.statusInfo?.errorMessage));
+          } */
+          return observableOf(data);
+        }));
+    }
+
+    userPut(requestParam: RequestParam): Observable<ServerResponse> {
+      const httpOptions: HttpOptions = {
+         headers: requestParam.header ? this.getHeader(requestParam.header) : this.getHeader(),
+        params: requestParam.param
+      };
+      return this.http.put<ServerResponse>(requestParam.url, requestParam.data, httpOptions).pipe(
         mergeMap((data: ServerResponse) => {
           console.log(data)
         /*   if (data.statusInfo.status !== 200) {

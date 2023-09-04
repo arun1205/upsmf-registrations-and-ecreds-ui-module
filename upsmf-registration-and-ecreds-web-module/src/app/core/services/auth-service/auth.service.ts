@@ -11,6 +11,8 @@ import { HttpService } from '../http-service/http.service';
 export class AuthService extends HttpService{
  override baseUrl: string;
  usermanagementApiURL:string;
+ private readonly TOKEN_KEY = 'token';
+ private readonly USER_DATA = "user_data";
  
 
   constructor(http: HttpClient, private configService: ConfigService) {
@@ -44,7 +46,16 @@ export class AuthService extends HttpService{
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJSR3RkMkZzeG1EMnJER3I4dkJHZ0N6MVhyalhZUzBSSyJ9.kMLn6177rvY53i0RAN3SPD5m3ctwaLb32pMYQ65nBdA',
       }
     }
-    return this.loginPost(reqParam);
+    return this.userPost(reqParam);
+  }
+
+  saveUserData(userData: any):void {
+    this.saveToken(userData?.accessToken);
+    localStorage.setItem(this.USER_DATA,JSON.stringify(userData));
+  }
+
+  saveToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
 }

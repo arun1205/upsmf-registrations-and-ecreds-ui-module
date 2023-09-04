@@ -1,1 +1,14 @@
-<p>admin-home works!</p>
+<app-header></app-header>
+<div class="content">
+    <h2 class="title-header">{{'Workspace'}}</h2>
+    <div class="cards-boxes">
+        <mat-card class="example-card" *ngFor="let item of cardList" (click)="navigateto(item)">
+            <!-- <a routerlink="manageuser">swe</a> -->
+            <mat-card-content class="content-container">
+                    <mat-icon class="icon-cls">book</mat-icon>
+                    <span class="title-section">{{item.title}}</span>
+                    <span class="desc-section">{{item.description}}</span>
+            </mat-card-content>
+            </mat-card>
+    </div>
+</div>

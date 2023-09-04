@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth-service/auth.service';
+import { BaseServiceService } from 'src/app/services/base-service.service';
 
 @Component({
   selector: 'app-login-page',
@@ -10,9 +11,11 @@ import { AuthService } from 'src/app/core/services/auth-service/auth.service';
 })
 export class LoginPageComponent {
   loginForm: FormGroup;
+  userRole:string = ''
 
   constructor(private router:Router,
-    private authService: AuthService){
+    private authService: AuthService,
+    private baseService: BaseServiceService){
     this.loginForm = new FormGroup({
       emailphno: new FormControl('', [Validators.required, this.emailOrPhoneValidator()]),
       password: new FormControl('',Validators.required)
@@ -44,7 +47,20 @@ export class LoginPageComponent {
       next:(res)=>{
         console.log('loginREs',res)
        if(res){
-          this.router.navigate(['/claims/manage'])
+          this.authService.saveUserData(res);
+         this.userRole= this.baseService.getUserRole()[0];
+         switch (this.userRole) {
+          case 'StudentFromUP':
+            this.router.navigate(['/claims/manage']);
+            break;
+          case 'SuperAdmin':
+            this.router.navigate(['/super-admin']);
+            break;
+    
+          default:
+          
+        }
+          // this.router.navigate(['/claims/manage'])
        }
       }
     })

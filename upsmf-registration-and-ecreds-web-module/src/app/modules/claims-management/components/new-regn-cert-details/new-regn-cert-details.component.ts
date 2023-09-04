@@ -11,7 +11,7 @@ import { HttpService } from 'src/app/core/services/http-service/http.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-import jsPDF from 'jspdf';
+// import jsPDF from 'jspdf';
 
 
 
@@ -832,67 +832,67 @@ export class NewRegnCertDetailsComponent {
       
      
     }
-    else if(this.entity==="StudentOutsideUP"){
-      const doc = new jsPDF();
+    // else if(this.entity==="StudentOutsideUP"){
+    //   const doc = new jsPDF();
 
-    // Extract form data
-    const formData = this.newRegCertDetailsformGroup.value;
+    // // Extract form data
+    // const formData = this.newRegCertDetailsformGroup.value;
 
-    // Define the PDF content
-    const content = `
-      Applicant Name: ${formData.applicantName}
-      Mobile Number: ${formData.mobNumber}
-      Email ID: ${formData.email}
-      Date: ${formData.date},
-      candidatePic: ${formData.email},
-      joiningYear: ${formData.joiningYear},
-      fathersName: ${formData.fatherName},
-      gender: ${formData.gender},
-      address:${formData.al1},
-      state: ${formData.state},
-      district: ${formData.district},
-        // "country": this.newRegCertDetailsformGroup.value.country,
-        // "pincode":this.newRegCertDetailsformGroup.value.pin,
-        // "finalYearRollNo": value.rollNum,
-        // "examBody": value.examBody,
-        // "joiningMonth": joinMonth,
-        // "passingMonth": passMonth,
-        // "email": this.newRegCertDetailsformGroup.value.email,
-        // "paymentStatus": "SUCCESS",
-        // "feeReciptNo": "12345678",
-        // "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
-        // "dateOfBirth":this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString() ,
-        // "barCode": "123457",
-        // "nursingCollage": value.collegeName,
-        // "passingYear": passYear.toString(),
-        // "courseName": value.courseName,
-        // "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
-        // "registrationType": this.stateData.claimType,
-        // "council": this.stateData.councilName,
-        // "mothersName": this.newRegCertDetailsformGroup.value.motherName,
-        // "name": this.newRegCertDetailsformGroup.value.applicantName,
-        // "credType":this.newRegCertDetailsformGroup.value.credType ,
-        // "examYear":'',
-        // "centerCode":'',
-        // "requestType":value.requestType,
-        // "docproof": this.convertUrlList,
-        // "regNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
-        // "diplomaNumber": value.diplomaNumber,
-        // "courseState": value.stateName ? value.stateName : "NA",
-        // "courseCouncil": value.newCouncil ?  value.newCouncil: "NA",
-        // "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
-        // "nurseRegDate": value.date? value.date : "NA",
-        // "claimType":"registration",
-        // "certificateNo": "NA"
-    `;
+    // // Define the PDF content
+    // const content = `
+    //   Applicant Name: ${formData.applicantName}
+    //   Mobile Number: ${formData.mobNumber}
+    //   Email ID: ${formData.email}
+    //   Date: ${formData.date},
+    //   candidatePic: ${formData.email},
+    //   joiningYear: ${formData.joiningYear},
+    //   fathersName: ${formData.fatherName},
+    //   gender: ${formData.gender},
+    //   address:${formData.al1},
+    //   state: ${formData.state},
+    //   district: ${formData.district},
+    //     // "country": this.newRegCertDetailsformGroup.value.country,
+    //     // "pincode":this.newRegCertDetailsformGroup.value.pin,
+    //     // "finalYearRollNo": value.rollNum,
+    //     // "examBody": value.examBody,
+    //     // "joiningMonth": joinMonth,
+    //     // "passingMonth": passMonth,
+    //     // "email": this.newRegCertDetailsformGroup.value.email,
+    //     // "paymentStatus": "SUCCESS",
+    //     // "feeReciptNo": "12345678",
+    //     // "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
+    //     // "dateOfBirth":this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString() ,
+    //     // "barCode": "123457",
+    //     // "nursingCollage": value.collegeName,
+    //     // "passingYear": passYear.toString(),
+    //     // "courseName": value.courseName,
+    //     // "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
+    //     // "registrationType": this.stateData.claimType,
+    //     // "council": this.stateData.councilName,
+    //     // "mothersName": this.newRegCertDetailsformGroup.value.motherName,
+    //     // "name": this.newRegCertDetailsformGroup.value.applicantName,
+    //     // "credType":this.newRegCertDetailsformGroup.value.credType ,
+    //     // "examYear":'',
+    //     // "centerCode":'',
+    //     // "requestType":value.requestType,
+    //     // "docproof": this.convertUrlList,
+    //     // "regNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
+    //     // "diplomaNumber": value.diplomaNumber,
+    //     // "courseState": value.stateName ? value.stateName : "NA",
+    //     // "courseCouncil": value.newCouncil ?  value.newCouncil: "NA",
+    //     // "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
+    //     // "nurseRegDate": value.date? value.date : "NA",
+    //     // "claimType":"registration",
+    //     // "certificateNo": "NA"
+    // `;
 
-    // Add the content to the PDF
-    doc.text(content, 20, 20);
+    // // Add the content to the PDF
+    // doc.text(content, 20, 20);
 
-    // Save the PDF
-    doc.save('form.pdf');
+    // // Save the PDF
+    // doc.save('form.pdf');
 
-    }
+    // }
     
    
     else{
