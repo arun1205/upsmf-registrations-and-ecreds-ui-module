@@ -17,9 +17,6 @@ const routes: Routes = [
   {
     path: 'claims', loadChildren: () => import('./modules/claims-management/claims-management.module').then(m => m.ClaimsManagementModule)
   },
-    {
-    path: 'users', loadChildren: () => import('./modules/user-management/user-management.module').then(m => m.UserManagementModule)
-  },
   {
     path: 'super-admin', loadChildren: () => import('./modules/super-admin-management/super-admin-management.module').then(m => m.SuperAdminManagementModule)
   },

@@ -9,13 +9,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ConfigService } from './services/config/config.service';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
+import { ConfirmationPopupComponent } from './components/confirmation-popup/confirmation-popup.component';
 @NgModule({
   declarations: [
     SharedTableComponent,
     HeaderComponent,
     SharedSkeletonLoadingComponent,
     BreadcrumbComponent,
-    DialogBoxComponent
+    DialogBoxComponent,
+    ConfirmationPopupComponent
    
   ],
   imports: [

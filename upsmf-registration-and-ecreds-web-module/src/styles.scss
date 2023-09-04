@@ -9,3 +9,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .red-snackbar{
     background:#9D1309;
   }
+
+  .content {
+    flex: 1;
+    padding: 1rem 8rem; /* Add space on both sides */
+    background-color: #F0F3F4;
+    min-height: 98vh;
+}
