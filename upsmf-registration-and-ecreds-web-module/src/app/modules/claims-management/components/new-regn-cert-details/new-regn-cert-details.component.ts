@@ -87,6 +87,7 @@ export class NewRegnCertDetailsComponent {
   courseList:any[]=[];
   courseUrl:string = ''
   paymentResponse:any;
+  updateStudentBody:any;
 
   
   stateData: any;
@@ -215,6 +216,7 @@ export class NewRegnCertDetailsComponent {
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
         credType: new FormControl('', [
           Validators.required]),
+        
     });
 
     this.newRegCourseDetailsformGroup = this.formBuilder.group({
@@ -237,7 +239,9 @@ export class NewRegnCertDetailsComponent {
        stateName:new FormControl(''),
        date: new FormControl(''),
        newCouncil: new FormControl(''),
-       otherRegnNo: new FormControl('')
+       otherRegnNo: new FormControl(''),
+       university: new FormControl('', [
+        Validators.required]),
     });
     this.getEndPoint();
     this.getCandidatePersonalDetails();
@@ -611,7 +615,7 @@ export class NewRegnCertDetailsComponent {
       this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
       //convert to string with commaa separated
       this.convertUrlList = this.urlList.join(',')
-      const updateStudentBody =
+       this.updateStudentBody =
       {
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
         "candidatePic": "arun.jpg",
@@ -627,7 +631,7 @@ export class NewRegnCertDetailsComponent {
         "examBody": value.examBody,
         "joiningMonth": joinMonth,
         "passingMonth": passMonth,
-        "email": this.newRegCertDetailsformGroup.value.email,
+        // "email": this.newRegCertDetailsformGroup.value.email,
         "paymentStatus": "SUCCESS",
         "feeReciptNo": "12345678",
         "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
@@ -653,9 +657,13 @@ export class NewRegnCertDetailsComponent {
         "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
         "nurseRegDate": value.date? value.date : "NA",
         "claimType":"registration",
-        "certificateNo": "NA"
+        "certificateNo": "NA",
+        "university":value.university,
+        "candidateSignature": "NA",
+         "validityUpto": "NA"
+
       }
-     console.log('updateStudentBody',updateStudentBody)
+     console.log('updateStudentBody',this.updateStudentBody)
    
      if(this.osid){
       const paymentData = {
@@ -664,7 +672,7 @@ export class NewRegnCertDetailsComponent {
         endPointUrl:this.endPointUrl
        }
        localStorage.setItem('payData', JSON.stringify(paymentData))
-          this.baseService.updateStudent$(this.osid, updateStudentBody, this.endPointUrl)
+          this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
          .subscribe(
            (response) => {
              console.log(response);
@@ -674,7 +682,10 @@ export class NewRegnCertDetailsComponent {
            },
          )
      } else {
-      this.baseService.postStudent$(updateStudentBody, this.endPointUrl).subscribe((data)=>{
+      this.updateStudentBody = {
+        ...this.updateStudentBody,
+        email:this.newRegCertDetailsformGroup.value.email,}
+      this.baseService.postStudent$(this.updateStudentBody, this.endPointUrl).subscribe((data)=>{
         console.log(data)
         if(data.result['StudentOutsideUP']) {
           this.paymentDetails= true;

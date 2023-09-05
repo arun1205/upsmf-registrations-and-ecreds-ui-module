@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { BaseServiceService } from '../../../../services/base-service.service';
 import { map } from 'rxjs/internal/operators/map';
 import { tap } from 'rxjs/internal/operators/tap';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { mergeMap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -52,6 +52,7 @@ export class GoodStandingForeignVerificationComponent {
   docsResponseUrl:string;
   paymentDetails: boolean = false;
   selectedLink: string = 'Candidate Details';
+  paymentResponse:any;
 
   profQualificationArray = ['ANM', 'Midwife', 'HW', 'Nurse', 'Bsc Nursing'];
 
@@ -63,6 +64,7 @@ export class GoodStandingForeignVerificationComponent {
     public dialog: MatDialog,
     private configService: ConfigService,
     private http: HttpService,
+    private route:  ActivatedRoute,
   ) { 
     this.userEmail = this.baseService.getUserRole()[0]
    console.log(this.userEmail)
@@ -72,6 +74,14 @@ export class GoodStandingForeignVerificationComponent {
 
   ngOnInit() {
     this.initForm();
+
+    this.route.queryParams.subscribe((param)=>{
+      if(param['resData']){
+        this.paymentResponse = JSON.parse(param['resData'])
+        this.paymentDetails = this.paymentResponse.isPayment
+      }
+      })
+      console.log(this.osid)
   }
 
   getCandidatePersonalDetails() {
@@ -348,6 +358,7 @@ export class GoodStandingForeignVerificationComponent {
       {{ (this.stateData?.customData?.type === 'ForeignVerifyReq') ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
 
     }
+    this.getEndPoint();
     // if(this.stateData.customData.type === 'goodStandingCert'){
     //   this.getCandidatePersonalDetails();
 
@@ -651,6 +662,7 @@ export class GoodStandingForeignVerificationComponent {
         "professionalQualification":this.goodStandingForeignVerificationformGroup.value.proQual,
         "registrationNumber":this.goodStandingForeignVerificationformGroup.value.regnNum,
         "paymentStatus": "SUCCESS",
+        "claimType":this.stateData?.customData.type
         
 
       
@@ -660,7 +672,7 @@ export class GoodStandingForeignVerificationComponent {
       if(this.osid){
         const paymentData={
           osId : this.osid,
-          origin: this.stateData?.origin,
+          origin: this.stateData?.customData.type,
           endPointUrl:this.endPointUrl
 
         }
@@ -677,22 +689,6 @@ export class GoodStandingForeignVerificationComponent {
       }
       else{
         this.baseService.postStudentGoodStanding$( updateStudentGoodstandingBody)
-      //  .pipe(
-      //    mergeMap((resp: any) => {
-      //     const makeClaimbody =
-      //     {
-      //       entityName: "StudentGoodstanding",
-      //       entityId: this.osid,
-      //       name: "studentGoodstandingVerification",
-      //       propertiesOSID: {
-      //         studentGoodstandingVerification: [
-      //             this.osid
-      //           ]
-      //       }
-      //   }
-      //      return this.baseService.makeClaim$(this.osid,makeClaimbody);
-      //    }
-      //    ))  
          .subscribe(
            (response) => {
              console.log("good resp",response);
@@ -712,7 +708,7 @@ export class GoodStandingForeignVerificationComponent {
       const updateStudentForeignVerificationBody={
         "name":this.goodStandingForeignVerificationformGroup.value.maidenName,
         "fathersName": this.goodStandingForeignVerificationformGroup.value.fatherName,
-        "presentAddress":`${this.goodStandingForeignVerificationformGroup.value.al1} ${this.goodStandingForeignVerificationformGroup.value.al2}`,
+        "address":`${this.goodStandingForeignVerificationformGroup.value.al1} ${this.goodStandingForeignVerificationformGroup.value.al2}`,
         "phoneNumber": this.goodStandingForeignVerificationformGroup.value.mobNumber,
         "email": this.goodStandingForeignVerificationformGroup.value.email,
         "trainingCenter": this.goodStandingForeignVerificationformGroup.value.tcName,
@@ -729,12 +725,14 @@ export class GoodStandingForeignVerificationComponent {
         "professionalQualification":this.goodStandingForeignVerificationformGroup.value.proQual,
         "registrationNumber":this.goodStandingForeignVerificationformGroup.value.regnNum,
         "paymentStatus": "SUCCESS",
+        "claimType":this.stateData?.customData.type
+
       }
       console.log("foreign body",updateStudentForeignVerificationBody)
       if(this.osid){
         const paymentData={
           osId : this.osid,
-          origin: this.stateData?.origin,
+          origin: this.stateData?.customData.type,
           endPointUrl:this.endPointUrl
         }
         localStorage.setItem('payData', JSON.stringify(paymentData))
@@ -869,4 +867,23 @@ export class GoodStandingForeignVerificationComponent {
         });
     }
   // }
+  getEndPoint(){
+    switch (this.stateData?.customData.type) {
+
+      case 'goodStandingCert':
+        this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_GOODSTANDING
+        break;
+        case 'ForeignVerifyReq':
+        this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_FOREIGNVARIFIVATION
+        
+        break;
+        case 'Regulator':
+        // this.router.navigate(['claims/new-regn-cert'])
+        break;
+
+      default:
+        return '';
+    }
+    return
+  }
 }

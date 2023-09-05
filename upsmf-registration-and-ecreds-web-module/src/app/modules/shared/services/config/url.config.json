@@ -20,7 +20,7 @@
             "GET_STUDENT_DETAILS_OUTSIDE_UP":"api/v1/StudentOutsideUP/",
             "OUTSIDE_UP_UPDATE":"api/v1/StudentOutsideUP/",
             "UPDATE_GOODSTANDING":"api/v1/StudentGoodstanding/",
-            "UPDATE_FOREIGNVERIFICATION":"api/v1/StudentForeignVerification",
+            "UPDATE_FOREIGNVERIFICATION":"api/v1/StudentForeignVerification/",
             "GET_COURSES_OUTSIDE":"api/v1/category/StudentOutsideUP/"
         },
         "ADMIN":
