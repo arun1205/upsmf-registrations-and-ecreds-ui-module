@@ -77,7 +77,7 @@ export interface ClaimsTableData {
     council: string,
     email: string,
     examBody: string,
-    docProof: string,
+    docProofs: string[],
     diplomaNumber:string,
     nursingCollage: string,
     courseState:string,
@@ -153,7 +153,7 @@ export interface ClaimsTableData {
   export interface StudentDetailsForeignVerification{
     name:string;
     fathersName:string;
-    address:string;
+    presentAddress:string;
     phoneNumber:string;
     email:string;
     trainingCenter:string;
@@ -165,7 +165,7 @@ export interface ClaimsTableData {
     dob:string | undefined;
     docproof:string | string[];
     candidatePic:string;
-    paymentStatus:string;
+    paymentStatus: string,
 
   }
 
