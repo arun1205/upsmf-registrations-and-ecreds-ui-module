@@ -100,7 +100,7 @@ export interface ClaimsTableData {
     examBody:string;
     joiningMonth: string;
     passingMonth: string;
-    email: string;
+    email?: string;
     paymentStatus: string;
     feeReciptNo: string;
     aadhaarNo: string;
@@ -122,7 +122,11 @@ export interface ClaimsTableData {
     pincode?:string,
     credType?:string,
     examYear?:string,
-    centerCode?:string
+    centerCode?:string,
+    university:string,
+    candidateSignature: string,
+    validityUpto:string
+    
 
   }
   export interface ClaimDetails {
@@ -153,7 +157,7 @@ export interface ClaimsTableData {
   export interface StudentDetailsForeignVerification{
     name:string;
     fathersName:string;
-    presentAddress:string;
+    address:string;
     phoneNumber:string;
     email:string;
     trainingCenter:string;
