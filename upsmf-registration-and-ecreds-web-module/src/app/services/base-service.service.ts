@@ -175,13 +175,22 @@ export class BaseServiceService  extends HttpService   {
         return this.put(reqParam);
 
       }
+      postStudentForeignVerification$( body: StudentDetailsForeignVerification): Observable<any>{
+        const reqParam:RequestParam={
+          url:this.configService.urlConFig. URLS.STUDENT.UPDATE_FOREIGNVERIFICATION,
+          data:body,
+          header:this.headers
+        }
+        return this.post(reqParam);
+
+      }
       updateStudentForeignVerification$(osid:string, body: StudentDetailsForeignVerification): Observable<any>{
         const reqParam:RequestParam={
           url:this.configService.urlConFig. URLS.STUDENT.UPDATE_FOREIGNVERIFICATION + osid,
           data:body,
           header:this.headers
         }
-        return this.post(reqParam);
+        return this.put(reqParam);
 
       }
       getClaimsAdmin$(){

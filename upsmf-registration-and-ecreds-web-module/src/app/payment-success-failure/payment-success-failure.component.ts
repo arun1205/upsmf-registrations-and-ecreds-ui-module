@@ -67,14 +67,27 @@ ngOnInit(): void {
                   entityName: "StudentGoodstanding",
                   name: "studentGoodstandingVerification",
                   propertiesOSID: {
-                    StudentGoodstanding: [
+                    studentGoodstandingVerification: [
                       this.resData.osId
                     ]
                   }
 
                 }
                 break;
+                case 'StudentForeignVerification':
+                  this.getMakeClaimbody={
+                    ...this.getMakeClaimbody,
+                    entityName:"StudentForeignVerification",
+                    name:"StudentForeignVerify",
+                    propertiesOSID: {
+                      StudentForeignVerify: [
+                        this.resData.osId
+                      ]
+                    }
+                  }
+                break;
                 case 'StudentFromUP':
+                  console.log("....outside up....")
                 this.getMakeClaimbody = {
                   ...this.getMakeClaimbody,
                   entityName: "StudentFromUP",
