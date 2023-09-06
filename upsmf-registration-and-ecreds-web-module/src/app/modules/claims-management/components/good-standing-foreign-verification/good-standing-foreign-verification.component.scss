@@ -103,7 +103,40 @@ mat-form-field{
     color: yellow !important; /* Note: You could also use a custom theme */
   }
   
+  .status{
+    margin: 0.5rem;
+  }
+  .status-reason{
+    margin: 0.5rem;
+    color: grey;
+  }
+  
+  .status-data{
+  width:61rem;
+  align-items:center;
+  border-radius:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top: 2rem;
+  border: 1px solid grey;
 
+  
+  }
+  .open {
+    color: orange;
+  }
+  
+  .closed {
+    color: green;
+  }
+  
+  .rejected {
+    color: red;
+  }
+  .mat-icon{
+    height: 21px;
+  }
   
 
   
