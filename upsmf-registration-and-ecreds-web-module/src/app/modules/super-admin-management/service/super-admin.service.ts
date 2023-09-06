@@ -25,8 +25,8 @@ export class SuperAdminService extends HttpService {
 
   getAllUsers(): Observable<any>  {
     const request = {
-      "offset":"0",
-       "size":"50"
+      "offset":"300",
+       "size":"700"
     };
     // const  reqParam: RequestParam = { url: this.configService.urlConFig.URLS.USER.GET_ALL_USERS}
     const reqParam: RequestParam = {
@@ -85,4 +85,17 @@ export class SuperAdminService extends HttpService {
      }
      return this.post(reqParam);
    }
+
+   getEmails(body:any):Observable<any>{
+    const reqParam: RequestParam = {
+      url: this.userManagementbaseURL +this.configService.urlConFig.URLS.USER.GET_EMAIL_DETAILS,
+      data: body,
+      header: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJSR3RkMkZzeG1EMnJER3I4dkJHZ0N6MVhyalhZUzBSSyJ9.kMLn6177rvY53i0RAN3SPD5m3ctwaLb32pMYQ65nBdA',
+      }
+    }
+    return this.userPost(reqParam);
+   }
 }
+
+

@@ -58,4 +58,10 @@ export class AuthService extends HttpService{
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
+  logout(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_DATA);
+    // localStorage.removeItem(this.ALL_ROLES);
+  }
+
 }

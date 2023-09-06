@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { BaseServiceService } from 'src/app/services/base-service.service';
 import { SuperAdminService } from '../../../service/super-admin.service';
 import { ConfigService } from 'src/app/modules/shared';
-import { ActivatedRoute, Route } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-user',
@@ -19,14 +19,19 @@ export class AddUserComponent {
   userId:string;
   isEditUser:boolean = false;
   userDetails:any;
+  roleType:string = ''
+  osId:string = ''
+  osId1:string = ''
+  userIds:string =''
 
   roleTypesArray = ["CouncilAdmin", "ExternalCouncil", "ExamBody"];
-  councilTypeArray:any
-  activeStatusArray = ["Active ", "Inactive"];
+  councilTypeArray:string[]=["UPSMFAC", "UPNM", "UPDC","UPMC"]
+  activeStatusArray = ["Active", "Inactive"];
   constructor(private formBuilder: FormBuilder,private baseService: BaseServiceService,
     private superAdminService: SuperAdminService,
     private configService: ConfigService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     
    }
@@ -47,8 +52,10 @@ export class AddUserComponent {
     this.superAdminService.getUserDetails(this.userId).subscribe({
       next: (res) => {
         console.log(res)
-        this.userDetails = res.responseData;
-        // this.setUserFormData();
+        console.log('1stRes',res)
+        this.userDetails = res
+        console.log('usd',this.userDetails)
+        this.setUserFormData();
       }
     })
   }
@@ -59,13 +66,24 @@ export class AddUserComponent {
       firstName = this.userDetails.firstName,
       lastName = this.userDetails.lastName
     };
+    if(this.userDetails?.attributes.role[0] === 'CouncilAdmin'){
+      this.councilTypeArray = ["UPSMFAC", "UPNM", "UPDC","UPMC"]
+    }
+    else if(this.userDetails?.attributes.role[0] === 'ExternalCouncil'){
+      this.councilTypeArray = ['OtherState']
+    }
+    else {
+      this.councilTypeArray =["UPSMFAC", "UPNM", "UPDC","UPMC"]
+    }
     this.newUserformGroup.setValue({
-      firstName: firstName,
-      lastName: lastName,
-      username: this.userDetails?.username,
-      phone:this.userDetails?.attributes.phoneNumber,
-      role:this.userDetails?.attributes.Role[0],
-      status: this.userDetails?.enabled === true? 'Active' : 'Inactive'
+      fName: firstName,
+      lName: lastName,
+      // username: this.userDetails?.username,
+      phoneNo:this.userDetails?.attributes.phoneNumber,
+      email: this.userDetails?.email,
+      role:this.userDetails?.attributes.role[0],
+      status: this.userDetails?.enabled === true? 'Active' : 'Inactive',
+      council:this.userDetails?.attributes.council[0]
     })
     console.log(this.newUserformGroup.value);
   }
@@ -117,7 +135,78 @@ export class AddUserComponent {
     return;
   }
 
+  navigateToHome(){
+    this.router.navigate(['super-admin/user-manage'])
+  }
+
   onnewUserformSubmit(e: any) {
+
+    if( this.isEditUser) {
+      this.updateUser();
+    } else {
+      this.createUser(e);
+    }
+  }
+
+  updateUser() {
+    const {fName, lName, phoneNo, role, status, email, department,council} = this.newUserformGroup.value;
+    const {id } = this.userDetails;
+     const requestObj = {
+      userName: this.userDetails.id,
+      "request" : {
+        // keycloakId: this.userDetails.keycloakId,
+        firstName: fName,
+        lastName: lName,
+        email: email,
+        username: email,
+        enabled: status == 'Active'? true: false,
+        emailVerified: true,
+        credentials: [
+          {
+              "type": "password",
+              "value": "ka09eF$299",
+              "temporary": "false"
+          }
+      ],
+      attributes: {
+         module: "registration",
+        // departmentName:  role === 'NODALOFFICER' ? department: role === 'GRIEVANCEADMIN' || role === 'ADMIN' ? -1 : null,
+        phoneNumber: phoneNo,
+        role: role,
+        council:council
+
+      }
+      }
+     }
+   
+    // this.isProcessing = true;
+    this.superAdminService.updateUser(requestObj).subscribe({
+      next: (res) => {
+        this.userDetails = res.responseData;
+        // this.toastrService.showToastr("User updated successfully!", 'Success', 'success', '');
+        // this.isProcessing = false;
+        this.navigateToHome();
+     },
+     error: (err) => {
+      // success response
+      if(err.status === 200) {
+        // this.toastrService.showToastr("User updated successfully!", 'Success', 'success', '');
+        // this.isProcessing = false;
+        this.getUserDetails();
+        this.navigateToHome();
+      }
+      else {
+        // this.isProcessing = false;
+        // this.toastrService.showToastr('Something went wrong. Please try again', 'Error', 'error', '');
+      }
+      
+       // Handle the error here in case of login failure
+     }}
+    );
+  }
+
+  createUser(e:any){
+    this.roleType =e.role
     console.log(e)
     const name = e.fName + ' ' + e.lName
     e.name = name
@@ -131,11 +220,93 @@ export class AddUserComponent {
     this.superAdminService.Createuser$(userObject, this.endPointUrl).subscribe({
       next:(res)=>{
         console.log(res)
+        if(res.result[this.roleType]){
+          this.osId = res.result[this.roleType]?.osid
+          console.log('osId',this.osId)
+          this.osId1= this.osId.replace(/^1-/, '');
+          console.log(this.osId1)
+          this.getEmail(e)
+        }
+
+
+        // this.navigateToHome();
       }
     })
-
    this.submitted = true
   }
+
+  getEmail(e:any){
+    const reqObj = {
+      "request":{
+        "fieldName":"email",
+        "fieldValue":e.email
+    }
+    }
+  this.superAdminService.getEmails(reqObj).subscribe({
+    next:(res)=>{
+      console.log('getData',res)
+      this.userIds =res[0]?.id
+      this.UpdateCreatedUser(e,this.userIds)
+    }
+  })
+  }
+
+  UpdateCreatedUser(e:any,ids:string){
+   console.log(e,'data')
+   const requestObj = {
+    userName: ids,
+    "request" : {
+      // keycloakId: this.userDetails.keycloakId,
+      firstName: e.fName,
+      lastName: e.lName,
+      email: e.email,
+      username: e.email,
+      enabled: e.status == 'Active'? true: false,
+      emailVerified: true,
+      credentials: [
+        {
+            "type": "password",
+            "value": "ka09eF$299",
+            "temporary": "false"
+        }
+    ],
+    attributes: {
+      // module: "grievance",
+      // departmentName:  role === 'NODALOFFICER' ? department: role === 'GRIEVANCEADMIN' || role === 'ADMIN' ? -1 : null,
+      phoneNumber: e.phoneNo,
+      role: e.role,
+      council:e.council
+
+    }
+    }
+   }
+ 
+  // this.isProcessing = true;
+  this.superAdminService.updateUser(requestObj).subscribe({
+    next: (res) => {
+      this.userDetails = res.responseData;
+      // this.toastrService.showToastr("User updated successfully!", 'Success', 'success', '');
+      // this.isProcessing = false;
+      this.navigateToHome();
+   },
+   error: (err) => {
+    // success response
+    if(err.status === 200) {
+      // this.toastrService.showToastr("User updated successfully!", 'Success', 'success', '');
+      // this.isProcessing = false;
+      this.getUserDetails();
+      this.navigateToHome();
+    }
+    else {
+      // this.isProcessing = false;
+      // this.toastrService.showToastr('Something went wrong. Please try again', 'Error', 'error', '');
+    }
+    
+     // Handle the error here in case of login failure
+   }}
+  );
+  }
+  
 
   onReset() {
     this.submitted = false;
