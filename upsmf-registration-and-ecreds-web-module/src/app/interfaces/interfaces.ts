@@ -77,7 +77,7 @@ export interface ClaimsTableData {
     council: string,
     email: string,
     examBody: string,
-    docProof: string,
+    docProofs: string[],
     diplomaNumber:string,
     nursingCollage: string,
     courseState:string,
@@ -100,7 +100,7 @@ export interface ClaimsTableData {
     examBody:string;
     joiningMonth: string;
     passingMonth: string;
-    email: string;
+    email?: string;
     paymentStatus: string;
     feeReciptNo: string;
     aadhaarNo: string;
@@ -122,7 +122,11 @@ export interface ClaimsTableData {
     pincode?:string,
     credType?:string,
     examYear?:string,
-    centerCode?:string
+    centerCode?:string,
+    university:string,
+    candidateSignature: string,
+    validityUpto:string
+    
 
   }
   export interface ClaimDetails {
@@ -165,7 +169,7 @@ export interface ClaimsTableData {
     dob:string | undefined;
     docproof:string | string[];
     candidatePic:string;
-    paymentStatus:string;
+    paymentStatus: string,
 
   }
 

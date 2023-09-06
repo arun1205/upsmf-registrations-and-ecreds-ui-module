@@ -15,6 +15,7 @@ export class ManageClaimsComponent {
   pendingClaims: ClaimsTableData[] = [];
   approvedClaims: ClaimsTableData[] = [];
   rejectedClaims: ClaimsTableData[] = [];
+  stateData: any;
 
   claimsTableColumns: TableColumn[] = [];
   pendingClaimsTableColumns: TableColumn[] = [];
@@ -24,7 +25,11 @@ export class ManageClaimsComponent {
   isDataLoading: boolean = false;
   constructor(
     private router: Router,
-    private baseService: BaseServiceService  ) { }
+    private baseService: BaseServiceService  ) { 
+      this.stateData = this.router?.getCurrentNavigation()?.extras.state;
+      console.log("stateData:",this.stateData)
+
+    }
 
   ngOnInit(): void {
     this.initializeColumns();
@@ -45,7 +50,7 @@ export class ManageClaimsComponent {
         columnDef: 'claimType',
         header: 'Claim Type',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimType']}`
+        cell: (element: Record<string, any>) => `${element['entity']}`
       },
       {
         columnDef: 'createdAt',
@@ -80,7 +85,7 @@ export class ManageClaimsComponent {
         columnDef: 'claimType',
         header: 'Claim Type',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimType']}`
+        cell: (element: Record<string, any>) => `${element['entity']}`
       },
       {
         columnDef: 'createdAt',
@@ -115,7 +120,7 @@ export class ManageClaimsComponent {
         columnDef: 'claimType',
         header: 'Claim Type',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimType']}`
+        cell: (element: Record<string, any>) => `${element['entity']}`
       },
       {
         columnDef: 'createdAt',
@@ -160,246 +165,47 @@ export class ManageClaimsComponent {
 
       }, 
     ) 
-
- /*    const body = {
-      "aadhaarNo": "some_aadhaar_no",
-      "council": "upsmfac",
-      "courseName": "Nursing Course",
-      "dateOfBirth": "1990-01-01",
-      "email": "45@example12366.com",
-      "examBody": "Some Exam Body",
-      "fathersName": "Jack Doe",
-      "finalYearRollNo": "1234",
-      "gender": "male",
-      "date":"1990-01-01",
-      "joiningMonth": "January",
-      "joiningYear": "2018",
-      "mothersName": "Jane Doe",
-      "name": "John Doe",
-      "nursingCollage": "Some Nursing College",
-      "passingMonth": "December",
-      "passingYear": "2021",
-      "phoneNumber": "09876735",
-      "registrationType": "SomeRegistrationType",
-      "barCode": "123457",
-      "doc-proof":"qwer.doc",
-      "paymentStatus":"SUCCESS",
-      "candidatePic":"arun.jpg",
-      "feeReciptNo":"12345678"
-  } */
- 
-   /*   this.baseService.inviteStudent$(body)
-    .pipe(
-      mergeMap((resp: any) => {
-        console.log(resp.result.StudentFromUP.osid)
-       // return resp;
-        return this.baseService.makeClaim$(resp.result.StudentFromUP.osid);
-      }
-      ))  
-      .subscribe(
-        (response) => {
-          console.log(response.result.StudentFromUP.osid);
-
-        },
-      )*/
-
-
-
-   
-    // setTimeout(() => {
-    //   this.isDataLoading = false;
-    // }, 2000);
-    // this.claims = [
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: new Date("2023-08-02T06:47:12.601+00:00").toLocaleDateString("en-us"),
-    //     status: "OPEN",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     closed: false
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "OPEN",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     closed: true
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "REJECTED",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     notes: "Rejected because of document mismatch ",
-    //     closed: true
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "REJECTED",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     notes: "Rejected because of incorrect DOB",
-    //     closed: true
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "CLOSED",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     notes: "Rejected because of insufficient docs",
-    //     closed: true
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "OPEN",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     closed: false
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "CLOSED",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     closed: true
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "OPEN",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     closed: false
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "CLOSED",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     closed: true
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "CLOSED",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     closed: true
-    //   },
-    //   {
-    //     id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-    //     entity: "Student",
-    //     entityId: "1-62b526e4-c62c-4b7c-9bc0-5f126414d57d",
-    //     createdAt: "2023-08-02T05:50:52.535+00:00",
-    //     updatedAt: "2023-08-02T06:47:31.718+00:00",
-    //     attestedOn: "2023-08-02T06:47:12.601+00:00",
-    //     status: "OPEN",
-    //     attestorEntity: "Teacher",
-    //     requestorName: "kumarpawans67@gmail.com",
-    //     attestationId: "1-6d4e2ffd-361e-4e13-b4a4-9beade1decb0",
-    //     attestationName: "studentVerification",
-    //     attestorUserId: "c49ac210-6a1b-47b2-b429-2f88deb8d8a4",
-    //     claimType: "Registration",
-    //     closed: false
-    //   }
-
-    // ];
-  
   }
 
-  onClickItem(e: any) {
-    console.log(e?.id)
-    let id = parseInt(e?.id)
+  // onClickItem(e: any) {
+  //   console.log(e?.id)
+  //   let id = parseInt(e?.id)
+  //   const data=this.claims
+
+  //   console.log("claim",data)
+    
+  //   // if(this.claims[0]?.entity==='StudentGoodstanding'){
+  //   //   this.router.navigate(['/claims/foreign-goodstanding', e.id], { state: { data: e } });
+
+  //   // }
+  //   //this.router.navigate(['/:'+id], {state: {data: e}});
+  //   this.router.navigate(['/claims', e.id], { state: { data: e } });
+  //   // this.router.navigate(['/grievance', e.id]);
+  // }
+  //this.router.navigate(['/:'+id], {state: {data: e}});
+  onClickItem(value: any) {
+    console.log("body",value)
+    let id = parseInt(value?.id)
     //this.router.navigate(['/:'+id], {state: {data: e}});
-    this.router.navigate(['/claims', e.id], { state: { data: e } });
+    if(value.entity==="StudentFromUP" ){
+      this.router.navigate(['/claims', value.id], { state: { body: value } });
+      // this.router.navigate(['/claims/gdfrgn', e.id], { state: { data: e } });
+
+
+      }
+      else if(value.entity==="StudentOutsideUP"){
+        this.router.navigate(['/claims', value.id], { state: { body: value } });
+      }
+    else if(value.entity==="StudentForeignVerification"){
+      this.router.navigate(['/claims/foreign-goodstanding', value.id], { state: { body:value } });
+    }
+    else{
+      this.router.navigate(['/claims/foreign-goodstanding', value.id], { state: { body:value } });
+
+    }
+    // this.router.navigate(['/claims', e.id], { state: { data: e } });
     // this.router.navigate(['/grievance', e.id]);
   }
-
 }
+
+

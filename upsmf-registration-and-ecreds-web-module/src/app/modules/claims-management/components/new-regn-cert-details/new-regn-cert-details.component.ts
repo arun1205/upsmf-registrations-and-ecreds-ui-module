@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, Location } from '@angular/common';
 import { BaseServiceService } from 'src/app/services/base-service.service';
@@ -11,9 +11,15 @@ import { HttpService } from 'src/app/core/services/http-service/http.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-// import jsPDF from 'jspdf';
+//import html2canvas from 'html2canvas';
+//import jspdf from 'jspdf';
+import {  applabels } from '../../../../messages/labels';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
 
-
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts'; 
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 
 @Component({
@@ -22,9 +28,13 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./new-regn-cert-details.component.scss']
 })
 export class NewRegnCertDetailsComponent {
+  @ViewChild('form1', { static: false }) form1: ElementRef;
+  @ViewChild('form2', { static: false }) form2: ElementRef;
 
-
-
+  form1Html: any
+  
+  form2Html: any
+  labels=applabels;
   links = ['Candidate Details', 'Course Details', 'Payment Details']
 
   newRegCertformGroup: FormGroup;
@@ -87,6 +97,7 @@ export class NewRegnCertDetailsComponent {
   courseList:any[]=[];
   courseUrl:string = ''
   paymentResponse:any;
+  updateStudentBody:any;
 
   
   stateData: any;
@@ -121,7 +132,9 @@ export class NewRegnCertDetailsComponent {
     
 
   }
-
+ngAfterViewInit(){
+  this.form1Html = this.form1.nativeElement
+}
   ngOnInit() {
     console.log(this.baseService.generate_uuidv4())
     this.initForm();
@@ -215,6 +228,7 @@ export class NewRegnCertDetailsComponent {
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
         credType: new FormControl('', [
           Validators.required]),
+        
     });
 
     this.newRegCourseDetailsformGroup = this.formBuilder.group({
@@ -237,7 +251,9 @@ export class NewRegnCertDetailsComponent {
        stateName:new FormControl(''),
        date: new FormControl(''),
        newCouncil: new FormControl(''),
-       otherRegnNo: new FormControl('')
+       otherRegnNo: new FormControl(''),
+       university: new FormControl('', [
+        Validators.required]),
     });
     this.getEndPoint();
     this.getCandidatePersonalDetails();
@@ -249,7 +265,8 @@ export class NewRegnCertDetailsComponent {
     this.osid=this.stateData?.id
     this.entity= this.stateData?.entity
     console.log("entity",this.entity)
-    if(this.entity==="StudentFromUP"){
+    if(this.entity==="StudentFromUP" && this.userEmail==="Regulator"){
+      console.log("status",this.stateData.body.status)
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
@@ -338,7 +355,7 @@ export class NewRegnCertDetailsComponent {
       );
 
     }
-    else if(this.entity==="StudentOutsideUP"){
+    else if(this.entity==="StudentOutsideUP" && this.userEmail==="Regulator"){
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
@@ -427,9 +444,37 @@ export class NewRegnCertDetailsComponent {
       );
 
     }
-    else{
+    else {
+     
+      if(this.stateData?.origin==="StudentOutsideUP"){
+        this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
+        // switch (this.stateData?.origin) {
 
-      this.baseService.getCandidatePersonalDetails$()
+        //   case 'StudentOutsideUP':
+        //     this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
+        //     this.courseUrl= this.configService.urlConFig.URLS.STUDENT.GET_COURSES_OUTSIDE
+        //     this.getCourses(this.courseUrl)
+        //     break;
+        //     case 'StudentFromUP':
+        //     this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+        //     this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
+        //     this.getCourses(this.courseUrl)
+        //     break;
+        //     case 'Regulator':
+        //     // this.router.navigate(['claims/new-regn-cert'])
+        //     break;
+    
+        //   default:
+        //     return '';
+        // }
+      }
+      else{
+        this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+
+      }
+      
+
+      this.baseService.getCandidatePersonalDetails$(this.endPointUrl)
         .subscribe(
           (response: any) => {
             if(response.responseData.length){
@@ -437,6 +482,8 @@ export class NewRegnCertDetailsComponent {
               console.log(this.candidateDetailList[0])
               this.osid = this.candidateDetailList[0].osid;
               this.urlDataResponse = this.candidateDetailList[0].docproof;
+              
+
               if(!!this.urlDataResponse){
                 this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
                 console.log('urlDaaaa',this.urlData)
@@ -549,10 +596,20 @@ export class NewRegnCertDetailsComponent {
         console.log("res",result);
         if(result){
           this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          if(this.urlData.length){
+            this.listOfFiles = this.urlData?.map(url => {
+                      const parts = url.split('=');
+            if (parts.length === 2) {
+                return decodeURIComponent(parts[1]);
+            } 
+            return null;
+            });
+            
+          }
           const details=JSON.parse(this.stateData.propertyData);
           console.log("data................",details)
           //convert to string with commaa separated
-          this.convertUrlList = this.urlList.join(',')
+          this.convertUrlList = this.listOfFiles.join(',')
           const mailBody={
             outsideEntityMailId:result.reason,
             name: this.newRegCertDetailsformGroup.value.applicantName,
@@ -560,7 +617,7 @@ export class NewRegnCertDetailsComponent {
             council: details.council,
             email: this.newRegCertDetailsformGroup.value.email,
             examBody: value.examBody,
-            docProof: this.convertUrlList,
+            docProofs: [this.convertUrlList],
             diplomaNumber: value.diplomaNumber,
             nursingCollage: value.collegeName,
             courseState:"aaaaa",
@@ -601,7 +658,7 @@ export class NewRegnCertDetailsComponent {
       this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
       //convert to string with commaa separated
       this.convertUrlList = this.urlList.join(',')
-      const updateStudentBody =
+       this.updateStudentBody =
       {
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
         "candidatePic": "arun.jpg",
@@ -617,7 +674,7 @@ export class NewRegnCertDetailsComponent {
         "examBody": value.examBody,
         "joiningMonth": joinMonth,
         "passingMonth": passMonth,
-        "email": this.newRegCertDetailsformGroup.value.email,
+        // "email": this.newRegCertDetailsformGroup.value.email,
         "paymentStatus": "SUCCESS",
         "feeReciptNo": "12345678",
         "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
@@ -643,9 +700,13 @@ export class NewRegnCertDetailsComponent {
         "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
         "nurseRegDate": value.date? value.date : "NA",
         "claimType":"registration",
-        "certificateNo": "NA"
+        "certificateNo": "NA",
+        "university":value.university,
+        "candidateSignature": "NA",
+         "validityUpto": "NA"
+
       }
-     console.log('updateStudentBody',updateStudentBody)
+     console.log('updateStudentBody',this.updateStudentBody)
    
      if(this.osid){
       const paymentData = {
@@ -654,7 +715,7 @@ export class NewRegnCertDetailsComponent {
         endPointUrl:this.endPointUrl
        }
        localStorage.setItem('payData', JSON.stringify(paymentData))
-          this.baseService.updateStudent$(this.osid, updateStudentBody, this.endPointUrl)
+          this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
          .subscribe(
            (response) => {
              console.log(response);
@@ -664,7 +725,10 @@ export class NewRegnCertDetailsComponent {
            },
          )
      } else {
-      this.baseService.postStudent$(updateStudentBody, this.endPointUrl).subscribe((data)=>{
+      this.updateStudentBody = {
+        ...this.updateStudentBody,
+        email:this.newRegCertDetailsformGroup.value.email,}
+      this.baseService.postStudent$(this.updateStudentBody, this.endPointUrl).subscribe((data)=>{
         console.log(data)
         if(data.result['StudentOutsideUP']) {
           this.paymentDetails= true;
@@ -832,70 +896,11 @@ export class NewRegnCertDetailsComponent {
       
      
     }
-    // else if(this.entity==="StudentOutsideUP"){
-    //   const doc = new jsPDF();
-
-    // // Extract form data
-    // const formData = this.newRegCertDetailsformGroup.value;
-
-    // // Define the PDF content
-    // const content = `
-    //   Applicant Name: ${formData.applicantName}
-    //   Mobile Number: ${formData.mobNumber}
-    //   Email ID: ${formData.email}
-    //   Date: ${formData.date},
-    //   candidatePic: ${formData.email},
-    //   joiningYear: ${formData.joiningYear},
-    //   fathersName: ${formData.fatherName},
-    //   gender: ${formData.gender},
-    //   address:${formData.al1},
-    //   state: ${formData.state},
-    //   district: ${formData.district},
-    //     // "country": this.newRegCertDetailsformGroup.value.country,
-    //     // "pincode":this.newRegCertDetailsformGroup.value.pin,
-    //     // "finalYearRollNo": value.rollNum,
-    //     // "examBody": value.examBody,
-    //     // "joiningMonth": joinMonth,
-    //     // "passingMonth": passMonth,
-    //     // "email": this.newRegCertDetailsformGroup.value.email,
-    //     // "paymentStatus": "SUCCESS",
-    //     // "feeReciptNo": "12345678",
-    //     // "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
-    //     // "dateOfBirth":this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString() ,
-    //     // "barCode": "123457",
-    //     // "nursingCollage": value.collegeName,
-    //     // "passingYear": passYear.toString(),
-    //     // "courseName": value.courseName,
-    //     // "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
-    //     // "registrationType": this.stateData.claimType,
-    //     // "council": this.stateData.councilName,
-    //     // "mothersName": this.newRegCertDetailsformGroup.value.motherName,
-    //     // "name": this.newRegCertDetailsformGroup.value.applicantName,
-    //     // "credType":this.newRegCertDetailsformGroup.value.credType ,
-    //     // "examYear":'',
-    //     // "centerCode":'',
-    //     // "requestType":value.requestType,
-    //     // "docproof": this.convertUrlList,
-    //     // "regNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
-    //     // "diplomaNumber": value.diplomaNumber,
-    //     // "courseState": value.stateName ? value.stateName : "NA",
-    //     // "courseCouncil": value.newCouncil ?  value.newCouncil: "NA",
-    //     // "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
-    //     // "nurseRegDate": value.date? value.date : "NA",
-    //     // "claimType":"registration",
-    //     // "certificateNo": "NA"
-    // `;
-
-    // // Add the content to the PDF
-    // doc.text(content, 20, 20);
-
-    // // Save the PDF
-    // doc.save('form.pdf');
-
-    // }
     
    
     else{
+    //this.generatePDFmakepdf()
+    this.generatePDF()
     console.log("onReset")
     this.submitted = false;
     this.newRegCertDetailsformGroup.reset();
@@ -959,4 +964,138 @@ export class NewRegnCertDetailsComponent {
     }
     )
   }
+  generatePDF(){
+    const doc = new jsPDF()
+    console.log(  this.form1Html)
+    console.log(this.newRegCertDetailsformGroup.value)
+    console.log(this.newRegCourseDetailsformGroup.value)
+// It can parse html:
+// <table id="my-table"><!-- ... --></table>
+autoTable(doc, {
+  margin: { top: 50 },
+  rowPageBreak: 'auto',
+  bodyStyles: { valign: 'top' },
+
+  head: [],
+  body: [
+    [this.labels.applicantName,this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+    ['Email', 'castille@example.com'], 
+  
+  
+  ],
+    
+});
+
+
+
+doc.save('table.pdf')
+  }
+
+  generatePDFmakepdf() { 
+    console.log(  this.form1Html)
+    console.log(this.newRegCertDetailsformGroup.value)
+    console.log(this.newRegCourseDetailsformGroup.value) 
+    const documentDefinition = {
+      content: [
+        {
+          text: 'Custom PDF Generated with pdfmake',
+          style: 'header',
+        },
+        {
+          text: 'Sample content with styles:',
+          style: 'subheader',
+        },
+        {
+          ul: [
+            'Item 1',
+            'Item 2',
+            'Item 3',
+          ],
+        },
+        {
+          text: 'Custom styling example:',
+          style: 'subheader',
+        },
+        {
+          text: 'This text is in blue color',
+          style: 'blueText',
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 22,
+          bold: true,
+        },
+        subheader: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 10, 0, 5],
+        },
+        blueText: {
+          color: 'blue',
+        },
+      },
+    };
+  
+    //pdfMake.createPdf(documentDefinition).download(); 
+   
+  } 
 }

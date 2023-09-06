@@ -25,7 +25,7 @@
                         <ng-template #notPayment>
                             <div class="content-details">
                                 
-                                <form [formGroup]="newRegCertDetailsformGroup" *ngIf="candidateDetails"
+                                <form #form1 id="form1" [formGroup]="newRegCertDetailsformGroup" *ngIf="candidateDetails"
                                 (ngSubmit)="newRegCertDetailsformGroupSubmit(newRegCertDetailsformGroup.value)">
                                     <div class="status-bar" *ngIf="stateData?.data?.status" >
                                             <div class="status-data" [ngClass]="getStatusColorClass(stateData?.data?.status)">
@@ -37,7 +37,7 @@
                                     </div> 
                                     <div class="full-details">
                                         <div class="applicant-details">
-                                            <h4>Applicant Name</h4>
+                                            <h4>{{labels.applicantName}}</h4>
                                             <mat-form-field appearance="outline" >
                                                 <input matInput placeholder="Applicant Name" formControlName="applicantName">
                                                 <mat-error *ngIf="newRegCertDetailsformGroup.controls['applicantName'].invalid">
@@ -271,7 +271,7 @@
 
 
 
-                                <form [formGroup]="newRegCourseDetailsformGroup" *ngIf="!candidateDetails"
+                                <form #form2 id="form2" [formGroup]="newRegCourseDetailsformGroup" *ngIf="!candidateDetails"
                                 (ngSubmit)="onNewRegCourseDetailsformSubmit(newRegCourseDetailsformGroup.value)">
                                     <div class="full-details">
 
@@ -307,6 +307,13 @@
                                             <h4>College Name</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="College Name" formControlName="collegeName">
+                                            
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="applicant-details">
+                                            <h4>University</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="College Name" formControlName="university">
                                             
                                             </mat-form-field>
                                         </div>

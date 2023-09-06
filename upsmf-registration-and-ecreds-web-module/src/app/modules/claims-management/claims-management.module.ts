@@ -13,6 +13,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NewRegnCertDetailsComponent } from './components/new-regn-cert-details/new-regn-cert-details.component';
 import { GoodStandingForeignVerificationComponent } from './components/good-standing-foreign-verification/good-standing-foreign-verification.component';
 
+
+
 @NgModule({
   declarations: [
     ManageClaimsComponent,
