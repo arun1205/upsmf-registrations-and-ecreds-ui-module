@@ -52,7 +52,7 @@ export class ViewClaimListComponent {
         columnDef: 'claimType',
         header: 'Claim Type',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimType']}`
+        cell: (element: Record<string, any>) => `${element['entity']}`
       },
       {
         columnDef: 'createdAt',
@@ -87,7 +87,7 @@ export class ViewClaimListComponent {
         columnDef: 'claimType',
         header: 'Claim Type',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimType']}`
+        cell: (element: Record<string, any>) => `${element['entity']}`
       },
       {
         columnDef: 'createdAt',
@@ -122,7 +122,7 @@ export class ViewClaimListComponent {
         columnDef: 'claimType',
         header: 'Claim Type',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['claimType']}`
+        cell: (element: Record<string, any>) => `${element['entity']}`
       },
       {
         columnDef: 'createdAt',
@@ -218,6 +218,10 @@ export class ViewClaimListComponent {
       }
     else if(this.stateData?.type==="ForeignVerifyReq"){
       this.router.navigate(['/claims/foreign-goodstanding', value.id], { state: { body:value } });
+    }
+    else{
+      this.router.navigate(['/claims/foreign-goodstanding', value.id], { state: { body:value } });
+
     }
     // this.router.navigate(['/claims', e.id], { state: { data: e } });
     // this.router.navigate(['/grievance', e.id]);

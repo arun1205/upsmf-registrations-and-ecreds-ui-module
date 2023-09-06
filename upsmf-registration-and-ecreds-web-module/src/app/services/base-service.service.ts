@@ -66,11 +66,11 @@ export class BaseServiceService  extends HttpService   {
   }
 
   
-  getCandidatePersonalDetails$(){
+  getCandidatePersonalDetails$(endPointUrl:string){
 
        const reqParam: RequestParam = {
-         url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS,  
-        //  url: endpointUrl,  
+        //  url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS,  
+         url: endPointUrl,  
          /* data:{
           "name": "Arun ",
           "phoneNumber": "9887478248",

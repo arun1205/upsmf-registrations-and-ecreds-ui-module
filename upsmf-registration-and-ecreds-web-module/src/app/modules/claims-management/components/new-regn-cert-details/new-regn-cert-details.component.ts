@@ -11,6 +11,8 @@ import { HttpService } from 'src/app/core/services/http-service/http.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
+import html2canvas from 'html2canvas';
+import jspdf from 'jspdf';
 // import jsPDF from 'jspdf';
 
 
@@ -253,7 +255,8 @@ export class NewRegnCertDetailsComponent {
     this.osid=this.stateData?.id
     this.entity= this.stateData?.entity
     console.log("entity",this.entity)
-    if(this.entity==="StudentFromUP"){
+    if(this.entity==="StudentFromUP" && this.userEmail==="Regulator"){
+      console.log("status",this.stateData.body.status)
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
@@ -342,7 +345,7 @@ export class NewRegnCertDetailsComponent {
       );
 
     }
-    else if(this.entity==="StudentOutsideUP"){
+    else if(this.entity==="StudentOutsideUP" && this.userEmail==="Regulator"){
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
@@ -431,9 +434,37 @@ export class NewRegnCertDetailsComponent {
       );
 
     }
-    else{
+    else {
+     
+      if(this.stateData?.origin==="StudentOutsideUP"){
+        this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
+        // switch (this.stateData?.origin) {
 
-      this.baseService.getCandidatePersonalDetails$()
+        //   case 'StudentOutsideUP':
+        //     this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
+        //     this.courseUrl= this.configService.urlConFig.URLS.STUDENT.GET_COURSES_OUTSIDE
+        //     this.getCourses(this.courseUrl)
+        //     break;
+        //     case 'StudentFromUP':
+        //     this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+        //     this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
+        //     this.getCourses(this.courseUrl)
+        //     break;
+        //     case 'Regulator':
+        //     // this.router.navigate(['claims/new-regn-cert'])
+        //     break;
+    
+        //   default:
+        //     return '';
+        // }
+      }
+      else{
+        this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+
+      }
+      
+
+      this.baseService.getCandidatePersonalDetails$(this.endPointUrl)
         .subscribe(
           (response: any) => {
             if(response.responseData.length){
@@ -441,6 +472,8 @@ export class NewRegnCertDetailsComponent {
               console.log(this.candidateDetailList[0])
               this.osid = this.candidateDetailList[0].osid;
               this.urlDataResponse = this.candidateDetailList[0].docproof;
+              
+
               if(!!this.urlDataResponse){
                 this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
                 console.log('urlDaaaa',this.urlData)
@@ -853,70 +886,11 @@ export class NewRegnCertDetailsComponent {
       
      
     }
-    // else if(this.entity==="StudentOutsideUP"){
-    //   const doc = new jsPDF();
-
-    // // Extract form data
-    // const formData = this.newRegCertDetailsformGroup.value;
-
-    // // Define the PDF content
-    // const content = `
-    //   Applicant Name: ${formData.applicantName}
-    //   Mobile Number: ${formData.mobNumber}
-    //   Email ID: ${formData.email}
-    //   Date: ${formData.date},
-    //   candidatePic: ${formData.email},
-    //   joiningYear: ${formData.joiningYear},
-    //   fathersName: ${formData.fatherName},
-    //   gender: ${formData.gender},
-    //   address:${formData.al1},
-    //   state: ${formData.state},
-    //   district: ${formData.district},
-    //     // "country": this.newRegCertDetailsformGroup.value.country,
-    //     // "pincode":this.newRegCertDetailsformGroup.value.pin,
-    //     // "finalYearRollNo": value.rollNum,
-    //     // "examBody": value.examBody,
-    //     // "joiningMonth": joinMonth,
-    //     // "passingMonth": passMonth,
-    //     // "email": this.newRegCertDetailsformGroup.value.email,
-    //     // "paymentStatus": "SUCCESS",
-    //     // "feeReciptNo": "12345678",
-    //     // "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
-    //     // "dateOfBirth":this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString() ,
-    //     // "barCode": "123457",
-    //     // "nursingCollage": value.collegeName,
-    //     // "passingYear": passYear.toString(),
-    //     // "courseName": value.courseName,
-    //     // "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
-    //     // "registrationType": this.stateData.claimType,
-    //     // "council": this.stateData.councilName,
-    //     // "mothersName": this.newRegCertDetailsformGroup.value.motherName,
-    //     // "name": this.newRegCertDetailsformGroup.value.applicantName,
-    //     // "credType":this.newRegCertDetailsformGroup.value.credType ,
-    //     // "examYear":'',
-    //     // "centerCode":'',
-    //     // "requestType":value.requestType,
-    //     // "docproof": this.convertUrlList,
-    //     // "regNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
-    //     // "diplomaNumber": value.diplomaNumber,
-    //     // "courseState": value.stateName ? value.stateName : "NA",
-    //     // "courseCouncil": value.newCouncil ?  value.newCouncil: "NA",
-    //     // "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
-    //     // "nurseRegDate": value.date? value.date : "NA",
-    //     // "claimType":"registration",
-    //     // "certificateNo": "NA"
-    // `;
-
-    // // Add the content to the PDF
-    // doc.text(content, 20, 20);
-
-    // // Save the PDF
-    // doc.save('form.pdf');
-
-    // }
     
    
     else{
+    this.generatePDF()
+
     console.log("onReset")
     this.submitted = false;
     this.newRegCertDetailsformGroup.reset();
@@ -980,4 +954,22 @@ export class NewRegnCertDetailsComponent {
     }
     )
   }
+  generatePDF() {
+    // if (this.formsReady) {
+
+        var data = document.getElementById('form')!;
+        html2canvas(data).then((canvas) => {
+          // Few necessary setting options
+          var imgWidth = 183;
+          var pageHeight = 300;
+          var imgHeight = (canvas.height * imgWidth) / canvas.width;
+          var heightLeft = imgHeight;
+
+          const contentDataURL = canvas.toDataURL('image/png');
+          let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
+          var position = 0;
+          pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+          pdf.save('application.pdf'); // Generated PDF
+        });
+    }
 }
