@@ -2,7 +2,7 @@
 <div class="main-container">
     <div class="claim-details-container">
         <div class="header">
-            <h2>Create User</h2>
+            <h2>{{isEditUser ? 'Edit User Details' : 'Create user'}}</h2>
         </div>
         <div class="certificate-container">
             <div class="inner-container">
@@ -42,7 +42,7 @@
                         <div class="ml4 flex flex-column">
                             <h4>Phone Number</h4>
                             <mat-form-field appearance="outline" style="width:16.5rem">
-                                <input matInput placeholder="Phone Number" formControlName="phoneNo">
+                                <input matInput  placeholder="Phone Number" formControlName="phoneNo">
 
                             </mat-form-field>
                         </div>
@@ -110,7 +110,7 @@
                         <div class="button-group ">
                             <button type="button" class="cancel-button" mat-stroked-button color="primary"
                                 (click)="onReset()">Cancel</button>
-                            <button class="next-button" mat-raised-button color="primary">Create User</button>
+                            <button class="next-button" mat-raised-button color="primary">Save</button>
                         </div>
                     </div>
                 </form>

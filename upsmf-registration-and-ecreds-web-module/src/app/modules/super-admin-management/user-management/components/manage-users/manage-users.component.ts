@@ -29,8 +29,8 @@ export class ManageUsersComponent {
   }
 
   ngOnInit(): void {
-  //  this.getAllUsers();
-  this.getUsers();
+   this.getAllUsers();
+  // this.getUsers();
     this.initializeColumns();
     console.log(this.userTableColumns)
     console.log(this.userData)
@@ -48,13 +48,13 @@ export class ManageUsersComponent {
       columnDef: 'email',
       header: 'Email',
       isSortable: true,
-      cell: (element: Record<string, any>) => `${element['email']}`
+      cell: (element: Record<string, any>) => `${element['username']}`
     },
     {
       columnDef: 'phoneNumber',
       header: 'Phone Number',
       isSortable: true,
-      cell: (element: Record<string, any>) => `${element['phoneNumber']}`
+      cell: (element: Record<string, any>) => `${element['phone']}`
     },
     {
       columnDef: 'role',
@@ -66,7 +66,9 @@ export class ManageUsersComponent {
       columnDef: 'status',
       header: 'Account Status',
       isSortable: false,
-      cell: (element: Record<string, any>) => `${element['status']}`
+      cell: (element: Record<string, any>) => {
+        return  element['isActive'] ? 'Active' : "Inactive";
+      }
     },
     {
       columnDef: 'more',
@@ -85,6 +87,7 @@ export class ManageUsersComponent {
       next: (res) => {
         console.log(res)
         this.isDataLoading = false;
+        res.shift()
         this.users = res.map((user:any) => {
           const { username, firstName, lastName, enabled, email, attributes, id } = user;
           let name = '';
@@ -92,14 +95,14 @@ export class ManageUsersComponent {
           let role = '';
           let phone = '';
           if(firstName && lastName !== undefined) {
-          name = `${firstName} + ' ' + ${lastName}`;
+          name = firstName + ' ' + lastName;
           }
           if(enabled) {
           isActive = enabled == true? 'Active': 'Inactive';
           }
           if(attributes !== undefined) {
-          if(attributes.hasOwnProperty('Role') && attributes.Role[0]) {
-          role = attributes.Role[0];
+          if(attributes.hasOwnProperty('role') && attributes.role[0]) {
+          role = attributes.role[0];
           }
           if(attributes.hasOwnProperty('phoneNumber') && attributes.phoneNumber[0]) {
           phone = attributes.phoneNumber[0]
@@ -124,21 +127,21 @@ export class ManageUsersComponent {
     });
   }
 
-  getUsers() {
-    this.isDataLoading = true;
-    setTimeout(() => {
-      this.isDataLoading = false;
-    }, 1000);
-    this.userData = [
-      {
-        id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
-        status: "Active",
-        name: "Devpratap Nagar",
-        email:"dev@nagar.up.ac.in",
-        phoneNumber: "9876543210",
-        role: "Nodal Officer",
-      },]
-    }
+  // getUsers() {
+  //   this.isDataLoading = true;
+  //   setTimeout(() => {
+  //     this.isDataLoading = false;
+  //   }, 1000);
+  //   this.userData = [
+  //     {
+  //       id: "7fcd0a6d-a3fa-4358-a094-0d36c03fb91d",
+  //       status: "Active",
+  //       name: "Devpratap Nagar",
+  //       email:"dev@nagar.up.ac.in",
+  //       phoneNumber: "9876543210",
+  //       role: "Nodal Officer",
+  //     },]
+  //   }
 
     onClickItem(e: any) {
       console.log(e)
@@ -165,6 +168,7 @@ export class ManageUsersComponent {
     }
 
     toggleUserStatus(event:any) {
+      console.log('eee',event)
       const status = event.isActive ? 'deactivate' : 'activate';
      const dialogRef = this.dialog.open(ConfirmationPopupComponent, {
       data: { title: `Are you sure you want to ${status} ?`},
