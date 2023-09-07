@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './modules/user-authentication/components/login-page/login-page.component';
 import { PaymentSuccessFailureComponent } from './payment-success-failure/payment-success-failure.component';
+import { AuthGuard } from './core/guard/auth.guard';
 
 
 const routes: Routes = [
@@ -15,13 +16,13 @@ const routes: Routes = [
     path:'payment-response', component: PaymentSuccessFailureComponent
   },
   {
-    path: 'claims', loadChildren: () => import('./modules/claims-management/claims-management.module').then(m => m.ClaimsManagementModule)
+    path: 'claims', loadChildren: () => import('./modules/claims-management/claims-management.module').then(m => m.ClaimsManagementModule),canActivate: [AuthGuard]
   },
   {
-    path: 'super-admin', loadChildren: () => import('./modules/super-admin-management/super-admin-management.module').then(m => m.SuperAdminManagementModule)
+    path: 'super-admin', loadChildren: () => import('./modules/super-admin-management/super-admin-management.module').then(m => m.SuperAdminManagementModule),canActivate: [AuthGuard]
   },
   {
-    path: 'admin', loadChildren: () => import('./modules/admin-management/admin-management.module').then(m => m.AdminManagementModule)
+    path: 'admin', loadChildren: () => import('./modules/admin-management/admin-management.module').then(m => m.AdminManagementModule),canActivate: [AuthGuard]
   }
   
 ];

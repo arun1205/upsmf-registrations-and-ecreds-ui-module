@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth-service/auth.service';
@@ -9,7 +9,7 @@ import { BaseServiceService } from 'src/app/services/base-service.service';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
   loginForm: FormGroup;
   userRole:string = ''
 
@@ -21,6 +21,27 @@ export class LoginPageComponent {
       password: new FormControl('',Validators.required)
 
     })
+  }
+
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      // Redirect to the home page if logged in
+      this.userRole= this.baseService.getUserRole()[0];
+      switch (this.userRole) {
+       case 'StudentFromUP':
+         this.router.navigate(['/claims/manage']);
+         break;
+       case 'SuperAdmin':
+         this.router.navigate(['/super-admin']);
+         break;
+      case 'Regulator':
+          this.router.navigate(['/admin']);
+          break;
+ 
+       default:
+       
+     }
+    }
   }
   emailOrPhoneValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -56,7 +77,9 @@ export class LoginPageComponent {
           case 'SuperAdmin':
             this.router.navigate(['/super-admin']);
             break;
-    
+          case 'Regulator':
+              this.router.navigate(['/admin']);
+              break;
           default:
           
         }
