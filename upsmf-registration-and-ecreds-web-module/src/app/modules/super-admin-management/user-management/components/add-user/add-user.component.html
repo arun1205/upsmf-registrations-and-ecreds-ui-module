@@ -1,5 +1,6 @@
 <app-header></app-header>
-<div class="main-container">
+<app-breadcrumb [breadcrumbItems]="breadcrumbItems"></app-breadcrumb>
+<div class="content">
     <div class="claim-details-container">
         <div class="header">
             <h2>{{isEditUser ? 'Edit User Details' : 'Create user'}}</h2>

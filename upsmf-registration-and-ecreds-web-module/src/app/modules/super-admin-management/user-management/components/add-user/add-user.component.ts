@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BaseServiceService } from 'src/app/services/base-service.service';
 import { SuperAdminService } from '../../../service/super-admin.service';
-import { ConfigService } from 'src/app/modules/shared';
+import { BreadcrumbItem, ConfigService } from 'src/app/modules/shared';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 @Component({
@@ -27,6 +27,11 @@ export class AddUserComponent {
   roleTypesArray = ["CouncilAdmin", "ExternalCouncil", "ExamBody"];
   councilTypeArray:string[]=["UPSMFAC", "UPNM", "UPDC","UPMC"]
   activeStatusArray = ["Active", "Inactive"];
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Workspace', url: '/super-admin' },
+    { label: 'User List', url: '/super-admin/user-manage' },
+    { label: 'User Details', url: '/super-admin/new-user' },
+  ];
   constructor(private formBuilder: FormBuilder,private baseService: BaseServiceService,
     private superAdminService: SuperAdminService,
     private configService: ConfigService,

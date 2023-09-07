@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { BreadcrumbItem } from 'src/app/modules/shared';
 
 @Component({
   selector: 'app-manage-claim',
@@ -7,6 +8,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./manage-claim.component.scss']
 })
 export class ManageClaimComponent {
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Workspace', url: '/admin' },
+    { label: 'Claim Manage', url: '/admin/manage-claim' },
+  ];
   cardList:any[]=[
     {
       title:'Registration Certificate ( From UP)',
