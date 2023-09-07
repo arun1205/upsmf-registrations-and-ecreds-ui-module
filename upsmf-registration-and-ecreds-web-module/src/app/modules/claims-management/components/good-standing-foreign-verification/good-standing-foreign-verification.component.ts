@@ -12,7 +12,9 @@ import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/componen
 import { ConfigService } from 'src/app/modules/shared';
 import { HttpService } from 'src/app/core/services/http-service/http.service';
 import html2canvas from 'html2canvas';
-import jspdf from 'jspdf';
+import jspdf, { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { applabels } from 'src/app/messages/labels';
 
 
 @Component({
@@ -27,6 +29,9 @@ export class GoodStandingForeignVerificationComponent {
   goodStandingForeignVerificationformGroup: FormGroup;
   submitted = false;
   formsReady: boolean = false;
+
+  labels=applabels;
+  form1Html: any
 
 
   listOfFiles: any[] = [];
@@ -86,17 +91,17 @@ export class GoodStandingForeignVerificationComponent {
 
   getCandidatePersonalDetails() {
     console.log("getting getCandidatePersonalDetails")
-    this.osid=this.stateData?.body?.id
-    this.entity= this.stateData?.body?.entity
+    this.osid=this.stateData.body.id
+    this.entity= this.stateData.body.entity
     console.log("entity",this.entity)
-    if(this.entity==="StudentGoodstanding"){
+    if(this.entity==="StudentGoodstanding" && this.userEmail==="Regulator"){
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
           console.log("data",response)
-          this.candidateDetailList=JSON.parse(response.responseData.claim.propertyData)
-          console.log("...",this.candidateDetailList)
-          this.urlDataResponse = this.candidateDetailList[0]?.docproof;
+          const candidateDetailList=JSON.parse(response.responseData.claim.propertyData)
+          console.log("...",candidateDetailList)
+          this.urlDataResponse = candidateDetailList.docproof;
           if(!!this.urlDataResponse){
             this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
             console.log('urlDaaaa',this.urlData)
@@ -114,99 +119,103 @@ export class GoodStandingForeignVerificationComponent {
               });
             }
           }
-          console.log(".....",this.candidateDetailList[0]?.name)
+          console.log(".....",candidateDetailList.name)
           this.goodStandingForeignVerificationformGroup.patchValue({
-            maidenName:this.candidateDetailList[0]?.name,
-            email: this.candidateDetailList[0]?.email,
-            mobNumber: this.candidateDetailList[0]?.phoneNumber,
-            applicantName: this.candidateDetailList[0]?.name,
-            adhr: this.candidateDetailList[0]?.aadhaarNo,
-            motherName: this.candidateDetailList[0]?.mothersName,
-            fatherName: this.candidateDetailList[0]?.fathersName, 
-            dob: this.candidateDetailList[0]?.dob,
-            gender: this.candidateDetailList[0]?.gender,
-            al1: this.candidateDetailList[0]?.address,
-            al2: this.candidateDetailList[0]?.address,
-            state: this.candidateDetailList[0]?.state,
-            pin: this.candidateDetailList[0]?.pincode,
-            district: this.candidateDetailList[0]?.district,
-            country: this.candidateDetailList[0]?.country,
-            placeOfWork:this.candidateDetailList[0]?.workPlace,
-            tcName:this.candidateDetailList[0]?.trainingCenter,
-            regnNum:this.candidateDetailList[0]?.registrationNumber,
+            maidenName:candidateDetailList.name,
+            mrdName:candidateDetailList.marriedName,
+            email: candidateDetailList.email,
+            mobNumber: candidateDetailList.phoneNumber,
+            applicantName: candidateDetailList.name,
+            adhr: candidateDetailList.aadhaarNo,
+            fatherName: candidateDetailList.fathersName, 
+            dob: candidateDetailList.dob,
+            gender: candidateDetailList.gender,
+            al1:candidateDetailList.presentAddress,
+            al2: candidateDetailList.presentAddress,
+            state: candidateDetailList.state,
+            pin: candidateDetailList.pincode,
+            district: candidateDetailList.district,
+            country: candidateDetailList.country,
+            placeOfWork:candidateDetailList.workPlace,
+            tcName:candidateDetailList.trainingCenter,
+            regnNum:candidateDetailList.registrationNumber,
+            proQual:candidateDetailList.professionalQualification
+            
           });
         });
     }
+    else{
     
-    this.baseService.getCandidatePersonalDetailsGoodstanding$()
-      .subscribe(
-        (response: any) => {
-          this.candidateDetailList = response.responseData
-          console.log("det",this.candidateDetailList[0])
-          this.osid = this.candidateDetailList[0].osid;
-          this.urlDataResponse = this.candidateDetailList[0].docproof;
-          console.log("hh",this.candidateDetailList[0].docproof)
-          if(!!this.urlDataResponse){
-            this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
-            console.log('urlDaaaa',this.urlData)
-            if(this.urlData.length){
-              this.listOfFiles = this.urlData?.map(url => {
-                const parts = url.split('=');
-                const fileNameWithQueryParams = parts[1];
-                const fileName = fileNameWithQueryParams.split('/').pop();
-                const extractLastPart = fileName?.split('_').pop(); 
-                const getuploadObject = {
-                  name:extractLastPart,
-                  url:url
-                } 
-                return getuploadObject;         
-              });
+      this.baseService.getCandidatePersonalDetailsGoodstanding$()
+        .subscribe(
+          (response: any) => {
+            this.candidateDetailList = response.responseData
+            console.log("det",this.candidateDetailList[0])
+            this.osid = this.candidateDetailList[0].osid;
+            this.urlDataResponse = this.candidateDetailList[0].docproof;
+            console.log("hh",this.candidateDetailList[0].docproof)
+            if(!!this.urlDataResponse){
+              this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              console.log('urlDaaaa',this.urlData)
+              if(this.urlData.length){
+                this.listOfFiles = this.urlData?.map(url => {
+                  const parts = url.split('=');
+                  const fileNameWithQueryParams = parts[1];
+                  const fileName = fileNameWithQueryParams.split('/').pop();
+                  const extractLastPart = fileName?.split('_').pop(); 
+                  const getuploadObject = {
+                    name:extractLastPart,
+                    url:url
+                  } 
+                  return getuploadObject;         
+                });
+              }
             }
-          }
-          
-          this.goodStandingForeignVerificationformGroup.patchValue({
-            maidenName:this.candidateDetailList[0]?.name,
-            mrdName:this.candidateDetailList[0]?.marriedName,
-            email: this.candidateDetailList[0]?.email,
-            mobNumber: this.candidateDetailList[0]?.phoneNumber,
-            applicantName: this.candidateDetailList[0]?.name,
-            adhr: this.candidateDetailList[0]?.aadhaarNo,
-            motherName: this.candidateDetailList[0]?.mothersName,
-            fatherName: this.candidateDetailList[0]?.fathersName, 
-            dob: this.candidateDetailList[0]?.dob,
-            gender: this.candidateDetailList[0]?.gender,
-            al1: this.candidateDetailList[0]?.presentAddress,
-            state: this.candidateDetailList[0].state,
-            pin: this.candidateDetailList[0]?.pincode,
-            district: this.candidateDetailList[0]?.district,
-            country: this.candidateDetailList[0]?.country,
-            regnNum:this.candidateDetailList[0]?.registrationNumber,
-            placeOfWork:this.candidateDetailList[0]?.workPlace,
-            tcName:this.candidateDetailList[0]?.trainingCenter,
-            proQual:this.candidateDetailList[0]?.professionalQualification
-            // docproof:this.candidateDetailList[0]?.docproof
-
             
-          });
-         
+            this.goodStandingForeignVerificationformGroup.patchValue({
+              maidenName:this.candidateDetailList[0]?.name,
+              mrdName:this.candidateDetailList[0]?.marriedName,
+              email: this.candidateDetailList[0]?.email,
+              mobNumber: this.candidateDetailList[0]?.phoneNumber,
+              applicantName: this.candidateDetailList[0]?.name,
+              adhr: this.candidateDetailList[0]?.aadhaarNo,
+              motherName: this.candidateDetailList[0]?.mothersName,
+              fatherName: this.candidateDetailList[0]?.fathersName, 
+              dob: this.candidateDetailList[0]?.dob,
+              gender: this.candidateDetailList[0]?.gender,
+              al1: this.candidateDetailList[0]?.presentAddress,
+              state: this.candidateDetailList[0].state,
+              pin: this.candidateDetailList[0]?.pincode,
+              district: this.candidateDetailList[0]?.district,
+              country: this.candidateDetailList[0]?.country,
+              regnNum:this.candidateDetailList[0]?.registrationNumber,
+              placeOfWork:this.candidateDetailList[0]?.workPlace,
+              tcName:this.candidateDetailList[0]?.trainingCenter,
+              proQual:this.candidateDetailList[0]?.professionalQualification,
+              // docproof:this.candidateDetailList[0]?.docproof
 
-        }
-      );
+              
+            });
+          
+
+          }
+        );
+      }
   }
   getCandidatePersonalDetailsForeign() {
     console.log("getting getCandidatePersonalDetails")
     console.log("getting getCandidatePersonalDetails")
-    this.osid=this.stateData?.body?.id
-    this.entity= this.stateData?.body?.entity
+    this.osid=this.stateData.body.id
+    this.entity= this.stateData.body.entity
     console.log("entity",this.entity)
     if(this.entity==="studentForeignVerification"){
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
-          this.candidateDetailList = response.responseData
-          console.log("det",this.candidateDetailList[0])
-          this.osid = this.candidateDetailList[0].osid;
-          this.urlDataResponse = this.candidateDetailList[0].docproof;
+          console.log("data",response)
+          const candidateDetailList=JSON.parse(response.responseData.claim.propertyData)
+          console.log("...",candidateDetailList)
+          this.urlDataResponse = candidateDetailList.docproof;
           if(!!this.urlDataResponse){
             this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
             console.log('urlDaaaa',this.urlData)
@@ -224,31 +233,30 @@ export class GoodStandingForeignVerificationComponent {
               });
             }
           }
-          
+          console.log(".....",candidateDetailList.name)
           this.goodStandingForeignVerificationformGroup.patchValue({
-            maidenName:this.candidateDetailList[0]?.name,
-            email: this.candidateDetailList[0]?.email,
-            mobNumber: this.candidateDetailList[0]?.phoneNumber,
-            applicantName: this.candidateDetailList[0]?.name,
-            adhr: this.candidateDetailList[0]?.aadhaarNo,
-            motherName: this.candidateDetailList[0]?.mothersName,
-            fatherName: this.candidateDetailList[0]?.fathersName, 
-            dob: this.candidateDetailList[0]?.dob,
-            gender: this.candidateDetailList[0]?.gender,
-            al1: this.candidateDetailList[0]?.address,
-            al2: this.candidateDetailList[0]?.address,
-            state: this.candidateDetailList[0]?.state,
-            pin: this.candidateDetailList[0]?.pincode,
-            district: this.candidateDetailList[0]?.district,
-            country: this.candidateDetailList[0]?.country,
-            placeOfWork:this.candidateDetailList[0]?.workPlace,
-            tcName:this.candidateDetailList[0]?.trainingCenter,
-            regnNum:this.candidateDetailList[0]?.registrationNumber,
-
+            maidenName:candidateDetailList.name,
+            mrdName:candidateDetailList.marriedName,
+            email: candidateDetailList.email,
+            mobNumber: candidateDetailList.phoneNumber,
+            applicantName: candidateDetailList.name,
+            adhr: candidateDetailList.aadhaarNo,
+            fatherName: candidateDetailList.fathersName, 
+            dob: candidateDetailList.dob,
+            gender: candidateDetailList.gender,
+            al1:candidateDetailList.presentAddress,
+            al2: candidateDetailList.presentAddress,
+            state: candidateDetailList.state,
+            pin: candidateDetailList.pincode,
+            district: candidateDetailList.district,
+            country: candidateDetailList.country,
+            placeOfWork:candidateDetailList.workPlace,
+            tcName:candidateDetailList.trainingCenter,
+            regnNum:candidateDetailList.registrationNumber,
+            proQual:candidateDetailList.professionalQualification
             
           });
-        }
-      );
+        });
         
     }
     
@@ -351,14 +359,15 @@ export class GoodStandingForeignVerificationComponent {
         Validators.required,
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
     });
-    if(this.userRole==="Regulator"){
+    if(this.userEmail==="Regulator"){
       {{(this.stateData.body.entity==="studentForeignVerification"?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     )}} 
     }
     else{
-      {{ (this.stateData?.customData?.type === 'ForeignVerifyReq') ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
+      {{ (this.stateData.body.entity === 'ForeignVerifyReq') ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
+      this.getEndPoint();
+
 
     }
-    this.getEndPoint();
     // if(this.stateData.customData.type === 'goodStandingCert'){
     //   this.getCandidatePersonalDetails();
 
@@ -785,10 +794,10 @@ export class GoodStandingForeignVerificationComponent {
     if(this.entity==="studentForeignVerification" ||  this.entity==="StudentGoodstanding"){
       this.generatePDF();
     }
-    console.log("onReset")
-    this.submitted = false;
-    this.goodStandingForeignVerificationformGroup.reset();
-    this.listOfFiles = [];
+    // console.log("onReset")
+    // this.submitted = false;
+    // this.goodStandingForeignVerificationformGroup.reset();
+    // this.listOfFiles = [];
   }
   showInfo(option: any) {
     this.selectLink(option);
@@ -848,23 +857,61 @@ export class GoodStandingForeignVerificationComponent {
     }
     )
   }
-  generatePDF() {
-    // if (this.formsReady) {
+  // generatePDF() {
+    // // if (this.formsReady) {
 
-        var data = document.getElementById('good-foreign-content')!;
-        html2canvas(data).then((canvas) => {
-          // Few necessary setting options
-          var imgWidth = 200;
-          var pageHeight = 300;
-          var imgHeight = (canvas.height * imgWidth) / canvas.width;
-          var heightLeft = imgHeight;
+    //     var data = document.getElementById('good-foreign-content')!;
+    //     html2canvas(data).then((canvas) => {
+    //       // Few necessary setting options
+    //       var imgWidth = 200;
+    //       var pageHeight = 300;
+    //       var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    //       var heightLeft = imgHeight;
 
-          const contentDataURL = canvas.toDataURL('image/png');
-          let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
-          var position = 0;
-          pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-          pdf.save('aplllication.pdf'); // Generated PDF
-        });
+    //       const contentDataURL = canvas.toDataURL('image/png');
+    //       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
+    //       var position = 0;
+    //       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    //       pdf.save('aplllication.pdf'); // Generated PDF
+    //     });
+    generatePDF(){
+      const doc = new jsPDF()
+      console.log(  this.form1Html)
+      console.log(this.goodStandingForeignVerificationformGroup.value)
+  
+      autoTable(doc, {
+      margin: { top: 50 },
+      rowPageBreak: 'auto',
+      bodyStyles: { valign: 'top' },
+  
+      head: [],
+      body: [
+        [this.labels.maidenName,this.goodStandingForeignVerificationformGroup.controls['maidenName'].value ],
+        [this.labels.mrdName,this.goodStandingForeignVerificationformGroup.controls['mrdName'].value ], 
+        [this.labels.fatherName,this.goodStandingForeignVerificationformGroup.controls['fatherName'].value ],
+        [this.labels.dob,this.goodStandingForeignVerificationformGroup.controls['dob'].value ],
+        [this.labels.al1,this.goodStandingForeignVerificationformGroup.controls['al1'].value ],
+        [this.labels.al2,this.goodStandingForeignVerificationformGroup.controls['al2'].value ],
+        [this.labels.district,this.goodStandingForeignVerificationformGroup.controls['district'].value ],
+        [this.labels.state,this.goodStandingForeignVerificationformGroup.controls['state'].value ],
+        [this.labels.pin,this.goodStandingForeignVerificationformGroup.controls['pin'].value ],
+        [this.labels.country,this.goodStandingForeignVerificationformGroup.controls['country'].value ],
+        [this.labels.mobNumber,this.goodStandingForeignVerificationformGroup.controls['mobNumber'].value ],
+        [this.labels.email,this.goodStandingForeignVerificationformGroup.controls['email'].value ],
+        [this.labels.proQual,this.goodStandingForeignVerificationformGroup.controls['proQual'].value ],
+        [this.labels.tcName,this.goodStandingForeignVerificationformGroup.controls['tcName'].value ],
+        [this.labels.regnNum,this.goodStandingForeignVerificationformGroup.controls['regnNum'].value ],
+        // [this.labels.attach,this.newRegCertDetailsformGroup.controls['attach'].value ],  
+        [this.labels.placeOfWork,this.goodStandingForeignVerificationformGroup.controls['placeOfWork'].value ],  
+        
+  
+      ],
+        
+    });
+  
+  
+  
+    doc.save('table.pdf')
     }
   // }
   getEndPoint(){

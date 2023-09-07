@@ -23,16 +23,16 @@
 
                     <div class="content">
                         <ng-template #notPayment>
-                            <div class="content-details">
+                            <div class="content-details" id="form">
                                 
                                 <form #form1 id="form1" [formGroup]="newRegCertDetailsformGroup" *ngIf="candidateDetails"
                                 (ngSubmit)="newRegCertDetailsformGroupSubmit(newRegCertDetailsformGroup.value)">
-                                    <div class="status-bar" *ngIf="stateData?.data?.status" >
-                                            <div class="status-data" [ngClass]="getStatusColorClass(stateData?.data?.status)">
-                                                <h3 class="status">STATUS : {{stateData?.data?.status}}</h3>
+                                    <div class="status-bar" *ngIf="this.stateData?.status" >
+                                            <div class="status-data" [ngClass]="getStatusColorClass(this.stateData?.status)">
+                                                <h3 class="status">STATUS : {{this.stateData?.status}}</h3>
                                             </div>
-                                            <div class="status-reason" *ngIf="stateData?.data?.status === 'REJECTED'">
-                                                <h3>{{stateData?.data?.notes}}</h3>
+                                            <div class="status-reason" *ngIf="this.stateData?.status === 'REJECTED'">
+                                                <h3>{{this.stateData?.status}}</h3>
                                             </div>                                            
                                     </div> 
                                     <div class="full-details">
@@ -46,7 +46,7 @@
                                         <!-- </div> -->
 
                                         <!-- <div class="ml4 flex flex-column"> -->
-                                            <h4>Mobile Number</h4>
+                                            <h4>{{labels.mobNumber}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="Mobile Number" formControlName="mobNumber">
                                                 <mat-error *ngIf="newRegCertDetailsformGroup.controls['mobNumber'].invalid">
@@ -56,7 +56,7 @@
                                         <!-- </div> -->
                                         <div>
                                             <div>
-                                                <h4>Email ID </h4>
+                                                <h4>{{labels.email}} </h4>
                                                 <mat-form-field appearance="outline" >
                                                     <input matInput placeholder="Email ID" formControlName="email">
                                                     <mat-error *ngIf="newRegCertDetailsformGroup.controls['email'].invalid">
@@ -71,7 +71,7 @@
                                         
                                         </mat-divider>
                                         <!-- <div class="ml4 flex flex-column"> -->
-                                            <h4>Father's Name</h4>
+                                            <h4>{{labels.fatherName}}</h4>
                                             <mat-form-field appearance="outline" >
                                                 <input matInput placeholder="Father's Name" formControlName="fatherName">
                                                 <mat-error *ngIf="newRegCertDetailsformGroup.controls['fatherName'].invalid">
@@ -81,7 +81,7 @@
 
                                     
                                         <div>
-                                            <h4>Mother's Name</h4>
+                                            <h4>{{labels.motherName}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="Mother's Name" formControlName="motherName">
                                                 <mat-error *ngIf="newRegCertDetailsformGroup.controls['motherName'].invalid">
@@ -89,7 +89,7 @@
                                             </mat-form-field>
                                         </div>
                                         <!-- <div class="ml4 flex flex-column"> -->
-                                            <h4>Date Of Birth</h4>
+                                            <h4>{{labels.dob}}</h4>
                                             <mat-form-field appearance="outline">
 
                                                 <mat-label>Choose a date</mat-label>
@@ -98,7 +98,7 @@
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>
                                             <div>
-                                                <h4>Credentials Type </h4>
+                                                <h4>{{labels.credType}}</h4>
                                                 <mat-form-field appearance="outline">
                                                     <!-- <input matInput placeholder="State" formControlName="state"> -->
                                                     <mat-select (selectionChange)="credTypeSelected($event)" formControlName="credType">
@@ -114,7 +114,7 @@
                                         <!-- </div> -->
                                         <div [ngClass]="{ 'invalid-field': submitted && newRegCertDetailsformGroup.controls['gender'].errors }">
                                             <!-- <div class=" mt3 "> -->
-                                                <h4 >Gender </h4>
+                                                <h4 >{{labels.gender}} </h4>
                                                 <mat-radio-group color="primary"  formControlName="gender">
                                                     <span *ngFor='let origin of genderTypesArray;let i = index'>
                                                         <mat-radio-button [value]="origin"
@@ -128,7 +128,7 @@
                                         <div class="place-details">
                                             <!-- <div class=" flex flex-column mr2"> -->
                                                 <div class="address-details">
-                                                    <h4>Address Line 1</h4>
+                                                    <h4>{{labels.addr1}}</h4>
                                                     <mat-form-field appearance="outline" >
                                                         <input matInput placeholder="Address Line 1" formControlName="al1">
                                                         <mat-error *ngIf="newRegCertDetailsformGroup.controls['al1'].invalid">
@@ -139,7 +139,7 @@
 
                                             <!-- <div class=" flex flex-column ml4 mt3"> -->
                                                 <div class="address-details">
-                                                    <h4>Address Line 2</h4>
+                                                    <h4>{{labels.al2}}</h4>
                                                     <mat-form-field appearance="outline" >
                                                         <input matInput placeholder="Address Line 2" formControlName="al2">
                                                         <mat-error *ngIf="newRegCertDetailsformGroup.controls['al2'].invalid">
@@ -151,7 +151,7 @@
                                         </div>
                                         <div class="place-details">
                                                 <div class="address-details">
-                                                    <h4>District</h4>
+                                                    <h4>{{labels.district}}</h4>
                                                     <mat-form-field appearance="outline">
                                                         <input matInput placeholder="District" formControlName="district">
                                                         <mat-error *ngIf="newRegCertDetailsformGroup.controls['district'].invalid">
@@ -161,7 +161,7 @@
 
 
                                                 <div class="address-details">
-                                                    <h4>State </h4>
+                                                    <h4>{{labels.state}} </h4>
                                                     <mat-form-field appearance="outline">
                                                         <!-- <input matInput placeholder="State" formControlName="state"> -->
                                                         <mat-select (selectionChange)="stateTypeSelected($event)" formControlName="state">
@@ -189,7 +189,7 @@
                                         </div>
                                         <div class="place-details">
                                                 <div class="address-details">
-                                                    <h4>Pincode </h4>
+                                                    <h4>{{labels.pin}} </h4>
                                                     <mat-form-field appearance="outline">
                                                         <input matInput placeholder="Pincode" formControlName="pin">
                                                         <mat-error *ngIf="newRegCertDetailsformGroup.controls['pin'].invalid">
@@ -199,7 +199,7 @@
 
 
                                                 <div class="address-details">
-                                                    <h4>Country </h4>
+                                                    <h4>{{labels.country}} </h4>
                                                     <mat-form-field appearance="outline">
                                                         <input matInput placeholder="Country" formControlName="country">
                                                         <mat-error *ngIf="newRegCertDetailsformGroup.controls['country'].invalid">
@@ -211,7 +211,7 @@
                                         
                                         <div class="applicant-details">
                                             <div>
-                                                <h4>Aadhar Number </h4>
+                                                <h4>{{labels.adhr}} </h4>
                                                 <mat-form-field appearance="outline"    >
                                                     <input matInput placeholder="Aadhar Number" formControlName="adhr">
                                                     <mat-error *ngIf="newRegCertDetailsformGroup.controls['adhr'].invalid">
@@ -220,7 +220,7 @@
                                             </div>
 
                                         <!-- </div> -->
-                                        <h4>Attach file(s)</h4>
+                                        <h4>{{labels.attach}}</h4>
 
                                         <div class="upload-column">
                                             <!-- <div class="flex flex-column mt1"> -->
@@ -276,7 +276,7 @@
                                     <div class="full-details">
 
                                         <div class="applicant-details slc">
-                                            <h4>Request Type</h4>
+                                            <h4>{{labels.requestType}}</h4>
                                             <mat-form-field appearance ="outline">
                                                 <mat-label>Request Type</mat-label>
                                               <mat-select (selectionChange)="requestTypeSelected($event)" formControlName="requestType">
@@ -288,7 +288,7 @@
                                         </div>
 
                                         <div class="applicant-details">
-                                            <h4>Course Name</h4>
+                                            <h4>{{labels.courseName}}</h4>
                                             <mat-form-field appearance ="outline">
                                                 <mat-label>Course Name</mat-label>
                                               <mat-select (selectionChange)="requestTypeSelected($event)" formControlName="courseName">
@@ -304,14 +304,14 @@
                                         </div>
 
                                         <div class="applicant-details">
-                                            <h4>College Name</h4>
+                                            <h4>{{labels.collegeName}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="College Name" formControlName="collegeName">
                                             
                                             </mat-form-field>
                                         </div>
                                         <div class="applicant-details">
-                                            <h4>University</h4>
+                                            <h4>{{labels.university}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="College Name" formControlName="university">
                                             
@@ -319,7 +319,7 @@
                                         </div>
 
                                         <div class="applicant-details">
-                                            <h4>Examination Body</h4>
+                                            <h4>{{labels.examBody}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="Examination Body" formControlName="examBody">
                                             
@@ -327,21 +327,21 @@
                                         </div>
 
                                         <div class="applicant-details">
-                                            <h4>Final year roll number</h4>
+                                            <h4>{{labels.rollNum}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="Final year roll number" formControlName="rollNum">
                                             
                                             </mat-form-field>
                                         </div>
                                         <div class="applicant-details" >
-                                            <h4>Diploma Number</h4>
+                                            <h4>{{labels.diplomaNumber}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="diploma number" formControlName="diplomaNumber">
                                             </mat-form-field>
                                         </div>
 
                                         <div class="applicant-details">
-                                            <h4>Course joining Date</h4>
+                                            <h4>{{labels.joinDate}}</h4>
                                             <mat-form-field appearance="outline">
 
                                                 <mat-label>Choose a date</mat-label>
@@ -353,7 +353,7 @@
                                         </div>
 
                                         <div class="applicant-details">
-                                            <h4>Course Passing Date</h4>
+                                            <h4>{{labels.passDate}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <mat-label>Choose a date</mat-label>
                                                 <input matInput [matDatepicker]="pickerpassingDate" formControlName="passDate" [min]="newRegCourseDetailsformGroup.controls['joinDate'].value">
@@ -364,7 +364,7 @@
 
                                         </div>
                                         <div class="applicant-details">
-                                            <h4>Attach file(s)</h4>
+                                            <h4>{{labels.attach}}</h4>
                                         <div class="upload-column">
                                             <!-- <div class="flex flex-column mt1"> -->
                                             <!-- </div> -->
@@ -453,13 +453,13 @@
                                                 <button  class="button" mat-raised-button color="primary" (click)="onSubmit(newRegCourseDetailsformGroup)"><mat-icon matSuffix>arrow_right_alt</mat-icon>Next</button>
                                             </div>
                                         </div> -->
-                                        <div class="buttons">
+                                        <div class="buttons" >
                                             <div class="button-group">
                                                 <button type="button" class="button" mat-raised-button  color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
                                             </div>
                                             
                             
-                                            <div class="button-group" >
+                                            <div class="button-group"  >
                                                 <!-- <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"> {{ ((this.userEmail==="Regulator") && this.entity==="StudentFromUP" ) ? 'Reject' :'Cancel' }}{{ ((this.userEmail==="Regulator") && this.entity==="StudentFromUP" ) ? 'Download Letter to EC' :'Cancel' }}<mat-icon>{{ this.userEmail==="Regulator" ? 'close' : '' }}</mat-icon></button> -->
                                                 <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()">
                                                     <ng-container [ngSwitch]="userEmail">
@@ -486,27 +486,27 @@
                                                 <!-- <button  class="button" mat-raised-button color="primary" >{{ (this.userEmail==="Regulator" && this.entity==="StudentFromUP") ? 'Approve' :'Next' }}{{ (this.userEmail==="Regulator" && this.entity==="StudentOutsideUP") ? 'Sent Email to EC' :'Next' }}<mat-icon>{{  this.userEmail==="Regulator" ? 'check' : '' }}</mat-icon><mat-icon >{{ !(this.entity==="StudentFromUP" || this.entity==="StudentOutsideUP")? 'arrow_right_alt' :''}}</mat-icon></button> -->
                                                 <button class="button" mat-raised-button color="primary">
                                                     <ng-container [ngSwitch]="userEmail">
-                                                      <ng-container *ngSwitchCase="'Regulator'">
-                                                        <ng-container [ngSwitch]="entity">
-                                                          <ng-container *ngSwitchCase="'StudentFromUP'">
-                                                            Approve
-                                                            <mat-icon>check</mat-icon>
-                                                          </ng-container>
-                                                          <ng-container *ngSwitchCase="'StudentOutsideUP'">
-                                                            Sent Email to EC
-                                                          </ng-container>
-                                                          <ng-container *ngSwitchDefault>
+                                                        <ng-container *ngSwitchCase="'Regulator'">
+                                                            <ng-container [ngSwitch]="entity">
+                                                                <ng-container *ngSwitchCase="'StudentFromUP'">
+                                                                    Approve
+                                                                    <mat-icon>check</mat-icon>
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchCase="'StudentOutsideUP'">
+                                                                    Sent Email to EC
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchDefault>
+                                                                    Next
+                                                                    <mat-icon *ngIf="!(entity === 'StudentFromUP' || entity === 'StudentOutsideUP')">arrow_right_alt</mat-icon>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                        <ng-container *ngSwitchDefault>
                                                             Next
                                                             <mat-icon *ngIf="!(entity === 'StudentFromUP' || entity === 'StudentOutsideUP')">arrow_right_alt</mat-icon>
-                                                          </ng-container>
-                                                        </ng-container>
-                                                      </ng-container>
-                                                      <ng-container *ngSwitchDefault>
-                                                        Next
-                                                        <mat-icon *ngIf="!(entity === 'StudentFromUP' || entity === 'StudentOutsideUP')">arrow_right_alt</mat-icon>
-                                                      </ng-container>
+                                                         </ng-container>
                                                     </ng-container>
-                                                  </button>
+                                                </button>
                                                   
                                                   
                                                   
