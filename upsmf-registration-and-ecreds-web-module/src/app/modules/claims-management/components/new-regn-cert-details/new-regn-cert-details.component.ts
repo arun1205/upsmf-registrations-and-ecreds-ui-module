@@ -3,19 +3,16 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { DatePipe, Location } from '@angular/common';
 import { BaseServiceService } from 'src/app/services/base-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 import { allStateList } from 'src/models/statemodel';
-import {credentialsType} from 'src/models/credentialsTypemodel';
+import { credentialsType } from 'src/models/credentialsTypemodel';
 import { BreadcrumbItem, ConfigService } from 'src/app/modules/shared';
 import { HttpService } from 'src/app/core/services/http-service/http.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-import {  applabels } from '../../../../messages/labels';
+import { applabels } from '../../../../messages/labels';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
-
-
+import * as QRCode from 'qrcode';
 
 
 @Component({
@@ -24,15 +21,11 @@ import autoTable from 'jspdf-autotable'
   styleUrls: ['./new-regn-cert-details.component.scss']
 })
 export class NewRegnCertDetailsComponent {
-  @ViewChild('form1', { static: false }) form1: ElementRef;
-  @ViewChild('form2', { static: false }) form2: ElementRef;
 
-  form1Html: any
-  
-  form2Html: any
-  labels=applabels;
+  labels = applabels;
   links = ['Candidate Details', 'Course Details', 'Payment Details']
 
+  logo = '../../../../../assets/images/sunbird_logo.png'
   newRegCertformGroup: FormGroup;
   public newRegCertDetailsformGroup: FormGroup;
   newRegCourseDetailsformGroup: FormGroup;
@@ -49,29 +42,29 @@ export class NewRegnCertDetailsComponent {
   listOfCourseFiles: any[] = [];
   courseFileList: File[] = [];
   isStudent: boolean = true;
-  candidateDetailList:any[]=[];
-  docsUrl:any[]=[];
-  urlData:any[]=[];
-  urlList:any;
-  updatedUrlList:any;
-  urlDataResponse:string;
-  docsResponseUrl:string;
-  convertUrlList:string;
-  getMakeClaimbody:any;
-  
+  candidateDetailList: any[] = [];
+  docsUrl: any[] = [];
+  urlData: any[] = [];
+  urlList: any;
+  updatedUrlList: any;
+  urlDataResponse: string;
+  docsResponseUrl: string;
+  convertUrlList: string;
+  getMakeClaimbody: any;
+
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Claim Registration Certificate', url: '/claims/new' },
     { label: 'Claim Details', url: '/claims/new-regn-cert' }
   ];
 
   osid: string;
-  entity:string;
+  entity: string;
 
   months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  monthMap:{ [key: string]: string } = {
+  monthMap: { [key: string]: string } = {
     "January": "01",
     "February": "02",
     "March": "03",
@@ -85,20 +78,20 @@ export class NewRegnCertDetailsComponent {
     "November": "11",
     "December": "12"
   };
-  stateList:any[]=[]
-  credTypeList:any[] =[];
-  userRole:any;
-  userEmail:any;
-  endPointUrl:any;
-  courseList:any[]=[];
-  courseUrl:string = ''
-  paymentResponse:any;
-  updateStudentBody:any;
+  stateList: any[] = []
+  credTypeList: any[] = [];
+  userRole: any;
+  userEmail: any;
+  endPointUrl: any;
+  courseList: any[] = [];
+  courseUrl: string = ''
+  paymentResponse: any;
+  updateStudentBody: any;
 
-  
+
   stateData: any;
   selectedLink: string = 'Candidate Details';
-  requestTypesArray = ['Orignal','Correction','Name change','Dublicate'];
+  requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
 
 
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe,
@@ -106,11 +99,10 @@ export class NewRegnCertDetailsComponent {
     private router: Router,
     private configService: ConfigService,
     private http: HttpService,
-    private route:  ActivatedRoute,
+    private route: ActivatedRoute,
     public dialog: MatDialog,
   ) {
-  this.userEmail = this.baseService.getUserRole()[0]
-   console.log("role",this.userEmail)
+    this.userEmail = this.baseService.getUserRole()[0]
     // var token:any
     //  token =localStorage.getItem('token')
     //  let tokenId:any = ''
@@ -122,50 +114,43 @@ export class NewRegnCertDetailsComponent {
     this.stateList = allStateList;
     this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
-    console.log("stateData:",this.stateData)
-    this.stateData =  this.stateData?.body
-    console.log(this.stateData?.origin)
-    
+    this.stateData = this.stateData?.body
+
 
   }
-ngAfterViewInit(){
-  this.form1Html = this.form1.nativeElement
-}
+
   ngOnInit() {
-    console.log(this.baseService.generate_uuidv4())
     this.initForm();
 
-    this.route.queryParams.subscribe((param)=>{
-      if(param['resData']){
+    this.route.queryParams.subscribe((param) => {
+      if (param['resData']) {
         this.paymentResponse = JSON.parse(param['resData'])
         this.paymentDetails = this.paymentResponse.isPayment
       }
-      })
-      console.log(this.osid)
-    
+    })
+
   }
 
-  getCourses(courseUrl:string){
-    this.baseService.getCourses(courseUrl).subscribe((data)=>{
-      console.log('data',data)
+  getCourses(courseUrl: string) {
+    this.baseService.getCourses(courseUrl).subscribe((data) => {
       this.courseList = data.responseData['result']
     })
   }
 
-  getEndPoint(){
+  getEndPoint() {
     switch (this.stateData?.origin) {
 
       case 'StudentOutsideUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
-        this.courseUrl= this.configService.urlConFig.URLS.STUDENT.GET_COURSES_OUTSIDE
+        this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES_OUTSIDE
         this.getCourses(this.courseUrl)
         break;
-        case 'StudentFromUP':
+      case 'StudentFromUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
         this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
         this.getCourses(this.courseUrl)
         break;
-        case 'Regulator':
+      case 'Regulator':
         // this.router.navigate(['claims/new-regn-cert'])
         break;
 
@@ -175,20 +160,18 @@ ngAfterViewInit(){
     return
   }
 
-  requestTypeSelected(e:Event){
-    console.log(e)
+  requestTypeSelected(e: Event) {
   }
 
-  stateTypeSelected(e:Event){
-    console.log(e)
+  stateTypeSelected(e: Event) {
   }
 
-  credTypeSelected(e:Event){
+  credTypeSelected(e: Event) {
 
   }
 
   initForm() {
- 
+
     this.newRegCertDetailsformGroup = this.formBuilder.group({
       applicantName: new FormControl('', [
         Validators.required]),
@@ -222,14 +205,14 @@ ngAfterViewInit(){
       mobNumber: new FormControl('', [
         Validators.required,
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
-        credType: new FormControl('', [
-          Validators.required]),
-        
+      credType: new FormControl('', [
+        Validators.required]),
+
     });
 
     this.newRegCourseDetailsformGroup = this.formBuilder.group({
       courseName: new FormControl('', [
-       ]),
+      ]),
       collegeName: new FormControl('', [
         Validators.required]),
       examBody: new FormControl('', [
@@ -242,13 +225,13 @@ ngAfterViewInit(){
       passDate: new FormControl('', [
         Validators.required]),
       requestType: new FormControl('', [
-          Validators.required]),
-       diplomaNumber: new FormControl(''),
-       stateName:new FormControl(''),
-       date: new FormControl(''),
-       newCouncil: new FormControl(''),
-       otherRegnNo: new FormControl(''),
-       university: new FormControl('', [
+        Validators.required]),
+      diplomaNumber: new FormControl(''),
+      stateName: new FormControl(''),
+      date: new FormControl(''),
+      newCouncil: new FormControl(''),
+      otherRegnNo: new FormControl(''),
+      university: new FormControl('', [
         Validators.required]),
     });
     this.getEndPoint();
@@ -257,49 +240,43 @@ ngAfterViewInit(){
   }
 
   getCandidatePersonalDetails() {
-    console.log("getting getCandidatePersonalDetails")
-    this.osid=this.stateData?.id
-    this.entity= this.stateData?.entity
-    console.log("entity",this.entity)
-    if(this.entity==="StudentFromUP" && this.userEmail==="Regulator"){
+    this.osid = this.stateData?.id
+    this.entity = this.stateData?.entity
+    if (this.entity === "StudentFromUP" && this.userEmail === "Regulator") {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
-      .subscribe(
-        (response: any) => {
-          // if(response.responseData.length){
+        .subscribe(
+          (response: any) => {
+            // if(response.responseData.length){
             const candidateDetailList = JSON.parse(response.responseData.claim.propertyData)
-            console.log("cad",response)
             this.osid = response.responseData.claim.osid;
             this.urlDataResponse = candidateDetailList.docproof;
-            if(!!this.urlDataResponse){
-              this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
-              console.log('urlDaaaa',this.urlData)
-              if(this.urlData.length){
+            if (!!this.urlDataResponse) {
+              this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
                   const parts = url.split('=');
                   const fileNameWithQueryParams = parts[1];
                   const fileName = fileNameWithQueryParams.split('/').pop();
-                  const extractLastPart = fileName?.split('_').pop(); 
+                  const extractLastPart = fileName?.split('_').pop();
                   const getuploadObject = {
-                    name:extractLastPart,
-                    url:url
-                  } 
-                  return getuploadObject;         
+                    name: extractLastPart,
+                    url: url
+                  }
+                  return getuploadObject;
                 });
               }
             }
-           
-            
-            console.log(this.listOfFiles)
-            
+
+
+
             // this.listOfFiles = this.candidateDetailList[0].docproof;
-            console.log('canndidateList',this.candidateDetailList)
             this.newRegCertDetailsformGroup.patchValue({
               email: candidateDetailList.email,
               mobNumber: candidateDetailList.phoneNumber,
               applicantName: candidateDetailList.name,
               adhr: candidateDetailList.aadhaarNo,
               motherName: candidateDetailList.mothersName,
-              fatherName: candidateDetailList.fathersName, 
+              fatherName: candidateDetailList.fathersName,
               dob: candidateDetailList.dateOfBirth,
               gender: candidateDetailList.gender,
               al1: candidateDetailList.address,
@@ -309,86 +286,77 @@ ngAfterViewInit(){
               district: candidateDetailList.district,
               country: candidateDetailList.country,
               credType: candidateDetailList.credType,
-              
 
-  
-  
-              
+
+
+
+
               // district : response[0]?.district
             });
-            const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
-              "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
-             new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
-          
+            const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
+              "0" + (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1) :
+              new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1
 
-             const joinM = candidateDetailList.joiningMonth;
-             console.log("month",joinM)
-             const jm = this.monthMap[joinM]
-             console.log("mon",jm)
-             const passM = candidateDetailList  .passingMonth;
-             console.log("month",joinM)
-             const pm = this.monthMap[joinM]
-             console.log("mon",pm)
+
+            const joinM = candidateDetailList.joiningMonth;
+            const jm = this.monthMap[joinM]
+            const passM = candidateDetailList.passingMonth;
+            const pm = this.monthMap[joinM]
 
             this.newRegCourseDetailsformGroup.patchValue({
               courseName: candidateDetailList.courseName,
               collegeName: candidateDetailList.nursingCollage,
               examBody: candidateDetailList.examBody,
-              
-              joinDate: candidateDetailList.joiningYear+"-" +jm+ "-01",
+
+              joinDate: candidateDetailList.joiningYear + "-" + jm + "-01",
               rollNum: candidateDetailList.finalYearRollNo,
-              passDate: candidateDetailList.passingYear+"-" +pm+ "-01",
+              passDate: candidateDetailList.passingYear + "-" + pm + "-01",
               requestType: candidateDetailList.requestType
             });
-            
-            console.log(this.newRegCourseDetailsformGroup.value.joinDate)
-          // }
-         
 
-          /*     this.listOfFiles =  */
-        }
-      );
+            // }
+
+
+            /*     this.listOfFiles =  */
+          }
+        );
 
     }
-    else if(this.entity==="StudentOutsideUP" && this.userEmail==="Regulator"){
+    else if (this.entity === "StudentOutsideUP" && this.userEmail === "Regulator") {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
-      .subscribe(
-        (response: any) => {
-          // if(response.responseData.length){
+        .subscribe(
+          (response: any) => {
+            // if(response.responseData.length){
             const candidateDetailList = JSON.parse(response.responseData.claim.propertyData)
-            console.log("cad",response)
             this.osid = response.responseData.claim.osid;
             this.urlDataResponse = candidateDetailList.docproof;
-            if(!!this.urlDataResponse){
-              this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
-              console.log('urlDaaaa',this.urlData)
-              if(this.urlData.length){
+            if (!!this.urlDataResponse) {
+              this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
                   const parts = url.split('=');
                   const fileNameWithQueryParams = parts[1];
                   const fileName = fileNameWithQueryParams.split('/').pop();
-                  const extractLastPart = fileName?.split('_').pop(); 
+                  const extractLastPart = fileName?.split('_').pop();
                   const getuploadObject = {
-                    name:extractLastPart,
-                    url:url
-                  } 
-                  return getuploadObject;         
+                    name: extractLastPart,
+                    url: url
+                  }
+                  return getuploadObject;
                 });
               }
             }
-           
-            
-            console.log(this.listOfFiles)
-            
+
+
+
             // this.listOfFiles = this.candidateDetailList[0].docproof;
-            console.log('canndidateList',this.candidateDetailList)
             this.newRegCertDetailsformGroup.patchValue({
               email: candidateDetailList.email,
               mobNumber: candidateDetailList.phoneNumber,
               applicantName: candidateDetailList.name,
               adhr: candidateDetailList.aadhaarNo,
               motherName: candidateDetailList.mothersName,
-              fatherName: candidateDetailList.fathersName, 
+              fatherName: candidateDetailList.fathersName,
               dob: candidateDetailList.dateOfBirth,
               gender: candidateDetailList.gender,
               al1: candidateDetailList.address,
@@ -398,50 +366,46 @@ ngAfterViewInit(){
               district: candidateDetailList.district,
               country: candidateDetailList.country,
               credType: candidateDetailList.credType,
-              
 
-  
-  
-              
+
+
+
+
               // district : response[0]?.district
             });
-            const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
-              "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
-             new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
-          
+            const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
+              "0" + (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1) :
+              new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1
 
-             const joinM = candidateDetailList.joiningMonth;
-             console.log("month",joinM)
-             const jm = this.monthMap[joinM]
-             console.log("mon",jm)
-             const passM = candidateDetailList  .passingMonth;
-             console.log("month",joinM)
-             const pm = this.monthMap[joinM]
-             console.log("mon",pm)
+
+            const joinM = candidateDetailList.joiningMonth;
+            const jm = this.monthMap[joinM]
+            const passM = candidateDetailList.passingMonth;
+            const pm = this.monthMap[joinM]
 
             this.newRegCourseDetailsformGroup.patchValue({
               courseName: candidateDetailList.courseName,
               collegeName: candidateDetailList.nursingCollage,
               examBody: candidateDetailList.examBody,
-              
-              joinDate: candidateDetailList.joiningYear+"-" +jm+ "-01",
+
+              joinDate: candidateDetailList.joiningYear + "-" + jm + "-01",
               rollNum: candidateDetailList.finalYearRollNo,
-              passDate: candidateDetailList.passingYear+"-" +pm+ "-01",
+              passDate: candidateDetailList.passingYear + "-" + pm + "-01",
               requestType: candidateDetailList.requestType
             });
-            
-            console.log(this.newRegCourseDetailsformGroup.value.joinDate)
-          // }
-         
 
-          /*     this.listOfFiles =  */
-        }
-      );
+            console.log(this.newRegCourseDetailsformGroup.value.joinDate)
+            // }
+
+
+            /*     this.listOfFiles =  */
+          }
+        );
 
     }
     else {
-     
-      if(this.stateData?.origin==="StudentOutsideUP"){
+
+      if (this.stateData?.origin === "StudentOutsideUP") {
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
         // switch (this.stateData?.origin) {
 
@@ -458,57 +422,53 @@ ngAfterViewInit(){
         //     case 'Regulator':
         //     // this.router.navigate(['claims/new-regn-cert'])
         //     break;
-    
+
         //   default:
         //     return '';
         // }
       }
-      else{
+      else {
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
 
       }
-      
+
 
       this.baseService.getCandidatePersonalDetails$(this.endPointUrl)
         .subscribe(
           (response: any) => {
-            if(response.responseData.length){
+            if (response.responseData.length) {
               this.candidateDetailList = response.responseData
-              console.log(this.candidateDetailList[0])
               this.osid = this.candidateDetailList[0].osid;
               this.urlDataResponse = this.candidateDetailList[0].docproof;
-              
 
-              if(!!this.urlDataResponse){
-                this.urlData =  this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
-                console.log('urlDaaaa',this.urlData)
-                if(this.urlData.length){
+
+              if (!!this.urlDataResponse) {
+                this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+                if (this.urlData.length) {
                   this.listOfFiles = this.urlData?.map(url => {
                     const parts = url.split('=');
                     const fileNameWithQueryParams = parts[1];
                     const fileName = fileNameWithQueryParams.split('/').pop();
-                    const extractLastPart = fileName?.split('_').pop(); 
+                    const extractLastPart = fileName?.split('_').pop();
                     const getuploadObject = {
-                      name:extractLastPart,
-                      url:url
-                    } 
-                    return getuploadObject;         
+                      name: extractLastPart,
+                      url: url
+                    }
+                    return getuploadObject;
                   });
                 }
               }
-            
-              
-              console.log(this.listOfFiles)
-              
+
+
+
               // this.listOfFiles = this.candidateDetailList[0].docproof;
-              console.log('canndidateList',this.candidateDetailList[0])
               this.newRegCertDetailsformGroup.patchValue({
                 email: this.candidateDetailList[0]?.email,
                 mobNumber: this.candidateDetailList[0]?.phoneNumber,
                 applicantName: this.candidateDetailList[0]?.name,
                 adhr: this.candidateDetailList[0]?.aadhaarNo,
                 motherName: this.candidateDetailList[0]?.mothersName,
-                fatherName: this.candidateDetailList[0]?.fathersName, 
+                fatherName: this.candidateDetailList[0]?.fathersName,
                 dob: this.candidateDetailList[0]?.dateOfBirth,
                 gender: this.candidateDetailList[0]?.gender,
                 al1: this.candidateDetailList[0]?.address,
@@ -518,95 +478,88 @@ ngAfterViewInit(){
                 district: this.candidateDetailList[0]?.district,
                 country: this.candidateDetailList[0]?.country,
                 credType: this.candidateDetailList[0]?.credType
-    
-    
-                
+
+
+
                 // district : response[0]?.district
               });
-              const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1 < 10)?
-                "0"+( new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1):
-              new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth +" 1, 2012")).getMonth()+1
-            
+              const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
+                "0" + (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1) :
+                new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1
+
               this.newRegCourseDetailsformGroup.patchValue({
                 courseName: this.candidateDetailList[0]?.courseName,
                 collegeName: this.candidateDetailList[0]?.nursingCollage,
                 examBody: this.candidateDetailList[0]?.examBody,
-                joinDate: this.candidateDetailList[0]?.joiningYear+"-" +month+ "-01",
+                joinDate: this.candidateDetailList[0]?.joiningYear + "-" + month + "-01",
                 rollNum: this.candidateDetailList[0]?.finalYearRollNo,
-                passDate: this.candidateDetailList[0]?.passingYear+"-" +month+ "-01",
+                passDate: this.candidateDetailList[0]?.passingYear + "-" + month + "-01",
                 requestType: this.candidateDetailList[0]?.requestType
               });
-              
-              console.log(this.newRegCourseDetailsformGroup.value.joinDate)
+
             }
-          
+
 
             /*     this.listOfFiles =  */
           }
         );
-        }
-      
+    }
+
   }
 
   newRegCertDetailsformGroupSubmit(value: any) {
-    console.log(value)
     this.submitted = true;
     if (this.newRegCertDetailsformGroup.valid) {
       this.candidateDetails = false;
     }
-    console.log("entity",this.entity)
 
   }
   onNewRegCourseDetailsformSubmit(value: any) {
     this.submitted = true;
-    const osid=this.stateData?.id
-    console.log("osis",osid)
-    if(this.entity==="StudentFromUP"){
-      const approveBody={
-        action:"GRANT_CLAIM",
-        note:"Registration Certificate"
+    const osid = this.stateData?.id
+    if (this.entity === "StudentFromUP") {
+      const approveBody = {
+        action: "GRANT_CLAIM",
+        note: "Registration Certificate"
       }
-      this.baseService.approveClaim$(osid,approveBody)
-      .subscribe((response)=>{
-        console.log(response)
-      })
+      this.baseService.approveClaim$(osid, approveBody)
+        .subscribe((response) => {
+        })
     }
-    else if(this.entity==="StudentOutsideUP" && this.userEmail==="Regulator"){
+    else if (this.entity === "StudentOutsideUP" && this.userEmail === "Regulator") {
       const message = `Enter the email`;
       const message1 = `Upload Document`;
 
       const shouldShowFileUpload = true;
-      const resDialog = new DialogModel( message,message1);
+      const resDialog = new DialogModel(message, message1);
 
       let dialogRef = this.dialog.open(DialogBoxComponent, {
-         disableClose: true ,
+        disableClose: true,
         // width: '40rem',
         // height:'25rem',
-        data:{message,message1,shouldShowFileUpload}
+        data: { message, message1, shouldShowFileUpload }
       });
       dialogRef.afterClosed().subscribe(result => {
         // const reason = result;
-        
 
-        console.log("res",result);
-        if(result){
-          this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
-          if(this.urlData.length){
+
+        if (result) {
+          this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          if (this.urlData.length) {
             this.listOfFiles = this.urlData?.map(url => {
-                      const parts = url.split('=');
-            if (parts.length === 2) {
+              const parts = url.split('=');
+              if (parts.length === 2) {
                 return decodeURIComponent(parts[1]);
-            } 
-            return null;
+              }
+              return null;
             });
-            
+
           }
-          const details=JSON.parse(this.stateData.propertyData);
-          console.log("data................",details)
+          const details = JSON.parse(this.stateData.propertyData);
           //convert to string with commaa separated
           this.convertUrlList = this.listOfFiles.join(',')
-          const mailBody={
-            outsideEntityMailId:result.reason,
+          const mailBody = {
+            outsideEntityMailId: result.reason,
             name: this.newRegCertDetailsformGroup.value.applicantName,
             gender: this.newRegCertDetailsformGroup.value.gender,
             council: details.council,
@@ -615,135 +568,128 @@ ngAfterViewInit(){
             docProofs: [this.convertUrlList],
             diplomaNumber: value.diplomaNumber,
             nursingCollage: value.collegeName,
-            courseState:"aaaaa",
-            courseCouncil:"BBB",
+            courseState: "aaaaa",
+            courseCouncil: "BBB",
             state: this.newRegCertDetailsformGroup.value.state,
             country: this.newRegCertDetailsformGroup.value.country,
             // state: this.newRegCertDetailsformGroup.value.state,
-            attachment:result.file,
-            
+            attachment: result.file,
+
           }
-          this.baseService.sendMailOutsideUp$(mailBody).subscribe((response)=>{
-            console.log(response)
+          this.baseService.sendMailOutsideUp$(mailBody).subscribe((response) => {
           })
-    
+
         }
-        
+
       });
 
 
     }
-    else{ 
+    else {
       if (this.newRegCourseDetailsformGroup.valid) {
 
-      console.log(this.newRegCertDetailsformGroup.value)
-      console.log(value)
+        const joinDate = new Date(this.newRegCourseDetailsformGroup.get('joinDate')?.value);
 
-      const joinDate = new Date(this.newRegCourseDetailsformGroup.get('joinDate')?.value);
+        const passDate = new Date(this.newRegCourseDetailsformGroup.get('passDate')?.value);
+        const jMonth = joinDate.getMonth();
+        const pMonth = passDate.getMonth();
+        const joinYear = joinDate.getFullYear();
+        const passYear = joinDate.getFullYear();
 
-      const passDate = new Date(this.newRegCourseDetailsformGroup.get('passDate')?.value);
-      const jMonth = joinDate.getMonth();
-      const pMonth = passDate.getMonth();
-      const joinYear = joinDate.getFullYear();
-      const passYear = joinDate.getFullYear();
-  
-      const joinMonth = this.months[jMonth];
-      const passMonth = this.months[pMonth];
-      console.log('hh',joinMonth, passMonth)
-      this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
-      //convert to string with commaa separated
-      this.convertUrlList = this.urlList.join(',')
-       this.updateStudentBody =
-      {
-        "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
-        "candidatePic": "arun.jpg",
-        "joiningYear": joinYear.toString(),
-        "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
-        "gender": this.newRegCertDetailsformGroup.value.gender,
-        "address":this.newRegCertDetailsformGroup.value.al1,
-        "state": this.newRegCertDetailsformGroup.value.state,
-        "district": this.newRegCertDetailsformGroup.value.district,
-        "country": this.newRegCertDetailsformGroup.value.country,
-        "pincode":this.newRegCertDetailsformGroup.value.pin,
-        "finalYearRollNo": value.rollNum,
-        "examBody": value.examBody,
-        "joiningMonth": joinMonth,
-        "passingMonth": passMonth,
-        // "email": this.newRegCertDetailsformGroup.value.email,
-        "paymentStatus": "SUCCESS",
-        "feeReciptNo": "12345678",
-        "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
-        "dateOfBirth":this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString() ,
-        "barCode": "123457",
-        "nursingCollage": value.collegeName,
-        "passingYear": passYear.toString(),
-        "courseName": value.courseName,
-        "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
-        "registrationType": this.stateData.claimType,
-        "council": this.stateData.councilName,
-        "mothersName": this.newRegCertDetailsformGroup.value.motherName,
-        "name": this.newRegCertDetailsformGroup.value.applicantName,
-        "credType":this.newRegCertDetailsformGroup.value.credType ,
-        "examYear":'',
-        "centerCode":'',
-        "requestType":value.requestType,
-        "docproof": this.convertUrlList,
-        "regNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
-        "diplomaNumber": value.diplomaNumber,
-        "courseState": value.stateName ? value.stateName : "NA",
-        "courseCouncil": value.newCouncil ?  value.newCouncil: "NA",
-        "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
-        "nurseRegDate": value.date? value.date : "NA",
-        "claimType":"registration",
-        "certificateNo": "NA",
-        "university":value.university,
-        "candidateSignature": "NA",
-         "validityUpto": "NA"
+        const joinMonth = this.months[jMonth];
+        const passMonth = this.months[pMonth];
+        this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+        //convert to string with commaa separated
+        this.convertUrlList = this.urlList.join(',')
+        this.updateStudentBody =
+        {
+          "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
+          "candidatePic": "arun.jpg",
+          "joiningYear": joinYear.toString(),
+          "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
+          "gender": this.newRegCertDetailsformGroup.value.gender,
+          "address": this.newRegCertDetailsformGroup.value.al1,
+          "state": this.newRegCertDetailsformGroup.value.state,
+          "district": this.newRegCertDetailsformGroup.value.district,
+          "country": this.newRegCertDetailsformGroup.value.country,
+          "pincode": this.newRegCertDetailsformGroup.value.pin,
+          "finalYearRollNo": value.rollNum,
+          "examBody": value.examBody,
+          "joiningMonth": joinMonth,
+          "passingMonth": passMonth,
+          // "email": this.newRegCertDetailsformGroup.value.email,
+          "paymentStatus": "SUCCESS",
+          "feeReciptNo": "12345678",
+          "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
+          "dateOfBirth": this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString(),
+          "barCode": "123457",
+          "nursingCollage": value.collegeName,
+          "passingYear": passYear.toString(),
+          "courseName": value.courseName,
+          "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
+          "registrationType": this.stateData.claimType,
+          "council": this.stateData.councilName,
+          "mothersName": this.newRegCertDetailsformGroup.value.motherName,
+          "name": this.newRegCertDetailsformGroup.value.applicantName,
+          "credType": this.newRegCertDetailsformGroup.value.credType,
+          "examYear": '',
+          "centerCode": '',
+          "requestType": value.requestType,
+          "docproof": this.convertUrlList,
+          "regNumber": this.stateData?.regNo ? this.stateData?.regNo : "NA",
+          "diplomaNumber": value.diplomaNumber,
+          "courseState": value.stateName ? value.stateName : "NA",
+          "courseCouncil": value.newCouncil ? value.newCouncil : "NA",
+          "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
+          "nurseRegDate": value.date ? value.date : "NA",
+          "claimType": "registration",
+          "certificateNo": "NA",
+          "university": value.university,
+          "candidateSignature": "NA",
+          "validityUpto": "NA"
 
-      }
-     console.log('updateStudentBody',this.updateStudentBody)
-   
-     if(this.osid){
-      const paymentData = {
-        osId : this.osid,
-        origin: this.stateData?.origin,
-        endPointUrl:this.endPointUrl
-       }
-       localStorage.setItem('payData', JSON.stringify(paymentData))
-          this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
-         .subscribe(
-           (response) => {
-             console.log(response);
-            this.paymentDetails= true;
-            
-   
-           },
-         )
-     } else {
-      this.updateStudentBody = {
-        ...this.updateStudentBody,
-        email:this.newRegCertDetailsformGroup.value.email,}
-      this.baseService.postStudent$(this.updateStudentBody, this.endPointUrl).subscribe((data)=>{
-        console.log(data)
-        if(data.result['StudentOutsideUP']) {
-          this.paymentDetails= true;
-           this.osid = data?.result?.StudentOutsideUP['osid']
-
-           const paymentData = {
-            osId : this.osid,
-            origin: this.stateData?.origin,
-            endPointUrl:this.endPointUrl
-           }
-           localStorage.setItem('payData', JSON.stringify(paymentData))
         }
 
-      })
-     }
+        if (this.osid) {
+          const paymentData = {
+            osId: this.osid,
+            origin: this.stateData?.origin,
+            endPointUrl: this.endPointUrl
+          }
+          localStorage.setItem('payData', JSON.stringify(paymentData))
+          this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
+            .subscribe(
+              (response) => {
+                this.paymentDetails = true;
+
+
+              },
+            )
+        } else {
+          this.updateStudentBody = {
+            ...this.updateStudentBody,
+            email: this.newRegCertDetailsformGroup.value.email,
+          }
+          this.baseService.postStudent$(this.updateStudentBody, this.endPointUrl).subscribe((data) => {
+            if (data.result['StudentOutsideUP']) {
+              this.paymentDetails = true;
+              this.osid = data?.result?.StudentOutsideUP['osid']
+
+              const paymentData = {
+                osId: this.osid,
+                origin: this.stateData?.origin,
+                endPointUrl: this.endPointUrl
+              }
+              localStorage.setItem('payData', JSON.stringify(paymentData))
+            }
+
+          })
+        }
+      }
     }
   }
-  }
 
-  navigateToUrl(item:any){
+  navigateToUrl(item: any) {
     window.open(item, "_blank");
   }
 
@@ -755,46 +701,40 @@ ngAfterViewInit(){
       if (this.listOfFiles.indexOf(selectedFile.name) === -1) {
         this.fileList.push(selectedFile);
         this.listOfFiles.push(selectedFile.name);
-      
+
       }
     }
     this.uploadFiles();
-    
+
   }
 
-  uploadFiles(){
-  
-     const formData = new FormData();
-    for (var i = 0; i < this.fileList.length; i++) { 
-      console.log(this.fileList[i])
+  uploadFiles() {
+
+    const formData = new FormData();
+    for (var i = 0; i < this.fileList.length; i++) {
       formData.append("files", this.fileList[i]);
-    }  
-    this.baseService.uploadFiles$(this.osid, formData, this.endPointUrl).subscribe((data)=>{
-      console.log(data)
+    }
+    this.baseService.uploadFiles$(this.osid, formData, this.endPointUrl).subscribe((data) => {
       this.docsResponseUrl = data.result;
-      this.docsUrl = this.docsResponseUrl.split(',').filter(url=>url.trim() !== "")
-      console.log('docsUrl',this.docsUrl)
-      
-     const uploadObj = this.docsUrl.map(url => {
+      this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
+
+      const uploadObj = this.docsUrl.map(url => {
         const parts = url.split('=');
         const fileNameWithQueryParams = parts[1];
         const fileName = fileNameWithQueryParams.split('/').pop();
-        const extractLastPart = fileName?.split('_').pop(); 
+        const extractLastPart = fileName?.split('_').pop();
         const getuploadObject = {
-          name:extractLastPart,
-          url:url
-        } 
-        return getuploadObject;         
+          name: extractLastPart,
+          url: url
+        }
+        return getuploadObject;
       });
-     console.log('uO',uploadObj)
-     this.listOfFiles.push(...uploadObj)
-     console.log('this.listOfFiles',this.listOfFiles)
+      this.listOfFiles.push(...uploadObj)
     })
-    
+
   }
 
   onCourseFileChanged(event?: any) {
-    console.log(event);
     for (let i = 0; i <= event.target.files.length - 1; i++) {
       let selectedFile = event.target.files[i];
 
@@ -808,8 +748,7 @@ ngAfterViewInit(){
   removeSelectedFile(index: any) {
     // Delete the item from fileNames list
     this.listOfFiles.splice(index, 1);
-    this.updatedUrlList = this.listOfFiles.map(item=> item.url)
-    console.log(this.updatedUrlList)
+    this.updatedUrlList = this.listOfFiles.map(item => item.url)
     // delete file from FileList
     this.fileList.splice(index, 1);
   }
@@ -835,7 +774,6 @@ ngAfterViewInit(){
 
   showInfo(option: any) {
     this.selectLink(option);
-    console.log(option)
     switch (option) {
       case 'Payment Details':
         this.paymentDetails = !this.paymentDetails
@@ -855,56 +793,62 @@ ngAfterViewInit(){
     return;
   }
 
-  onReset() {
-    if(this.entity==="StudentFromUP"){
+  doFormReset() {
+    this.submitted = false;
+    this.newRegCertDetailsformGroup.reset();
+    this.listOfFiles = [];
+  }
+
+  takeAcceptRejectAction(entity: string) {
+    if (entity === "StudentFromUP") {
       const message = `Reason For Rejection`;
       // const resDialog = new DialogModel( message);
       const shouldShowFileUpload = false;
 
 
       let dialogRef = this.dialog.open(DialogBoxComponent, {
-         disableClose: true ,
+        disableClose: true,
         width: '40rem',
-        height:'25rem',
-        data:{message,shouldShowFileUpload}
+        height: '25rem',
+        data: { message, shouldShowFileUpload }
       });
-  
+
       dialogRef.afterClosed().subscribe(result => {
         const reason = result;
 
-        console.log("res",reason);
-        if(result){
-          const approveBody={
-            action:"REJECT_CLAIM",
-            note:reason
+        if (result) {
+          const approveBody = {
+            action: "REJECT_CLAIM",
+            note: reason
           }
-          const osid=this.stateData?.id
-          this.baseService.approveClaim$(osid,approveBody)
-          .subscribe((response)=>{
-            console.log(response)
-          })
-    
+          const osid = this.stateData?.id
+          this.baseService.approveClaim$(osid, approveBody)
+            .subscribe((response) => {
+            })
+
         }
-        
-      
+
+
       });
-      
-     
-    }
-    
-   
-    else{
-    //this.generatePDFmakepdf()
-    this.generatePDF()
-    console.log("onReset")
-    this.submitted = false;
-    this.newRegCertDetailsformGroup.reset();
-    this.listOfFiles = [];
+
+
+    } else { //studentoutside UP Regulator role
+      this.createQRCode().then((qrCodeURL: any) => {
+        this.generatePDF(qrCodeURL.toString())
+      })
     }
   }
 
+  onReset(entity: string) {
+    this.userEmail === "Regulator" ? this.takeAcceptRejectAction(entity) : this.doFormReset();
+  }
+
+  async createQRCode() {
+    const qrCodeData = 'https://example.com'; // Replace with your QR code data
+    return await QRCode.toDataURL(qrCodeData);
+  }
+
   navToPreviousPage() {
-    console.log("hhh")
     this.location.back()
   }
   getStatusColorClass(status: string): string {
@@ -920,7 +864,7 @@ ngAfterViewInit(){
     }
   }
 
-  handlePayment(){
+  handlePayment() {
     const postData = {
       endpoint: "https://eazypayuat.icicibank.com/EazyPG",
       returnUrl: "https://payment.uphrh.in/api/v1/user/payment",
@@ -950,55 +894,58 @@ ngAfterViewInit(){
       optionalFields: "registration",
 
     };
-    this.http.getPaymentUrl(postData).subscribe((data)=>{
-      console.log(data)
-      if(data){
+    this.http.getPaymentUrl(postData).subscribe((data) => {
+      if (data) {
         window.open(data?.redirectUrl, '_blank')
 
       }
     }
     )
   }
-  generatePDF(){
+  generatePDF(qrCodeString: string) {
     const doc = new jsPDF()
-   
     autoTable(doc, {
-    margin: { top: 50 },
-    rowPageBreak: 'auto',
-    bodyStyles: { valign: 'top' },
+      margin: { top: 50 },
+      rowPageBreak: 'auto',
+      bodyStyles: { valign: 'top' },
 
-    head: [],
-    body: [
-      [this.labels.applicantName,this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-      [this.labels.mobNumber,this.newRegCertDetailsformGroup.controls['mobNumber'].value ], 
-      [this.labels.email,this.newRegCertDetailsformGroup.controls['email'].value ],
-      [this.labels.fatherName,this.newRegCertDetailsformGroup.controls['fatherName'].value ],
-      [this.labels.motherName,this.newRegCertDetailsformGroup.controls['motherName'].value ],
-      [this.labels.dob,this.newRegCertDetailsformGroup.controls['dob'].value ],
-      [this.labels.credType,this.newRegCertDetailsformGroup.controls['credType'].value ],
-      [this.labels.gender,this.newRegCertDetailsformGroup.controls['gender'].value ],
-      [this.labels.al2,this.newRegCertDetailsformGroup.controls['al2'].value ],
-      [this.labels.al2,this.newRegCertDetailsformGroup.controls['al2'].value ],
-      [this.labels.district,this.newRegCertDetailsformGroup.controls['district'].value ],
-      [this.labels.state,this.newRegCertDetailsformGroup.controls['state'].value ],
-      [this.labels.pin,this.newRegCertDetailsformGroup.controls['pin'].value ],
-      [this.labels.country,this.newRegCertDetailsformGroup.controls['country'].value ],
-      [this.labels.adhr,this.newRegCertDetailsformGroup.controls['adhr'].value ],
-      // [this.labels.attach,this.newRegCertDetailsformGroup.controls['attach'].value ],  
-      [this.labels.requestType,this.newRegCourseDetailsformGroup.controls['requestType'].value ],  
-      [this.labels.courseName,this.newRegCourseDetailsformGroup.controls['courseName'].value ], 
-      [this.labels.collegeName,this.newRegCourseDetailsformGroup.controls['collegeName'].value ],  
-      [this.labels.university,this.newRegCourseDetailsformGroup.controls['university'].value ],  
-      [this.labels.examBody,this.newRegCourseDetailsformGroup.controls['examBody'].value ], 
-      [this.labels.rollNum,this.newRegCourseDetailsformGroup.controls['rollNum'].value ], 
-      [this.labels.diplomaNumber,this.newRegCourseDetailsformGroup.controls['diplomaNumber'].value ],  
-      [this.labels.joinDate,this.newRegCourseDetailsformGroup.controls['joinDate'].value ],
-      [this.labels.passDate,this.newRegCourseDetailsformGroup.controls['passDate'].value ],  
+      head: [],
+      body: [
+        [this.labels.applicantName, this.newRegCertDetailsformGroup.controls['applicantName'].value],
+        [this.labels.mobNumber, this.newRegCertDetailsformGroup.controls['mobNumber'].value],
+        [this.labels.email, this.newRegCertDetailsformGroup.controls['email'].value],
+        [this.labels.fatherName, this.newRegCertDetailsformGroup.controls['fatherName'].value],
+        [this.labels.motherName, this.newRegCertDetailsformGroup.controls['motherName'].value],
+        [this.labels.dob, this.newRegCertDetailsformGroup.controls['dob'].value],
+        [this.labels.credType, this.newRegCertDetailsformGroup.controls['credType'].value],
+        [this.labels.gender, this.newRegCertDetailsformGroup.controls['gender'].value],
+        [this.labels.al2, this.newRegCertDetailsformGroup.controls['al2'].value],
+        [this.labels.al2, this.newRegCertDetailsformGroup.controls['al2'].value],
+        [this.labels.district, this.newRegCertDetailsformGroup.controls['district'].value],
+        [this.labels.state, this.newRegCertDetailsformGroup.controls['state'].value],
+        [this.labels.pin, this.newRegCertDetailsformGroup.controls['pin'].value],
+        [this.labels.country, this.newRegCertDetailsformGroup.controls['country'].value],
+        [this.labels.adhr, this.newRegCertDetailsformGroup.controls['adhr'].value],
+        // [this.labels.attach,this.newRegCertDetailsformGroup.controls['attach'].value ],  
+        [this.labels.requestType, this.newRegCourseDetailsformGroup.controls['requestType'].value],
+        [this.labels.courseName, this.newRegCourseDetailsformGroup.controls['courseName'].value],
+        [this.labels.collegeName, this.newRegCourseDetailsformGroup.controls['collegeName'].value],
+        [this.labels.university, this.newRegCourseDetailsformGroup.controls['university'].value],
+        [this.labels.examBody, this.newRegCourseDetailsformGroup.controls['examBody'].value],
+        [this.labels.rollNum, this.newRegCourseDetailsformGroup.controls['rollNum'].value],
+        [this.labels.diplomaNumber, this.newRegCourseDetailsformGroup.controls['diplomaNumber'].value],
+        [this.labels.joinDate, this.newRegCourseDetailsformGroup.controls['joinDate'].value],
+        [this.labels.passDate, this.newRegCourseDetailsformGroup.controls['passDate'].value],
 
-    ],
-      
-  });
+      ],
+      didDrawPage: (data) => {
+        doc.text(this.labels.header, 14, 40);
+        doc.addImage(this.logo, 10, 8, 80, 20);
+        doc.addImage(qrCodeString, 160, 10, 30, 30);
+      }
+    });
 
-  doc.save('table.pdf')
-  } 
+    doc.save(`Certificate_${this.newRegCourseDetailsformGroup.controls['rollNum'].value}_.pdf`)
+
+  }
 }

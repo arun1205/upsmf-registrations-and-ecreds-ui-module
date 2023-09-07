@@ -1,4 +1,5 @@
 export const applabels = {
+    header: "New Registration Certificate",
     applicantName: "Applicant Name",
     mobNumber:"Mobile Number",
     email: "Email ID",
