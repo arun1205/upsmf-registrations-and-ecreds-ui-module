@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClaimsTableData, TableColumn } from 'src/app/interfaces';
+import { BreadcrumbItem } from 'src/app/modules/shared';
 import { BaseServiceService } from 'src/app/services/base-service.service';
 
 @Component({
@@ -22,6 +23,12 @@ export class ViewClaimListComponent {
   monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'
+  ];
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Workspace', url: '/admin' },
+    { label: 'Claim Manage', url: '/admin/manage-claim' },
+    { label: 'Claim Certificate', url: '/admin/view-claim' },
   ];
   
 

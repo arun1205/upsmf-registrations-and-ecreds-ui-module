@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { SuperAdminService } from '../../../service/super-admin.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationPopupComponent } from 'src/app/modules/shared/components/confirmation-popup/confirmation-popup.component';
+import { BreadcrumbItem } from 'src/app/modules/shared';
 
 
 @Component({
@@ -21,6 +22,10 @@ export class ManageUsersComponent {
   userTableColumns: TableColumn[] = [];
   userData: UsersTableData[] = [];
   users: userTableData[] = [];
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Workspace', url: '/super-admin' },
+    { label: 'User List', url: 'super-admin/user-manage' },
+  ];
 
   constructor(private router: Router,
     private superAdminService: SuperAdminService,
