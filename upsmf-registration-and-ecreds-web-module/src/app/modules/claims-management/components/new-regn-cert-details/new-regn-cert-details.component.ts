@@ -25,7 +25,8 @@ export class NewRegnCertDetailsComponent {
   labels = applabels;
   links = ['Candidate Details', 'Course Details', 'Payment Details']
 
-  logo = '../../../../../assets/images/sunbird_logo.png'
+  logo = '../../../../../assets/images/sunbird_logo.png';
+  internalLogo = '../../../../../assets/images/up_smf_logo-24_x_24.png'; 
   newRegCertformGroup: FormGroup;
   public newRegCertDetailsformGroup: FormGroup;
   newRegCourseDetailsformGroup: FormGroup;
@@ -942,6 +943,10 @@ export class NewRegnCertDetailsComponent {
         doc.text(this.labels.header, 14, 40);
         doc.addImage(this.logo, 10, 8, 80, 20);
         doc.addImage(qrCodeString, 160, 10, 30, 30);
+        doc.addImage(this.internalLogo, 173, 23, 5, 5);
+        const text = 'Please scan this QR code to approve / reject the claim'; // Replace with your desired text
+        doc.setFontSize(7)
+        doc.text(text,145, 40 );
       }
     });
 
