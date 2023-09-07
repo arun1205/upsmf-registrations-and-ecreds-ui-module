@@ -961,10 +961,7 @@ ngAfterViewInit(){
   }
   generatePDF(){
     const doc = new jsPDF()
-    console.log(  this.form1Html)
-    console.log(this.newRegCertDetailsformGroup.value)
-    console.log(this.newRegCourseDetailsformGroup.value)
-
+   
     autoTable(doc, {
     margin: { top: 50 },
     rowPageBreak: 'auto',
@@ -1002,58 +999,6 @@ ngAfterViewInit(){
       
   });
 
-
-
   doc.save('table.pdf')
-  }
-
-  generatePDFmakepdf() { 
-    console.log(  this.form1Html)
-    console.log(this.newRegCertDetailsformGroup.value)
-    console.log(this.newRegCourseDetailsformGroup.value) 
-    const documentDefinition = {
-      content: [
-        {
-          text: 'Custom PDF Generated with pdfmake',
-          style: 'header',
-        },
-        {
-          text: 'Sample content with styles:',
-          style: 'subheader',
-        },
-        {
-          ul: [
-            'Item 1',
-            'Item 2',
-            'Item 3',
-          ],
-        },
-        {
-          text: 'Custom styling example:',
-          style: 'subheader',
-        },
-        {
-          text: 'This text is in blue color',
-          style: 'blueText',
-        },
-      ],
-      styles: {
-        header: {
-          fontSize: 25,
-          bold: true,
-        },
-        subheader: {
-          fontSize: 20,
-          bold: true,
-          margin: [0, 10, 0, 5],
-        },
-        blueText: {
-          color: 'blue',
-        },
-      },
-    };
-  
-    //pdfMake.createPdf(documentDefinition).download(); 
-   
   } 
 }
