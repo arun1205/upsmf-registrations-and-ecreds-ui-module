@@ -21,6 +21,10 @@ export class ManageClaimsComponent {
   pendingClaimsTableColumns: TableColumn[] = [];
   approvedClaimsTableColumns: TableColumn[] = [];
   rejectedClaimsTableColumns: TableColumn[] = [];
+  monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December'
+  ];
 
   isDataLoading: boolean = false;
   constructor(
@@ -56,7 +60,14 @@ export class ManageClaimsComponent {
         columnDef: 'createdAt',
         header: 'Claim Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['createdAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'isLink',
@@ -91,13 +102,27 @@ export class ManageClaimsComponent {
         columnDef: 'createdAt',
         header: 'Claim Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['createdAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'updatedAt',
         header: 'Approved Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['updatedAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'viewClaims',
@@ -126,13 +151,27 @@ export class ManageClaimsComponent {
         columnDef: 'createdAt',
         header: 'Claim Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['createdAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'updatedAt',
         header: 'Rejected Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['updatedAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'notes',

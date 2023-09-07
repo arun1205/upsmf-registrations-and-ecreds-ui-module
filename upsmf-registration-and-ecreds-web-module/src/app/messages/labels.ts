@@ -1,18 +1,40 @@
 export const applabels = {
     applicantName: "Applicant Name",
-    mobNum:"Mobile Number",
+    mobNumber:"Mobile Number",
     email: "Email ID",
     fatherName: "Father's Name",
     motherName: "Mother's Name",
-    DOB: "Date Of Birth",
+    dob: "Date Of Birth",
     credType: " Credentials Type",
     gender: "Gender",
-    addr1:"Address Line 1",
-    addr2:"Address Line 2",
+    al1:"Address Line 1",
+    al2:"Address Line 2",
     district:"District",
     state:" State",
     pin: "Pincode",
     country:"Country",
-    aadhar: "Aadhar Number",
-    attach: "Attach file(s)"
+    adhr: "Aadhar Number",
+    attach: "Attach file(s)",
+    requestType:"Request Type",
+    courseName:"Course Name",
+    collegeName:"College Name",
+    university:"University",
+    examBody:"Examination Body",
+    rollNum:"Final year roll number",
+    diplomaNumber:"Diploma Number",
+    joinDate:"Course Joining Date",
+    passDate:"Course Passing Date",
+    maidenName:"Maiden Name",
+    mrdName:"Married Name",
+    proQual:"Professional Qualification ",
+    tcName:"Name of Training Centre",
+    regnNum:"Registration Number",
+    placeOfWork:"Place where you worked with full details"
+    
+
+
+
+
+
+
   }

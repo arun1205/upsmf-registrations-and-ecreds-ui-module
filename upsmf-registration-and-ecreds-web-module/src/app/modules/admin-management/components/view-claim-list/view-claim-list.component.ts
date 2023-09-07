@@ -19,6 +19,10 @@ export class ViewClaimListComponent {
   approvedClaimsTableColumns: TableColumn[] = [];
   rejectedClaimsTableColumns: TableColumn[] = [];
   stateData: any;
+  monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December'
+  ];
   
 
   isDataLoading: boolean = false;
@@ -27,6 +31,7 @@ export class ViewClaimListComponent {
     private baseService: BaseServiceService  ) { 
       this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     console.log("stateData:",this.stateData)
+    
     }
 
   ngOnInit(): void {
@@ -41,13 +46,28 @@ export class ViewClaimListComponent {
   }
 
   initializeColumns(): void {
+  
     this.pendingClaimsTableColumns = [
+    
+      {
+        columnDef: 'requestorName',
+        header: 'Applicant Name',
+        isSortable: true,
+        cell: (element: Record<string, any>) => `${element['requestorName']}`
+      },
       {
         columnDef: 'id',
         header: 'Claim ID',
         isSortable: true,
         cell: (element: Record<string, any>) => `${element['id']}`
       },
+      {
+        columnDef: 'council',
+        header: 'Council',
+        isSortable: true,
+        cell: (element: Record<string, any>) => `${element['council']}`
+      },
+      
       {
         columnDef: 'claimType',
         header: 'Claim Type',
@@ -58,7 +78,15 @@ export class ViewClaimListComponent {
         columnDef: 'createdAt',
         header: 'Claim Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['createdAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
+        
       },
       {
         columnDef: 'isLink',
@@ -93,13 +121,27 @@ export class ViewClaimListComponent {
         columnDef: 'createdAt',
         header: 'Claim Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['createdAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'updatedAt',
         header: 'Approved Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['updatedAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'viewClaims',
@@ -128,13 +170,27 @@ export class ViewClaimListComponent {
         columnDef: 'createdAt',
         header: 'Claim Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['createdAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'updatedAt',
         header: 'Rejected Date',
         isSortable: true,
-        cell: (element: Record<string, any>) => `${element['updatedAt']}`
+        cell: (element: Record<string, any>) => {
+          const timestamp = element['createdAt'];
+          const date = new Date(timestamp);
+          const month = this.monthNames[date.getMonth()];
+          const day = date.getDate();
+          const year = date.getFullYear();
+          return `${month} ${day}, ${year}`;
+        }
       },
       {
         columnDef: 'notes',

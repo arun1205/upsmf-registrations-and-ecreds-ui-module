@@ -11,15 +11,11 @@ import { HttpService } from 'src/app/core/services/http-service/http.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-//import html2canvas from 'html2canvas';
-//import jspdf from 'jspdf';
 import {  applabels } from '../../../../messages/labels';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 
-import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts'; 
-(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+
 
 
 @Component({
@@ -266,7 +262,6 @@ ngAfterViewInit(){
     this.entity= this.stateData?.entity
     console.log("entity",this.entity)
     if(this.entity==="StudentFromUP" && this.userEmail==="Regulator"){
-      console.log("status",this.stateData.body.status)
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
@@ -969,84 +964,47 @@ ngAfterViewInit(){
     console.log(  this.form1Html)
     console.log(this.newRegCertDetailsformGroup.value)
     console.log(this.newRegCourseDetailsformGroup.value)
-// It can parse html:
-// <table id="my-table"><!-- ... --></table>
-autoTable(doc, {
-  margin: { top: 50 },
-  rowPageBreak: 'auto',
-  bodyStyles: { valign: 'top' },
 
-  head: [],
-  body: [
-    [this.labels.applicantName,this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-    ['Name',this.newRegCertDetailsformGroup.controls['applicantName'].value ],
-    ['Email', 'castille@example.com'], 
-  
-  
-  ],
-    
-});
+    autoTable(doc, {
+    margin: { top: 50 },
+    rowPageBreak: 'auto',
+    bodyStyles: { valign: 'top' },
+
+    head: [],
+    body: [
+      [this.labels.applicantName,this.newRegCertDetailsformGroup.controls['applicantName'].value ],
+      [this.labels.mobNumber,this.newRegCertDetailsformGroup.controls['mobNumber'].value ], 
+      [this.labels.email,this.newRegCertDetailsformGroup.controls['email'].value ],
+      [this.labels.fatherName,this.newRegCertDetailsformGroup.controls['fatherName'].value ],
+      [this.labels.motherName,this.newRegCertDetailsformGroup.controls['motherName'].value ],
+      [this.labels.dob,this.newRegCertDetailsformGroup.controls['dob'].value ],
+      [this.labels.credType,this.newRegCertDetailsformGroup.controls['credType'].value ],
+      [this.labels.gender,this.newRegCertDetailsformGroup.controls['gender'].value ],
+      [this.labels.al2,this.newRegCertDetailsformGroup.controls['al2'].value ],
+      [this.labels.al2,this.newRegCertDetailsformGroup.controls['al2'].value ],
+      [this.labels.district,this.newRegCertDetailsformGroup.controls['district'].value ],
+      [this.labels.state,this.newRegCertDetailsformGroup.controls['state'].value ],
+      [this.labels.pin,this.newRegCertDetailsformGroup.controls['pin'].value ],
+      [this.labels.country,this.newRegCertDetailsformGroup.controls['country'].value ],
+      [this.labels.adhr,this.newRegCertDetailsformGroup.controls['adhr'].value ],
+      // [this.labels.attach,this.newRegCertDetailsformGroup.controls['attach'].value ],  
+      [this.labels.requestType,this.newRegCourseDetailsformGroup.controls['requestType'].value ],  
+      [this.labels.courseName,this.newRegCourseDetailsformGroup.controls['courseName'].value ], 
+      [this.labels.collegeName,this.newRegCourseDetailsformGroup.controls['collegeName'].value ],  
+      [this.labels.university,this.newRegCourseDetailsformGroup.controls['university'].value ],  
+      [this.labels.examBody,this.newRegCourseDetailsformGroup.controls['examBody'].value ], 
+      [this.labels.rollNum,this.newRegCourseDetailsformGroup.controls['rollNum'].value ], 
+      [this.labels.diplomaNumber,this.newRegCourseDetailsformGroup.controls['diplomaNumber'].value ],  
+      [this.labels.joinDate,this.newRegCourseDetailsformGroup.controls['joinDate'].value ],
+      [this.labels.passDate,this.newRegCourseDetailsformGroup.controls['passDate'].value ],  
+
+    ],
+      
+  });
 
 
 
-doc.save('table.pdf')
+  doc.save('table.pdf')
   }
 
   generatePDFmakepdf() { 
@@ -1081,11 +1039,11 @@ doc.save('table.pdf')
       ],
       styles: {
         header: {
-          fontSize: 22,
+          fontSize: 25,
           bold: true,
         },
         subheader: {
-          fontSize: 16,
+          fontSize: 20,
           bold: true,
           margin: [0, 10, 0, 5],
         },
