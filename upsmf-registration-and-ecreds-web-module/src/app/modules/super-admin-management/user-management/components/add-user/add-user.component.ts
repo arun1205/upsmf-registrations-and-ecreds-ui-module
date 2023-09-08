@@ -138,7 +138,7 @@ export class AddUserComponent {
         break;
       case 'Regulator':
           this.councilTypeArray = ["UPSMFAC", "UPNM", "UPDC","UPMC"]
-          this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_EXAMINATION_USER
+          this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_REGULATOR_USER
         break;
 
       default:
