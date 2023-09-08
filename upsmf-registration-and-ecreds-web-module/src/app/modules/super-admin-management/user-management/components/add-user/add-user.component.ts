@@ -24,8 +24,8 @@ export class AddUserComponent {
   osId1:string = ''
   userIds:string =''
 
-  roleTypesArray = ["CouncilAdmin", "ExternalCouncil", "ExamBody"];
-  councilTypeArray:string[]=["UPSMFAC", "UPNM", "UPDC","UPMC"]
+  roleTypesArray = ["CouncilAdmin", "ExternalCouncil", "ExamBody","Regulator"];
+  councilTypeArray:string[]=["UPSMF", "UPNM", "UPDC","UPMC"]
   activeStatusArray = ["Active", "Inactive"];
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Workspace', url: '/super-admin' },
@@ -72,13 +72,16 @@ export class AddUserComponent {
       lastName = this.userDetails.lastName
     };
     if(this.userDetails?.attributes.role[0] === 'CouncilAdmin'){
-      this.councilTypeArray = ["UPSMFAC", "UPNM", "UPDC","UPMC"]
+      this.councilTypeArray = ["UPSMF", "UPNM", "UPDC","UPMC"]
     }
     else if(this.userDetails?.attributes.role[0] === 'ExternalCouncil'){
       this.councilTypeArray = ['OtherState']
     }
+    else if(this.userDetails?.attributes.role[0] === 'Regulator'){
+      this.councilTypeArray = ["UPSMF", "UPNM", "UPDC","UPMC"]
+    }
     else {
-      this.councilTypeArray =["UPSMFAC", "UPNM", "UPDC","UPMC"]
+      this.councilTypeArray =["UPSMF", "UPNM", "UPDC","UPMC"]
     }
     this.newUserformGroup.setValue({
       fName: firstName,
@@ -130,6 +133,10 @@ export class AddUserComponent {
         this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_EXTERNAL_USER
         break;
       case 'ExamBody':
+          this.councilTypeArray = ["UPSMFAC", "UPNM", "UPDC","UPMC"]
+          this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_EXAMINATION_USER
+        break;
+      case 'Regulator':
           this.councilTypeArray = ["UPSMFAC", "UPNM", "UPDC","UPMC"]
           this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_EXAMINATION_USER
         break;
