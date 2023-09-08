@@ -35,6 +35,7 @@
             "CREATE_SUPERADMIN_USER": "api/v1/SuperAdmin/invite",
             "CREATE_EXTERNAL_USER": "api/v1/ExternalCouncil/invite",
             "CREATE_EXAMINATION_USER": "api/v1/ExamBody/invite",
+            "CREATE_REGULATOR_USER":"api/v1/Regulator/invite",
             "UPDATE_USER": "/api/v1/user/update",
             "DELETE_USER": "/api/v1/user/deactivate",
             "GET_USERDETAILS_BY_ID": "/api/v1/user/details",
