@@ -68,7 +68,7 @@ breadcrumbItems: BreadcrumbItem[] = [
         case 'goodStandingCert':
           navigationExtras = {
             state: {
-              customData: { type: item.type }
+              body: { type: item.type }
             }
           };
           this.router.navigate(['claims/good-stand-frgn-cert'], navigationExtras);

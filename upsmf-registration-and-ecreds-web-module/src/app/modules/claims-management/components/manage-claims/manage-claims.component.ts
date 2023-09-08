@@ -195,7 +195,7 @@ export class ManageClaimsComponent {
    this.baseService.getClaims$().subscribe(
       (res) =>{
         this.claims = res.responseData
-        console.log('this.claims', this.claims);
+        console.log('this.claims', res);
         this.pendingClaims = this.claims.filter(claim => claim['status'] === 'OPEN');
         this.approvedClaims = this.claims.filter(claim => claim['status'] === 'APPROVED');
         this.rejectedClaims = this.claims.filter(claim => claim['status']==='REJECTED');
@@ -206,22 +206,7 @@ export class ManageClaimsComponent {
     ) 
   }
 
-  // onClickItem(e: any) {
-  //   console.log(e?.id)
-  //   let id = parseInt(e?.id)
-  //   const data=this.claims
-
-  //   console.log("claim",data)
-    
-  //   // if(this.claims[0]?.entity==='StudentGoodstanding'){
-  //   //   this.router.navigate(['/claims/foreign-goodstanding', e.id], { state: { data: e } });
-
-  //   // }
-  //   //this.router.navigate(['/:'+id], {state: {data: e}});
-  //   this.router.navigate(['/claims', e.id], { state: { data: e } });
-  //   // this.router.navigate(['/grievance', e.id]);
-  // }
-  //this.router.navigate(['/:'+id], {state: {data: e}});
+  
   onClickItem(value: any) {
     console.log("body",value)
     let id = parseInt(value?.id)
@@ -242,8 +227,7 @@ export class ManageClaimsComponent {
       this.router.navigate(['/claims/foreign-goodstanding', value.id], { state: { body:value } });
 
     }
-    // this.router.navigate(['/claims', e.id], { state: { data: e } });
-    // this.router.navigate(['/grievance', e.id]);
+  
   }
 }
 

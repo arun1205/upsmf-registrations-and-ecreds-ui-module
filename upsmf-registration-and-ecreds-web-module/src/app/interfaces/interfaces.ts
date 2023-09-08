@@ -1,8 +1,10 @@
 export interface ClaimsTableData {
+    no:string,
     status: string;
     attachedDocs?: Array<string>;
     claimType?:string;
     id: string;
+    credType:string,
     entity: string;
     entityId: string;
     createdAt: string;
@@ -18,6 +20,9 @@ export interface ClaimsTableData {
     propertyData?:string;
     conditions?:string;
     propertyURI?:string;
+    outsideStudentStatus:string,
+    
+    
   }
 
   export interface UsersTableData {
@@ -34,9 +39,9 @@ export interface ClaimsTableData {
     totalclaim:string
     pending:string;
     rejected:string;
-    payment:string;
+    // payment:string;
     issue:string;
-    approval:string;
+    // approval:string;
     claimpending:string
     
   }

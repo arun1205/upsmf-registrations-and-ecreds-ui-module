@@ -208,7 +208,7 @@ export class GoodStandingForeignVerificationComponent {
     this.osid=this.stateData.body.id
     this.entity= this.stateData.body.entity
     console.log("entity",this.entity)
-    if(this.entity==="studentForeignVerification"){
+    if(this.entity==="StudentForeignVerification" && this.userEmail==="Regulator"){
       this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
       .subscribe(
         (response: any) => {
@@ -360,11 +360,21 @@ export class GoodStandingForeignVerificationComponent {
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
     });
     if(this.userEmail==="Regulator"){
-      {{(this.stateData.body.entity==="studentForeignVerification"?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     )}} 
+      {{(this.stateData.body.entity==="StudentForeignVerification"?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     )}} 
     }
     else{
-      {{ (this.stateData.body.entity === 'ForeignVerifyReq') ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
-      this.getEndPoint();
+      if(this.stateData.body.entity){
+        this.getEndPoint();
+        {{ (this.stateData.body.entity === 'ForeignVerifyReq') ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
+      
+      }
+      else{
+        this.getEndPoint();
+        {{ (this.stateData.body.type === 'ForeignVerifyReq') ?  this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()     }}
+      
+      }
+      
+      
 
 
     }
@@ -502,45 +512,43 @@ export class GoodStandingForeignVerificationComponent {
   // }
 
   onGoodStandingForeignVerificationformSubmit(value: any) {
-    const osid=this.stateData?.body?.id
+    const osid=this.stateData.body.id
     console.log("id....",osid)
     
-    if(this.entity==="studentForeignVerification" && this.userEmail==="Regulator"){
+    if(this.entity==="StudentForeignVerification" && this.userEmail==="Regulator"){
       const message = `Enter the email`;
       const message1 = `Upload Document`;
 
       const shouldShowFileUpload = true;
-      const resDialog = new DialogModel( message,message1);
+      const resDialog = new DialogModel(message, message1);
 
       let dialogRef = this.dialog.open(DialogBoxComponent, {
-         disableClose: true ,
+        disableClose: true,
         // width: '40rem',
         // height:'25rem',
-        data:{message,message1,shouldShowFileUpload}
+        data: { message, message1, shouldShowFileUpload }
       });
       dialogRef.afterClosed().subscribe(result => {
         // const reason = result;
-        
 
-        console.log("res",result);
-        if(result){
-          this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
-          if(this.urlData.length){
+
+        if (result) {
+          this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          if (this.urlData.length) {
             this.listOfFiles = this.urlData?.map(url => {
-                      const parts = url.split('=');
-            if (parts.length === 2) {
+              const parts = url.split('=');
+              if (parts.length === 2) {
                 return decodeURIComponent(parts[1]);
-            } 
-            return null;
+              }
+              return null;
             });
-            
+
           }
-          const details=JSON.parse(this.stateData.propertyData);
-          console.log("data................",details)
+          const details = JSON.parse(this.stateData.body.propertyData);
           //convert to string with commaa separated
           this.convertUrlList = this.listOfFiles.join(',')
-          const mailBody={
-            outsideEntityMailId:result.reason,
+          const mailBody = {
+            outsideEntityMailId: result.reason,
             name: this.goodStandingForeignVerificationformGroup.value.applicantName,
             gender: this.goodStandingForeignVerificationformGroup.value.gender,
             council: details.council,
@@ -549,20 +557,19 @@ export class GoodStandingForeignVerificationComponent {
             docProofs: [this.convertUrlList],
             diplomaNumber: value.diplomaNumber,
             nursingCollage: value.collegeName,
-            courseState:"aaaaa",
-            courseCouncil:"BBB",
+            courseState: "aaaaa",
+            courseCouncil: "BBB",
             state: this.goodStandingForeignVerificationformGroup.value.state,
             country: this.goodStandingForeignVerificationformGroup.value.country,
             // state: this.newRegCertDetailsformGroup.value.state,
-            attachment:result.file,
-            
+            attachment: result.file,
+
           }
-          this.baseService.sendMailOutsideUp$(mailBody).subscribe((response)=>{
-            console.log(response)
+          this.baseService.sendMailOutsideUp$(mailBody).subscribe((response) => {
           })
-    
+
         }
-        
+
       });
 
       // const approveBody={
@@ -605,7 +612,7 @@ export class GoodStandingForeignVerificationComponent {
             });
             
           }
-          const details=JSON.parse(this.stateData.propertyData);
+          const details=JSON.parse(this.stateData.body.propertyData);
           console.log("data................",details)
           //convert to string with commaa separated
           this.convertUrlList = this.listOfFiles.join(',')
@@ -646,7 +653,7 @@ export class GoodStandingForeignVerificationComponent {
 
     }
 
-    else if ((this.stateData.customData.type === 'goodStandingCert')) {
+    else if ((this.stateData.body.type === 'goodStandingCert')) {
       this.urlList  = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
         //convert to string with commaa separated
         this.convertUrlList = this.urlList.join(',')
@@ -658,7 +665,7 @@ export class GoodStandingForeignVerificationComponent {
         "phoneNumber": this.goodStandingForeignVerificationformGroup.value.mobNumber,
         "email": this.goodStandingForeignVerificationformGroup.value.email,
         "trainingCenter": this.goodStandingForeignVerificationformGroup.value.tcName,
-        "council": "upsmf",
+        "council": "UPSMF",
         "workPlace":this.goodStandingForeignVerificationformGroup.value.placeOfWork,
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
         "refNo": "REF789012",
@@ -671,7 +678,7 @@ export class GoodStandingForeignVerificationComponent {
         "professionalQualification":this.goodStandingForeignVerificationformGroup.value.proQual,
         "registrationNumber":this.goodStandingForeignVerificationformGroup.value.regnNum,
         "paymentStatus": "SUCCESS",
-        "claimType":this.stateData?.customData.type
+        "claimType":this.stateData?.body.type
         
 
       
@@ -681,7 +688,7 @@ export class GoodStandingForeignVerificationComponent {
       if(this.osid){
         const paymentData={
           osId : this.osid,
-          origin: this.stateData?.customData.type,
+          origin: this.stateData.body.type,
           endPointUrl:this.endPointUrl
 
         }
@@ -701,6 +708,16 @@ export class GoodStandingForeignVerificationComponent {
          .subscribe(
            (response) => {
              console.log("good resp",response);
+             this.paymentDetails= true;
+             this.osid = response?.result?.StudentGoodstanding['osid']
+             this.getEndPoint();
+              const paymentData = {
+                osId: this.osid,
+                origin: this.stateData.body.type,
+                endPointUrl: this.endPointUrl
+              }
+              localStorage.setItem('payData', JSON.stringify(paymentData))
+             
              
    
            },
@@ -721,7 +738,7 @@ export class GoodStandingForeignVerificationComponent {
         "phoneNumber": this.goodStandingForeignVerificationformGroup.value.mobNumber,
         "email": this.goodStandingForeignVerificationformGroup.value.email,
         "trainingCenter": this.goodStandingForeignVerificationformGroup.value.tcName,
-        "council": "upsmf",
+        "council": "UPSMF",
         "workPlace":this.goodStandingForeignVerificationformGroup.value.placeOfWork,
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
         "refNo": "REF789012",
@@ -734,14 +751,14 @@ export class GoodStandingForeignVerificationComponent {
         "professionalQualification":this.goodStandingForeignVerificationformGroup.value.proQual,
         "registrationNumber":this.goodStandingForeignVerificationformGroup.value.regnNum,
         "paymentStatus": "SUCCESS",
-        "claimType":this.stateData?.customData.type
+        "claimType":this.stateData.body.type
 
       }
       console.log("foreign body",updateStudentForeignVerificationBody)
       if(this.osid){
         const paymentData={
           osId : this.osid,
-          origin: this.stateData?.customData.type,
+          origin: this.stateData.body.type,
           endPointUrl:this.endPointUrl
         }
         localStorage.setItem('payData', JSON.stringify(paymentData))
@@ -758,6 +775,18 @@ export class GoodStandingForeignVerificationComponent {
         .subscribe(
           (response)=>{
             console.log("foreign response",response)
+            this.paymentDetails= true;
+            this.getEndPoint();
+            this.osid = response?.result?.StudentForeignVerification['osid']
+
+              const paymentData = {
+                osId: this.osid,
+                origin: this.stateData.body.type  ,
+                endPointUrl: this.endPointUrl
+              }
+              localStorage.setItem('payData', JSON.stringify(paymentData))
+
+            
           }
         )
       }
@@ -915,7 +944,7 @@ export class GoodStandingForeignVerificationComponent {
     }
   // }
   getEndPoint(){
-    switch (this.stateData?.customData.type) {
+    switch (this.stateData.body.type) {
 
       case 'goodStandingCert':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_GOODSTANDING
