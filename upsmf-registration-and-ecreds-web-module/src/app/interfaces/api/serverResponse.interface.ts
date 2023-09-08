@@ -12,6 +12,7 @@ export interface ServerResponse {
     responseData?: any;
 
     result?:any;
+    claimList?:any;
 }
 
 export interface StatusInfo {

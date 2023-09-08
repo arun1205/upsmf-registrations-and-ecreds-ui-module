@@ -221,6 +221,16 @@ export class BaseServiceService  extends HttpService   {
     return this.get(reqParam);
   
   }
+  getAllClaims$(){
+    const header  = {
+      'Accept': 'application/json'
+    }
+    const reqParam: RequestParam={
+      url:this.configService.urlConFig.URLS.CLAIMS.ALL_CLAIMS,
+      header:header
+    }
+    return this.post(reqParam);
+  }
 
   uploadFiles$(osid: string, body:any, endPointUrl:any){
     const reqParam: RequestParam = {
@@ -230,6 +240,7 @@ export class BaseServiceService  extends HttpService   {
          }
          return this.put(reqParam);
   }
+
 
   getUserRole(){
     var token:any

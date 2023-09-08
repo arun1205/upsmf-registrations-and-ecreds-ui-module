@@ -244,9 +244,9 @@ export class ViewClaimListComponent {
         }
         else if(this.stateData?.type==="ForeignVerifyReq"){
           // this.baseService.get
-          this.pendingClaims = this.claims.filter(claim => (claim['status'] === 'OPEN')&&(claim['entity']==='studentForeignVerification'));
-          this.approvedClaims = this.claims.filter(claim => (claim['status'] === 'APPROVED')&&(claim['entity']==='studentForeignVerification'));
-          this.rejectedClaims = this.claims.filter(claim => (claim['status'] === 'REJECTED')&&(claim['entity']==='studentForeignVerification'))
+          this.pendingClaims = this.claims.filter(claim => (claim['status'] === 'OPEN')&&(claim['entity']==='StudentForeignVerification'));
+          this.approvedClaims = this.claims.filter(claim => (claim['status'] === 'APPROVED')&&(claim['entity']==='StudentForeignVerification'));
+          this.rejectedClaims = this.claims.filter(claim => (claim['status'] === 'REJECTED')&&(claim['entity']==='StudentForeignVerification'))
           console.log('pendingClaims', this.pendingClaims)
           this.isDataLoading = false;
         }

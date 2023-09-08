@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { ClaimDashBoardData, DashBoardData, TableColumn } from 'src/app/interfaces';
+import { Router } from '@angular/router';
+import { ClaimDashBoardData, ClaimsTableData, DashBoardData, TableColumn } from 'src/app/interfaces';
+import { BaseServiceService } from 'src/app/services/base-service.service';
 
 @Component({
   selector: 'app-dasboard',
@@ -9,17 +11,26 @@ import { ClaimDashBoardData, DashBoardData, TableColumn } from 'src/app/interfac
 export class DasboardComponent {
   isDataLoading: boolean = false;
   
+  claims: ClaimsTableData[]=[];
+  claimsTableColumns: TableColumn[] = [];
 
   adminTableColumns: TableColumn[] = [];
-  adminData: DashBoardData[] = [];
+  adminData:DashBoardData []=[];
   adminClaimData:ClaimDashBoardData[]=[];
   adminClaimTableColumns: TableColumn[]=[];
+  constructor(
+    private router: Router,
+    private baseService: BaseServiceService  ) { 
+      
+
+    }
+
 
   ngOnInit(): void {
     this.initializeColumns();
-    console.log(this.adminTableColumns)
-    this.getUsers();
-    console.log(this.adminData)
+    // console.log(this.adminTableColumns)
+    this.getClaims();
+    console.log("adata",this.adminData)
   }
 
   initializeColumns(): void {
@@ -75,18 +86,21 @@ export class DasboardComponent {
 
 
     ];
-  this.adminTableColumns = [
-    {
-      columnDef: 'no',
-      header: '#',
-      isSortable: false,
-      cell: (element: Record<string, any>) => `${element['no']}`
-    },
+   
+    this.adminTableColumns = [
+      {
+        columnDef: `no`,
+        header: `#`,
+        isSortable: true,
+        cell: (element: Record<string, any>) => `${element['no']}`
+      },
     {
       columnDef: 'type',
       header: 'Credential Type',
       isSortable: true,
       cell: (element: Record<string, any>) => `${element['type']}`
+
+      
     },
     {
       columnDef: 'totalclaim',
@@ -106,37 +120,117 @@ export class DasboardComponent {
       isSortable: false,
       cell: (element: Record<string, any>) => `${element['rejected']}`
     },
-    {
-      columnDef: 'payment',
-      header: 'Payment Pending',
-      isSortable: false,
-      cell: (element: Record<string, any>) => `${element['payment']}`
-    },
+    
     {
       columnDef: 'issue',
       header: 'Credential Issued',
       isSortable: false,
-      cell: (element: Record<string, any>) => `${element['payment']}`
+      cell: (element: Record<string, any>) => `${element['issue']}`
     },
-    {
-      columnDef: 'approval',
-      header: 'TAT(Approval)',
-      isSortable: false,
-      cell: (element: Record<string, any>) => `${element['approval']}`
-    },
-    {
-      columnDef: 'claimpending',
-      header: 'Claim Pending >15 days',
-      isSortable: false,
-      // isMenuOption: true,
-      cell: (element: Record<string, any>) => `${element['claimpending']}`
-    }
+    // {
+    //   columnDef: 'claimpending',
+    //   header: 'Claim Pending >15 days',
+    //   isSortable: false,
+    //   // isMenuOption: true,
+    //   cell: (element: Record<string, any>) => `${element['claimpending']}`
+    // }
 
   ];
+  
   }
 
-  getUsers() {
+  getClaims() {
     this.isDataLoading = true;
+    this.baseService.getAllClaims$().subscribe(
+      (response)=>{
+      this.claims=response.claimList
+      
+      console.log("res",this.claims.filter(claim => claim['credType']?.toLowerCase() === 'degree'))
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      
+      console.log(formattedDate);
+      const fifteenDaysAgo = new Date();
+      fifteenDaysAgo.setDate(currentDate.getDate() - 15);
+      const day=this.claims.filter(claim=> claim['createdAt'])
+      const formattedDate2 = currentDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      
+      console.log("ad",fifteenDaysAgo.toString())
+      console.log(day)
+      this.adminData = [
+        {
+          no : "1",
+          type: "All Claim",
+          totalclaim:this.claims.length.toString(),
+          pending: this.claims.filter(claim => claim['status'] === 'OPEN').length.toString(),
+          rejected:this.claims.filter(claim => claim['status'] === 'REJECTED').length.toString(),
+          issue:this.claims.filter(claim => claim['status'] === 'APPROVED').length.toString(),
+          // approval: "2",
+          claimpending: "12",
+        },
+        {
+          no : "2",
+          type: "UP - Registration Diploma",
+          totalclaim:this.claims.filter(claim => claim['credType'] === 'Diploma').length.toString(),
+          pending: this.claims.filter(claim => claim['credType'] === 'DIPLOMA' &&  claim['status'] === 'OPEN').length.toString(),
+          rejected:this.claims.filter(claim =>claim['credType'] === 'DIPLOMA' && claim['status'] === 'REJECTED').length.toString(),
+          issue:this.claims.filter(claim =>claim['credType'] === 'DIPLOMA' && claim['status'] === 'APPROVED').length.toString(),
+          // approval: "2",
+          claimpending: "34",
+        },
+        {
+          no : "3",
+          type: "UP - Registration Degree",
+          totalclaim:this.claims.filter(claim => claim['credType']?.toLowerCase() === 'degree').length.toString(),
+          pending: this.claims.filter(claim => claim['credType']?.toLowerCase() === 'degree'  && claim['status']==='OPEN').length.toString(),
+          rejected:this.claims.filter(claim =>claim['credType']?.toLowerCase() === 'degree' && claim['status'] === 'REJECTED').length.toString(),
+          issue:this.claims.filter(claim =>claim['credType']?.toLowerCase() === 'degree' && claim['status'] === 'APPROVED').length.toString(),
+          // approval: "2",
+          claimpending: "34",
+        },
+        {
+          no : "4",
+          type: "Non UP - Registration",
+          totalclaim:this.claims.filter(claim => claim['entity'].toLowerCase() === 'studentoutsideup' ).length.toString(),
+          pending: this.claims.filter(claim => claim['entity'].toLowerCase() === 'studentoutsideup'  && claim['status']==='OPEN').length.toString(),
+          rejected:this.claims.filter(claim =>claim['entity'].toLowerCase() === 'studentoutsideup' && claim['status'] === 'REJECTED').length.toString(),
+          issue:this.claims.filter(claim =>claim['entity'].toLowerCase() === 'studentoutsideup' && claim['status'] === 'APPROVED').length.toString(),
+          // approval: "2",
+          claimpending: "34",
+        },
+        {
+          no : "5",
+          type: "Foreign Verification Request",
+          totalclaim:this.claims.filter(claim => claim['entity'].toLowerCase() === 'studentforeignverification' ).length.toString(),
+          pending: this.claims.filter(claim => claim['entity'].toLowerCase() === 'studentforeignverification' && claim['status']==='OPEN').length.toString(),
+          rejected:this.claims.filter(claim =>claim['entity'].toLowerCase() === 'studentforeignverification' && claim['status'] === 'REJECTED').length.toString(),
+          issue:this.claims.filter(claim =>claim['entity'].toLowerCase() === 'studentforeignverification' && claim['status'] === 'APPROVED').length.toString(),
+          // approval: "2",
+          claimpending: "34",
+        },
+        {
+          no : "6",
+          type: "Other Certificate",
+          totalclaim:this.claims.filter(claim => claim['entity'] === 'StudentGoodstanding' ).length.toString(),
+          pending: this.claims.filter(claim => claim['entity'] === 'StudentGoodstanding' && claim['status']==='OPEN').length.toString(),
+          rejected:this.claims.filter(claim =>claim['entity'] === 'StudentGoodstanding'&& claim['status'] === 'REJECTED').length.toString(),
+          issue:this.claims.filter(claim =>claim['entity'] === 'StudentGoodstanding' && claim['status'] === 'APPROVED').length.toString(),
+          // approval: "2",
+          claimpending: "34",
+        },
+      ]
+
+      },
+    
+      )
     setTimeout(() => {
       this.isDataLoading = false;
     }, 1000);
@@ -187,73 +281,7 @@ export class DasboardComponent {
         status:"Pending payment"
       }
     ]
-    this.adminData = [
-      {
-        no : "1",
-        type: "All Claim",
-        totalclaim: "87",
-        pending: "87",
-        rejected:"174",
-        payment:"1",
-        issue:"2",
-        approval: "2",
-        claimpending: "34",
-      },
-      {
-        no : "2",
-        type: "UP - Registration - Diploma",
-        totalclaim: "87",
-        pending: "87",
-        rejected:"174",
-        payment:"1",
-        issue:"2",
-        approval: "2",
-        claimpending: "12",
-      },
-      {
-        no : "3",
-        type: "UP - Registration - Degree",
-        totalclaim: "87",
-        pending: "87",
-        rejected:"174",
-        payment:"1",
-        issue:"2",
-        approval: "2",
-        claimpending: "67",
-      },
-      {
-        no : "4",
-        type: "Non UP - Registration",
-        totalclaim: "87",
-        pending: "87",
-        rejected:"174",
-        payment:"1",
-        issue:"2",
-        approval: "2",
-        claimpending: "23",
-      },
-      {
-        no : "5",
-        type: "Foreign Verification Request",
-        totalclaim: "87",
-        pending: "87",
-        rejected:"174",
-        payment:"1",
-        issue:"2",
-        approval: "2",
-        claimpending: "56",
-      },
-      {
-        no : "6",
-        type: "Other Certificate",
-        totalclaim: "87",
-        pending: "87",
-        rejected:"174",
-        payment:"1",
-        issue:"2",
-        approval: "2",
-        claimpending: "12",
-      },]
+    
     }
 
     onClickItem(e: any) {

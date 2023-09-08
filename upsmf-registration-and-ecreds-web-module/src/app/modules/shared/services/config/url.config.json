@@ -6,7 +6,8 @@
             "GET_ALL_CLAIMS": "api/v2/StudentFromUP/claims",
             "GET_ALL_CLAIMS_ADMIN": "api/v1/Regulator/claims",
             "MAKE_CLAIM":"api/v1/send?send=true",
-            "UPLOAD_FILES":"api/v1/StudentFromUP/"
+            "UPLOAD_FILES":"api/v1/StudentFromUP/",
+            "ALL_CLAIMS":"claim-ms/api/v1/all-claims"
         },
         "STUDENT": 
         {
