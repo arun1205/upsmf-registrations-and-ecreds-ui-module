@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './modules/user-authentication/components/login-page/login-page.component';
 import { PaymentSuccessFailureComponent } from './payment-success-failure/payment-success-failure.component';
 import { AuthGuard } from './core/guard/auth.guard';
+import { AdminRegnCertificateDetailsComponent } from './modules/shared/components/admin-regn-certificate-details/admin-regn-certificate-details.component';
+import { AdminGoodStandingForeignVerificationComponent } from './modules/shared/components/admin-good-standing-foreign-verification/admin-good-standing-foreign-verification.component';
 
 
 const routes: Routes = [
@@ -33,7 +35,13 @@ const routes: Routes = [
     data: {
       role: 'Regulator'
     }
-  }
+  },
+  {
+    path:'registration-claim/:id', component: AdminRegnCertificateDetailsComponent
+  },
+  {
+    path:'goodStanding-foreign-claim/:id', component: AdminGoodStandingForeignVerificationComponent
+  },
   
 ];
 

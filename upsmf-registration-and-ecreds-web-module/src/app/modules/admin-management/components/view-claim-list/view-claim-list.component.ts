@@ -271,19 +271,19 @@ export class ViewClaimListComponent {
     let id = parseInt(value?.id)
     //this.router.navigate(['/:'+id], {state: {data: e}});
     if(this.stateData?.type==="regnCertfromUP" ){
-      this.router.navigate(['/claims', value.id], { state: { body: value } });
+      this.router.navigate(['/registration-claim', value.id], { state: { body: value } });
       // this.router.navigate(['/claims/gdfrgn', e.id], { state: { data: e } });
 
 
       }
       else if(this.stateData?.type==="regnCertoutsideUP"){
-        this.router.navigate(['/claims', value.id], { state: { body: value } });
+        this.router.navigate(['/registration-claim', value.id], { state: { body: value } });
       }
     else if(this.stateData?.type==="ForeignVerifyReq"){
-      this.router.navigate(['/claims/foreign-goodstanding', value.id], { state: { body:value } });
+      this.router.navigate(['/goodStanding-foreign-claim', value.id], { state: { body:value } });
     }
     else{
-      this.router.navigate(['/claims/foreign-goodstanding', value.id], { state: { body:value } });
+      this.router.navigate(['/goodStanding-foreign-claim', value.id], { state: { body:value } });
 
     }
     // this.router.navigate(['/claims', e.id], { state: { data: e } });

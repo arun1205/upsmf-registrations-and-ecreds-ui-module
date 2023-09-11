@@ -95,7 +95,7 @@ export class GoodStandingForeignVerificationComponent {
     this.entity= this.stateData.body.entity
     console.log("entity",this.entity)
     if(this.entity==="StudentGoodstanding" && this.userEmail==="Regulator"){
-      this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
+      this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
       .subscribe(
         (response: any) => {
           console.log("data",response)
@@ -209,7 +209,7 @@ export class GoodStandingForeignVerificationComponent {
     this.entity= this.stateData.body.entity
     console.log("entity",this.entity)
     if(this.entity==="StudentForeignVerification" && this.userEmail==="Regulator"){
-      this.baseService.getCandidatePersonalDetailsRegulator$(this.osid)
+      this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
       .subscribe(
         (response: any) => {
           console.log("data",response)

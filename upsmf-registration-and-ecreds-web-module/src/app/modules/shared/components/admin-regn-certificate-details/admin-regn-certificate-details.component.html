@@ -1,0 +1,617 @@
+<app-header></app-header>
+<!-- <app-breadcrumb [breadcrumbItems]="breadcrumbItems"></app-breadcrumb> -->
+
+<div class="full-container">
+    <div class="certificate-container">
+        <div class="certificate-header">
+            <h2>
+                <ng-container [ngSwitch]="stateData.entity">
+                    <ng-container *ngSwitchCase="'StudentFromUP'">
+                        <ng-conntainer [ngSwitch]="stateData.status">
+                            <ng-container *ngSwitchCase="'OPEN'">
+                                Pending Registration Certificate (From UP)
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'APPROVED'">
+                                Approved Registration Certificate (From UP)
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'REJECTED'">
+                                Pending Registration Certificate (From UP)
+                            </ng-container>
+                        </ng-conntainer>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'StudentOutsideUP'">
+                        <ng-conntainer [ngSwitch]="stateData.status">
+                            <ng-container *ngSwitchCase="'OPEN'">
+                                Pending Registration Certificate (Outside UP)
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'APPROVED'">
+                                Approved Registration Certificate (Outside UP)
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'REJECTED'">
+                                Pending Registration Certificate (Outside UP)
+                            </ng-container>
+                        </ng-conntainer>
+                    </ng-container>
+                </ng-container>
+
+            </h2>
+        </div>
+
+
+        <div class="certificate-details">
+            <mat-drawer-container>
+                <mat-drawer #drawer class="drawer" mode="side" opened="true">
+                    <mat-nav-list>
+                        <mat-list-item *ngFor="let link of links" [activated]="link.isActive"
+                            [ngClass]="{ 'active-link': selectedLink === link }">
+
+                            <span (click)="showInfo(link)">
+                                <a routerLinkActive="active-list-item">{{ link }}</a>
+                            </span>
+                        </mat-list-item>
+                    </mat-nav-list>
+                </mat-drawer>
+
+                <div class="content">
+                    <ng-template #notPayment>
+                        <div class="content-details" id="form">
+
+                            <form #form1 id="form1" [formGroup]="newRegCertDetailsformGroup" *ngIf="candidateDetails"
+                                (ngSubmit)="newRegCertDetailsformGroupSubmit(newRegCertDetailsformGroup.value)">
+                                <div class="status-bar" *ngIf="this.stateData?.status">
+                                    <div class="status-data" [ngClass]="getStatusColorClass(this.stateData?.status)">
+                                        <h3 class="status">STATUS : {{this.stateData?.status}}</h3>
+                                    </div>
+                                    <div class="status-reason" *ngIf="this.stateData?.status === 'REJECTED'">
+                                        <h3>{{this.stateData?.status}}</h3>
+                                    </div>
+                                </div>
+                                <div class="full-details">
+                                    <div class="applicant-details">
+                                        <h4>{{labels.applicantName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Applicant Name" formControlName="applicantName"
+                                                [disabled]="isInactive">
+                                            <mat-error
+                                                *ngIf="newRegCertDetailsformGroup.controls['applicantName'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>{{labels.mobNumber}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Mobile Number" formControlName="mobNumber">
+                                            <mat-error *ngIf="newRegCertDetailsformGroup.controls['mobNumber'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                        <!-- </div> -->
+                                        <div>
+                                            <div>
+                                                <h4>{{labels.email}} </h4>
+                                                <mat-form-field appearance="outline">
+                                                    <input matInput placeholder="Email ID" formControlName="email">
+                                                    <mat-error
+                                                        *ngIf="newRegCertDetailsformGroup.controls['email'].invalid">
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+
+                                        </div>
+                                        <mat-hint>Type in Name, mobile number and email ID</mat-hint>
+                                        <mat-divider>
+
+                                        </mat-divider>
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>{{labels.fatherName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Father's Name" formControlName="fatherName">
+                                            <mat-error
+                                                *ngIf="newRegCertDetailsformGroup.controls['fatherName'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+
+
+                                        <div>
+                                            <h4>{{labels.motherName}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Mother's Name"
+                                                    formControlName="motherName">
+                                                <mat-error
+                                                    *ngIf="newRegCertDetailsformGroup.controls['motherName'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>{{labels.dob}}</h4>
+                                        <mat-form-field appearance="outline">
+
+                                            <mat-label>Choose a date</mat-label>
+                                            <input matInput [matDatepicker]="picker" formControlName="dob">
+                                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+                                        <div>
+                                            <h4>{{labels.credType}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <!-- <input matInput placeholder="State" formControlName="state"> -->
+                                                <mat-select (selectionChange)="credTypeSelected($event)"
+                                                    formControlName="credType">
+                                                    <span *ngFor='let cred of credTypeList;let i = index'>
+                                                        <mat-option [value]="cred">{{cred}}</mat-option>
+                                                    </span>
+                                                </mat-select>
+                                                <mat-error
+                                                    *ngIf="newRegCertDetailsformGroup.controls['credType'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <!-- </div> -->
+                                        <div
+                                            [ngClass]="{ 'invalid-field': submitted && newRegCertDetailsformGroup.controls['gender'].errors }">
+                                            <!-- <div class=" mt3 "> -->
+                                            <h4>{{labels.gender}} </h4>
+                                            <mat-radio-group color="primary" formControlName="gender">
+                                                <span *ngFor='let origin of genderTypesArray;let i = index'>
+                                                    <mat-radio-button [value]="origin">{{origin}}</mat-radio-button>
+                                                </span>
+
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+
+                                    <div class="place-details">
+                                        <!-- <div class=" flex flex-column mr2"> -->
+                                        <div class="address-details">
+                                            <h4>{{labels.al1}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Address Line 1" formControlName="al1">
+                                                <mat-error *ngIf="newRegCertDetailsformGroup.controls['al1'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class=" flex flex-column ml4 mt3"> -->
+                                        <div class="address-details">
+                                            <h4>{{labels.al2}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Address Line 2" formControlName="al2">
+                                                <mat-error *ngIf="newRegCertDetailsformGroup.controls['al2'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <!-- </div> -->
+                                    </div>
+                                    <div class="place-details">
+                                        <div class="address-details">
+                                            <h4>{{labels.district}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="District" formControlName="district">
+                                                <mat-error
+                                                    *ngIf="newRegCertDetailsformGroup.controls['district'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+
+                                        <div class="address-details">
+                                            <h4>{{labels.state}} </h4>
+                                            <mat-form-field appearance="outline">
+                                                <!-- <input matInput placeholder="State" formControlName="state"> -->
+                                                <mat-select (selectionChange)="stateTypeSelected($event)"
+                                                    formControlName="state">
+                                                    <span *ngFor='let state of stateList;let i = index'>
+                                                        <mat-option [value]="state">{{state}}</mat-option>
+                                                    </span>
+                                                </mat-select>
+                                                <mat-error *ngIf="newRegCertDetailsformGroup.controls['state'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <!-- <div class="address-details">
+                                                    <h4>Credentials Type </h4>
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-select (selectionChange)="credTypeSelected($event)" formControlName="credType">
+                                                            <span *ngFor='let cred of credTypeList;let i = index'>
+                                                                <mat-option [value]="cred">{{cred}}</mat-option>
+                                                            </span>
+                                                          </mat-select>
+                                                        <mat-error *ngIf="newRegCertDetailsformGroup.controls['credType'].invalid">
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div> -->
+
+                                    </div>
+                                    <div class="place-details">
+                                        <div class="address-details">
+                                            <h4>{{labels.pin}} </h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Pincode" formControlName="pin">
+                                                <mat-error *ngIf="newRegCertDetailsformGroup.controls['pin'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+
+                                        <div class="address-details">
+                                            <h4>{{labels.country}} </h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Country" formControlName="country">
+                                                <mat-error
+                                                    *ngIf="newRegCertDetailsformGroup.controls['country'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="applicant-details">
+                                        <div>
+                                            <h4>{{labels.adhr}} </h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Aadhar Number" formControlName="adhr">
+                                                <mat-error *ngIf="newRegCertDetailsformGroup.controls['adhr'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <!-- </div> -->
+                                        <h4>{{labels.attach}}</h4>
+
+                                        <div class="upload-column">
+                                            <!-- <div class="flex flex-column mt1"> -->
+                                            <!-- </div> -->
+                                            <!-- <div class="ml4 flex flex-column right"> -->
+                                            <label for="fileUpload1" class="custom-file-upload"
+                                                [class.disabled]="isInactive">
+                                                <a mat-button color="primary">+ Add
+                                                    attachment(s) </a>
+                                            </label>
+                                            <mat-hint>docx /pdf files accepted</mat-hint>
+                                            <input id="fileUpload1" type="file" style="display: none"
+                                                enctype="multipart/form-data" (change)="onFileChanged($event)"
+                                                multiple="true" accept=".pdf,.docx" [disabled]="isInactive" />
+                                            <!-- </div> -->
+
+
+                                            <!-- <div class="flex flex-row  ml4 mt1">
+                                                <div class="flex flex-column mt1"> -->
+
+
+                                            <div *ngFor="let selected of listOfFiles; let index = index">
+
+                                                <mat-list>
+                                                    <mat-list-item (click)="navigateToUrl(selected.url)">{{
+                                                        selected.name }} <mat-icon class="mt2 ml4"
+                                                            (click)="removeSelectedFile(index)">delete</mat-icon></mat-list-item>
+                                                    <mat-divider></mat-divider>
+
+                                                </mat-list>
+
+                                            </div>
+
+                                            <!-- </div> -->
+
+                                        </div>
+                                    </div>
+                                    <div class="buttons">
+                                        <div class="button-group">
+                                            <button type="button" class="button" mat-raised-button color="primary"
+                                                (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
+                                        </div>
+
+
+                                        <div class="button-group">
+                                            <button type="button" class="button" mat-stroked-button color="primary"
+                                                (click)="onReset()">Cancel</button>
+                                            <button class="button" mat-raised-button color="primary"><mat-icon
+                                                    matSuffix>arrow_right_alt</mat-icon>{{buttonText}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+
+
+                            <form #form2 id="form2" [formGroup]="newRegCourseDetailsformGroup" *ngIf="!candidateDetails"
+                                (ngSubmit)="onNewRegCourseDetailsformSubmit(newRegCourseDetailsformGroup.value)">
+                                <div class="full-details">
+
+                                    <div class="applicant-details slc">
+                                        <h4>{{labels.requestType}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Request Type</mat-label>
+                                            <mat-select (selectionChange)="requestTypeSelected($event)"
+                                                formControlName="requestType">
+                                                <span *ngFor='let requesttype of requestTypesArray;let i = index'>
+                                                    <mat-option [value]="requesttype">{{requesttype}}</mat-option>
+                                                </span>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="applicant-details">
+                                        <h4>{{labels.courseName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Course Name</mat-label>
+                                            <mat-select (selectionChange)="requestTypeSelected($event)"
+                                                formControlName="courseName">
+                                                <span *ngFor='let course of courseList;let i = index'>
+                                                    <mat-option [value]="course">{{course}}</mat-option>
+                                                </span>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <!-- <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Course Name" formControlName="courseName">
+                                            
+                                            </mat-form-field> -->
+                                    </div>
+
+                                    <div class="applicant-details">
+                                        <h4>{{labels.collegeName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="College Name" formControlName="collegeName">
+
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="applicant-details">
+                                        <h4>{{labels.university}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="College Name" formControlName="university">
+
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="applicant-details">
+                                        <h4>{{labels.examBody}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Examination Body" formControlName="examBody">
+
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="applicant-details">
+                                        <h4>{{labels.rollNum}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Final year roll number"
+                                                formControlName="rollNum">
+
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="applicant-details">
+                                        <h4>{{labels.diplomaNumber}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="diploma number"
+                                                formControlName="diplomaNumber">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="applicant-details">
+                                        <h4>{{labels.joinDate}}</h4>
+                                        <mat-form-field appearance="outline">
+
+                                            <mat-label>Choose a date</mat-label>
+                                            <input matInput [matDatepicker]="pickerjoindate" formControlName="joinDate"
+                                                (click)="onDateChange($event)">
+                                            <mat-datepicker-toggle matIconSuffix
+                                                [for]="pickerjoindate"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerjoindate></mat-datepicker>
+                                        </mat-form-field>
+
+                                    </div>
+
+                                    <div class="applicant-details">
+                                        <h4>{{labels.passDate}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Choose a date</mat-label>
+                                            <input matInput [matDatepicker]="pickerpassingDate"
+                                                formControlName="passDate"
+                                                [min]="newRegCourseDetailsformGroup.controls['joinDate'].value">
+                                            <mat-datepicker-toggle matIconSuffix
+                                                [for]="pickerpassingDate"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerpassingDate></mat-datepicker>
+
+                                        </mat-form-field>
+
+                                    </div>
+                                    <div class="applicant-details">
+                                        <h4>{{labels.attach}}</h4>
+                                        <div class="upload-column">
+                                            <!-- <div class="flex flex-column mt1"> -->
+                                            <!-- </div> -->
+                                            <!-- <div class="ml4 flex flex-column right"> -->
+                                            <label for="file-upload2" class="custom-file-upload">
+                                                <a mat-button color="primary">+ Add
+                                                    attachment(s) </a>
+                                            </label>
+                                            <mat-hint>docx /pdf files accepted</mat-hint>
+                                            <input id="file-upload2" type="file" style="display: none"
+                                                (change)="onCourseFileChanged($event)" multiple="true"
+                                                enctype="multipart/form-data" accept=".pdf,.docx"
+                                                [disabled]="isInactive" />
+                                            <!-- </div> -->
+
+
+                                            <!-- <div class="flex flex-row  ml4 mt1">
+                                                <div class="flex flex-column mt1"> -->
+
+
+                                            <div *ngFor="let selected of listOfFiles; let index = index">
+
+                                                <mat-list>
+                                                    <mat-list-item>{{ selected?.name }} <mat-icon class="mt2 ml4"
+                                                            (click)="removeSelectedFile(index)">delete</mat-icon></mat-list-item>
+                                                    <mat-divider></mat-divider>
+
+                                                </mat-list>
+
+                                            </div>
+
+                                            <!-- </div> -->
+
+                                        </div>
+                                    </div>
+                                    <div *ngIf="this.userRole === 'StudentOutsideUP'">
+                                        <h3>Note: Fill the details in this section as you already registered with any
+                                            other State Medical Council</h3>
+                                        <div class="applicant-details">
+                                            <h4>State</h4>
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>select state</mat-label>
+                                                <!-- <input matInput placeholder="State" formControlName="state"> -->
+                                                <mat-select (selectionChange)="stateTypeSelected($event)"
+                                                    formControlName="stateName">
+                                                    <span *ngFor='let state of stateList;let i = index'>
+                                                        <mat-option [value]="state">{{state}}</mat-option>
+                                                    </span>
+                                                </mat-select>
+                                                <!-- <mat-error *ngIf="newRegCertDetailsformGroup.controls['state'].invalid">
+                                                                                                                                </mat-error> -->
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="applicant-details">
+                                            <h4>Council</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Council" formControlName="newCouncil">
+
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="applicant-details">
+                                            <h4>Registration Number</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Registration Number"
+                                                    formControlName="otherRegnNo">
+
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="applicant-details">
+                                            <h4>Date</h4>
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Choose a date</mat-label>
+                                                <input matInput formControlName="date">
+                                                <mat-datepicker #pickerpassingDate></mat-datepicker>
+
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="buttons">
+                                            <div class="button-group">
+                                                <button type="button"  mat-raised-button  color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
+                                            </div>
+                                            
+                            
+                                            <div class="button-group">
+                                                <button type="button"   mat-stroked-button color="primary" (click)="onReset()">Cancel</button>
+                                                <button  class="button" mat-raised-button color="primary" (click)="onSubmit(newRegCourseDetailsformGroup)"><mat-icon matSuffix>arrow_right_alt</mat-icon>Next</button>
+                                            </div>
+                                        </div> -->
+                                    <div class="buttons">
+                                        <div class="button-group">
+                                            <button type="button" class="button" mat-raised-button color="primary"
+                                                (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
+                                        </div>
+                                        <div class="button-group" *ngIf="this.stateData?.status==='APPROVED'">
+                                            <button type="button" class="button" mat-raised-button color="primary"
+                                                (click)="navToPreviousPage()">Back to list</button>
+
+                                        </div>
+
+                                        <div class="button-group" *ngIf="this.stateData?.status==='OPEN'">
+                                            <button type="button" class="button" mat-stroked-button color="primary"
+                                                (click)="onReset()"> {{ ( this.entity==="StudentFromUP" ) ? 'Reject'
+                                                :'Download Letter to EC' }}<mat-icon>{{ this.entity==="StudentFromUP" ?
+                                                    'close' : '' }}</mat-icon></button>
+                                            <!-- <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset(entity)">
+                                                    <ng-container [ngSwitch]="userEmail">
+                                                        <ng-container *ngSwitchCase="'Regulator'">
+                                                            <ng-container [ngSwitch]="entity">
+                                                                <ng-container *ngSwitchCase="'StudentFromUP'">
+                                                                    Reject
+                                                                    <mat-icon >close</mat-icon> 
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchCase="'StudentOutsideUP'">
+                                                                    Download Letter to EC
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchDefault>
+                                                                    Cancel
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                      <ng-container *ngSwitchDefault>
+                                                        Cancel
+                                                        <mat-icon></mat-icon>
+                                                      </ng-container>
+                                                    </ng-container>
+                                                  </button> -->
+                                            <button class="button" mat-raised-button color="primary">{{ (
+                                                this.entity==="StudentFromUP") ? 'Approve' :'Sent Email to EC'
+                                                }}<mat-icon>{{ this.entity==="StudentFromUP" ? 'check' : ''
+                                                    }}</mat-icon><mat-icon></mat-icon></button>
+                                            <!-- <button class="button" mat-raised-button color="primary">
+                                                    <ng-container [ngSwitch]="userEmail">
+                                                        <ng-container *ngSwitchCase="'Regulator'">
+                                                            <ng-container [ngSwitch]="entity">
+                                                                <ng-container *ngSwitchCase="'StudentFromUP'">
+                                                                    Approve
+                                                                    <mat-icon>check</mat-icon>
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchCase="'StudentOutsideUP'">
+                                                                    Sent Email to EC
+                                                                </ng-container>
+                                                
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </button> -->
+
+
+
+
+
+
+                                        </div>
+                                        <!-- <div class="button-group" *ngIf="!isStudent">
+                                                <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset()"><mat-icon>close</mat-icon>Reject</button>
+                                                <button  class="button" mat-raised-button color="primary" ><mat-icon>check</mat-icon>
+                                                    Approve</button>
+                                            </div> -->
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </ng-template>
+
+
+                    <div class="payment-details" *ngIf="paymentDetails; else notPayment">
+
+
+                    </div>
+                </div>
+
+            </mat-drawer-container>
+            <!-- <div class="ml4 flex flex-row left mt2">
+                <div class="button-group ml4">
+                    <button mat-stroked-button color="primary" class="ml4">Previous</button>
+                </div>
+                </div>
+
+            <div class="ml4 flex flex-column right mt2">
+            <div class="button-group ">
+                <button mat-stroked-button color="primary" class="ml2">Cancel</button>
+                <button mat-stroked-button color="primary" class="ml2">Next</button>
+            </div>
+            </div> -->
+        </div>
+    </div>
+</div>

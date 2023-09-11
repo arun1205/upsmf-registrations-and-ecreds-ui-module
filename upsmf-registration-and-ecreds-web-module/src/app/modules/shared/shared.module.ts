@@ -10,6 +10,8 @@ import { ConfigService } from './services/config/config.service';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
 import { ConfirmationPopupComponent } from './components/confirmation-popup/confirmation-popup.component';
+import { AdminRegnCertificateDetailsComponent } from './components/admin-regn-certificate-details/admin-regn-certificate-details.component';
+import { AdminGoodStandingForeignVerificationComponent } from './components/admin-good-standing-foreign-verification/admin-good-standing-foreign-verification.component';
 @NgModule({
   declarations: [
     SharedTableComponent,
@@ -17,7 +19,9 @@ import { ConfirmationPopupComponent } from './components/confirmation-popup/conf
     SharedSkeletonLoadingComponent,
     BreadcrumbComponent,
     DialogBoxComponent,
-    ConfirmationPopupComponent
+    ConfirmationPopupComponent,
+    AdminRegnCertificateDetailsComponent,
+    AdminGoodStandingForeignVerificationComponent,
    
   ],
   imports: [

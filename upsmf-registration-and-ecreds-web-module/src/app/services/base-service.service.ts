@@ -81,9 +81,9 @@ export class BaseServiceService  extends HttpService   {
        return this.get(reqParam);
      
      }
-     getCandidatePersonalDetailsRegulator$(osid:string){
+     getCandidatePersonalDetailsRegulator$(entity:string,osid:string){
       const reqParam: RequestParam = {
-        url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_REGULATOR + osid, 
+        url: this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_REGULATOR + entity +"/"+ osid, 
         header: this.headers
        }
        return this.get(reqParam); 
