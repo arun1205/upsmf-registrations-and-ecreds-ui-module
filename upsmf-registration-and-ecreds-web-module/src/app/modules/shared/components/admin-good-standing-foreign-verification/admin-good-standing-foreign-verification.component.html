@@ -1,0 +1,313 @@
+<app-header></app-header>
+<div class="full-container">
+    <div class="certificate-container">
+
+        <div class="certificate-header">
+            <h2>
+                <ng-container [ngSwitch]="stateData.body.entity">
+                    <ng-container *ngSwitchCase="'StudentGoodstanding'">
+                        <ng-conntainer [ngSwitch]="stateData.body.status">
+                            <ng-container *ngSwitchCase="'OPEN'">
+                                Pending Good Standing Request
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'APPROVED'">
+                                Approved Good Standing Request
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'REJECTED'">
+                                Pending Good Standing Request
+                            </ng-container>
+                        </ng-conntainer>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'StudentForeignVerification'">
+                        <ng-conntainer [ngSwitch]="stateData.body.status">
+                            <ng-container *ngSwitchCase="'OPEN'">
+                                Pending Foreign Verification Request
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'APPROVED'">
+                                Approved Foreign Verification Request
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'REJECTED'">
+                                Pending Foreign Verification Request
+                            </ng-container>
+                        </ng-conntainer>
+                    </ng-container>
+                </ng-container>
+
+            </h2>
+        </div>
+
+        <div class="certificate-details">
+            <mat-drawer-container>
+                <mat-drawer #drawer class="drawer" mode="side" opened="true">
+                    <mat-nav-list>
+                        <mat-list-item *ngFor="let link of links" [activated]="link.isActive">
+                            <span (click)="showInfo(link)">
+                                <a routerLinkActive="active-list-item">{{ link }}</a>
+                            </span>
+                        </mat-list-item>
+                    </mat-nav-list>
+                </mat-drawer>
+                <div class="content">
+                    <ng-template #notPayment>
+                        <div id="good-foreign-content">
+                            <form *ngIf="candidateDetails " [formGroup]="goodStandingForeignVerificationformGroup"
+                                (ngSubmit)="onGoodStandingForeignVerificationformSubmit(goodStandingForeignVerificationformGroup.value)">
+                                <div class="status-bar" *ngIf="this.stateData.body.status">
+                                    <div class="status-data"
+                                        [ngClass]="getStatusColorClass(this.stateData.body.status)">
+                                        <h3 class="status">STATUS : {{this.stateData.body.status}}</h3>
+                                    </div>
+                                    <div class="status-reason" *ngIf="this.stateData.body.status === 'REJECTED'">
+                                        <h3>{{this.stateData.body.status}}</h3>
+                                    </div>
+                                </div>
+                                <div class="full-details">
+                                    <div class="applicant-details">
+                                        <h4>{{labels.maidenName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Maiden Name" formControlName="maidenName">
+                                            <mat-error
+                                                *ngIf="goodStandingForeignVerificationformGroup.controls['maidenName'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>{{labels.mrdName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Married Name" formControlName="mrdName">
+                                            <mat-error
+                                                *ngIf="goodStandingForeignVerificationformGroup.controls['mrdName'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>{{labels.fatherName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Father's Name" formControlName="fatherName">
+                                            <mat-error
+                                                *ngIf="goodStandingForeignVerificationformGroup.controls['fatherName'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>{{labels.dob}} </h4>
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Choose a date</mat-label>
+                                            <input matInput [matDatepicker]="picker" formControlName="dob">
+                                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="place-details">
+                                        <div class="address-details">
+                                            <!-- <div class=" mt3 "> -->
+                                            <h4>{{labels.al1}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Address Line 1" formControlName="al1">
+                                                <mat-error
+                                                    *ngIf="goodStandingForeignVerificationformGroup.controls['al1'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div class="address-details">
+                                            <!-- <div> -->
+                                            <h4>{{labels.al2}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Address Line 2" formControlName="al2">
+                                                <mat-error
+                                                    *ngIf="goodStandingForeignVerificationformGroup.controls['al2'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                            <!-- </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="place-details">
+                                        <div class="address-details">
+                                            <!-- <div> -->
+                                            <h4>{{labels.district}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="District" formControlName="district">
+                                                <mat-error
+                                                    *ngIf="goodStandingForeignVerificationformGroup.controls['district'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div class="address-details">
+                                            <!-- <div> -->
+                                            <h4>{{labels.state}} </h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="State" formControlName="state">
+                                                <mat-error
+                                                    *ngIf="goodStandingForeignVerificationformGroup.controls['state'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                            <!-- </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="place-details">
+                                        <div class="address-details">
+                                            <!-- <div> -->
+                                            <h4>{{labels.pin}} </h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Pincode" formControlName="pin">
+                                                <mat-error
+                                                    *ngIf="goodStandingForeignVerificationformGroup.controls['pin'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div class="address-details">
+                                            <!-- <div> -->
+                                            <h4>{{labels.country}} </h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Country" formControlName="country">
+                                                <mat-error
+                                                    *ngIf="goodStandingForeignVerificationformGroup.controls['country'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                            <!-- </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="applicant-details">
+                                        <h4>{{labels.mobNumber}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Mobile Number" formControlName="mobNumber">
+                                            <mat-error
+                                                *ngIf="goodStandingForeignVerificationformGroup.controls['mobNumber'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+                                        <!-- <div class="applicant-details"> -->
+                                        <div>
+                                            <h4>{{labels.email}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Email ID" formControlName="email">
+                                                <mat-error
+                                                    *ngIf="goodStandingForeignVerificationformGroup.controls['email'].invalid">
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <!-- <div class=" mt3 "> -->
+                                        <h4>{{labels.proQual}}</h4>
+                                        <mat-radio-group color="primary" formControlName="proQual">
+                                            <span *ngFor='let qual of profQualificationArray;let i = index'>
+                                                <mat-radio-button [value]="qual">{{qual}}</mat-radio-button>
+                                            </span>
+                                        </mat-radio-group>
+                                        <mat-error
+                                            *ngIf="submitted && goodStandingForeignVerificationformGroup.controls['proQual'].errors?.['required']">
+                                        </mat-error>
+                                        <!-- </div> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="ml4 flex flex-column mt3"> -->
+                                        <h4>{{labels.tcName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder=" Name of Training Centre"
+                                                formControlName="tcName">
+                                            <mat-error
+                                                *ngIf="goodStandingForeignVerificationformGroup.controls['tcName'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>{{labels.regnNum}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Registration Number" formControlName="regnNum">
+                                            <mat-error
+                                                *ngIf="goodStandingForeignVerificationformGroup.controls['regnNum'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+                                        <!-- <div class="ml4 flex flex-column"> -->
+                                        <h4>{{labels.placeOfWork}}</h4>
+                                        <mat-form-field appearance="outline" class="work-details">
+                                            <textarea matInput placeholder="Place Of Work"
+                                                formControlName="placeOfWork"></textarea>
+                                            <mat-error
+                                                *ngIf="goodStandingForeignVerificationformGroup.controls['placeOfWork'].invalid">
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <!-- </div> -->
+                                        <h4>Attach file(s)</h4>
+
+                                        <div class="upload-column">
+                                            <!-- <div class="flex flex-column mt1"> -->
+                                            <!-- </div> -->
+                                            <!-- <div class="ml4 flex flex-column right"> -->
+                                            <label for="fileUpload1" class="custom-file-upload"
+                                                [class.disabled]="isInactive">
+                                                <!-- <a mat-button color="primary">+ Add 
+                                                                attachment(s) </a> -->
+                                            </label>
+                                            <mat-hint>docx /pdf files accepted</mat-hint>
+                                            <input id="fileUpload1" type="file" style="display: none"
+                                                enctype="multipart/form-data" (change)="onFileChanged($event)"
+                                                multiple="true" accept=".pdf,.docx" [disabled]="isInactive" />
+                                            <!-- </div> -->
+
+
+                                            <!-- <div class="flex flex-row  ml4 mt1">
+                                                        <div class="flex flex-column mt1"> -->
+
+
+                                            <div *ngFor="let selected of listOfFiles; let index = index">
+
+                                                <mat-list>
+                                                    <mat-list-item (click)="navigateToUrl(selected.url)">{{
+                                                        selected.name }} <mat-icon class="mt2 ml4"
+                                                            (click)="removeSelectedFile(index)">delete</mat-icon></mat-list-item>
+                                                    <mat-divider></mat-divider>
+
+                                                </mat-list>
+
+                                            </div>
+
+                                            <!-- </div> -->
+
+                                        </div>
+                                    </div>
+                                    <div class="buttons">
+                                        <div class="button-group">
+                                            <button class="button" mat-raised-button
+                                                color="primary"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
+                                        </div>
+                                        <div class="button-group" *ngIf="!this.stateData.body.status==='OPEN'">
+                                            <button class="button" mat-raised-button
+                                                color="primary"><mat-icon>keyboard_backspace</mat-icon>Back to
+                                                list</button>
+
+                                        </div>
+
+
+                                        <div class="button-group" *ngIf="this.stateData.body.status==='OPEN'">
+                                            <button type="button" class="button" mat-stroked-button color="primary"
+                                                (click)="onReset()">Download Letter to EC</button>
+                                            <button class="button" mat-raised-button color="primary">Sent Email to
+                                                EC</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </ng-template>
+                    <div class="payment-details" *ngIf="paymentDetails;else notPayment">
+
+
+
+                    </div>
+
+                </div>
+            </mat-drawer-container>
+            <!--     <div class="ml4 flex flex-row left mt2">
+                <div class="button-group ml4">
+                    <button mat-stroked-button color="primary" class="ml4">Previous</button>
+                </div>
+            </div> -->
+
+            <br /> <br /> <br /> <br /> <br />
+        </div>
+    </div>

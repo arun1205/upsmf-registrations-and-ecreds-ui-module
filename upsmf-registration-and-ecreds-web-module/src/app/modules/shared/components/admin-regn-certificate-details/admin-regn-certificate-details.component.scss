@@ -1,0 +1,155 @@
+.full-container{
+    width:100%;
+    height:fit-content;
+    background-color:#F0F3F4;
+  }
+  .certificate-container{
+    padding: 4rem;
+    margin-left: 4rem;
+  }
+  .certificate-header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+  .edit-btn{
+    height: 3rem;
+    width: 6rem;
+  }
+  mat-drawer{
+    background-color:#F0F3F4 ;
+  }
+  
+  .content{
+    border-radius: 4px;
+    height  : fit-content;
+    background-color: #F0F3F4;
+  
+    
+  }
+  
+  
+  .applicant-details{
+    margin-left: 2rem;
+  }
+  .slc {
+    width: 20% !important;
+  }
+  h4{
+    font-weight:500;
+    margin-top: 1rem;
+  }
+  mat-form-field{
+    width:20rem;
+  }
+  .place-details{
+    display: flex;
+    flex-direction: row;
+    margin-left: 2rem;
+  }
+  .address-details{
+    margin-right: 2rem;
+    
+  }
+  .upload-column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 43rem;
+    height: 20rem;
+    border: 1px solid rgba(0,0,0,.36);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+  }
+  .buttons{
+    display: flex;
+    justify-content: space-between;
+    background-color: #F0F3F4;
+    height: 4rem;
+    padding-top: 2rem;
+  }
+  .button{
+    padding:1.5rem;
+    margin-left: 1.5rem;
+  }
+  .payment-details{
+    display: flex;
+    flex-direction: column;
+   
+  }
+  .user-info{
+    display: flex;
+    flex-direction: row;
+    padding: 2rem ;
+    margin-left: 4rem;
+  }
+  .details{
+    margin-right: 3rem;
+  }
+  .cer-name{
+    padding: 2rem;
+    margin-left: 4rem;
+  }
+  .drawer {
+      min-width: 25%;
+    }
+    .drawer .contents {
+      padding: 16px;
+    }
+    .active-list-item {
+      color: yellow !important; /* Note: You could also use a custom theme */
+    }
+    
+    .active-link {
+      background-color:rgba(201, 197, 197, 0.305);
+     
+      /* Add more styles as needed */
+    }
+  .status-bar{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background-color: #fafafa;
+  }
+  .full-details{
+    background-color: #fafafa;
+  }
+  
+  
+    .status{
+      margin: 0.5rem;
+    }
+    .status-reason{
+      margin: 0.5rem;
+      color: grey;
+    }
+    
+    .status-data{
+    width:61rem;
+    align-items:center;
+    border-radius:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top: 2rem;
+    border: 1px solid grey;
+  
+    
+    }
+    .open {
+      color: orange;
+    }
+    
+    .closed {
+      color: green;
+    }
+    
+    .rejected {
+      color: red;
+    }
+    .mat-icon{
+      height: 21px;
+    }
+    

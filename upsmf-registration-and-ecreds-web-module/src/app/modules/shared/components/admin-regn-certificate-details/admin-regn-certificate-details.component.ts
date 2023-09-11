@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, Location } from '@angular/common';
 import { BaseServiceService } from 'src/app/services/base-service.service';
@@ -16,14 +16,13 @@ import * as QRCode from 'qrcode';
 
 
 @Component({
-  selector: 'app-new-regn-cert-details',
-  templateUrl: './new-regn-cert-details.component.html',
-  styleUrls: ['./new-regn-cert-details.component.scss']
+  selector: 'app-admin-regn-certificate-details',
+  templateUrl: './admin-regn-certificate-details.component.html',
+  styleUrls: ['./admin-regn-certificate-details.component.scss']
 })
-export class NewRegnCertDetailsComponent {
-
+export class AdminRegnCertificateDetailsComponent {
   labels = applabels;
-  links = ['Candidate Details', 'Course Details', 'Payment Details']
+  links = ['Candidate Details', 'Course Details']
 
   logo = '../../../../../assets/images/sunbird_logo.png';
   internalLogo = '../../../../../assets/images/up_smf_logo-24_x_24.png'; 
@@ -52,11 +51,13 @@ export class NewRegnCertDetailsComponent {
   docsResponseUrl: string;
   convertUrlList: string;
   getMakeClaimbody: any;
+  isInactive = true;
 
-  breadcrumbItems: BreadcrumbItem[] = [
-    { label: 'Claim Registration Certificate', url: '/claims/new' },
-    { label: 'Claim Details', url: '/claims/new-regn-cert' }
-  ];
+  // breadcrumbItems: BreadcrumbItem[] = [
+  //   { label: 'Workspace', url: '/admin' },
+  //   { label: 'Claim Manage', url: '/admin/manage-claim' },
+  //   { label: 'Claim Certificate', url: '/admin/view-claim' },
+  // ];
 
   osid: string;
   entity: string;
@@ -95,7 +96,8 @@ export class NewRegnCertDetailsComponent {
   requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
 
 
-  constructor(private formBuilder: FormBuilder, private datePipe: DatePipe,
+  constructor(private formBuilder: FormBuilder,
+    //  private datePipe: DatePipe,
     private location: Location, private baseService: BaseServiceService,
     private router: Router,
     private configService: ConfigService,
@@ -104,18 +106,12 @@ export class NewRegnCertDetailsComponent {
     public dialog: MatDialog,
   ) {
     this.userEmail = this.baseService.getUserRole()[0]
-    // var token:any
-    //  token =localStorage.getItem('token')
-    //  let tokenId:any = ''
-    //  tokenId = token
-    // console.log('accessTOken',tokenId)
-    // const helper = new JwtHelperService();
-    // const decoded= helper.decodeToken(tokenId);
-    // console.log(decoded)
+ 
     this.stateList = allStateList;
     this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     this.stateData = this.stateData?.body
+    console.log("data",this.stateData)
 
 
   }
@@ -236,21 +232,23 @@ export class NewRegnCertDetailsComponent {
         Validators.required]),
     });
     this.getEndPoint();
+    this.newRegCertDetailsformGroup.disable();
+    this.newRegCourseDetailsformGroup.disable();
     this.getCandidatePersonalDetails();
 
   }
 
   getCandidatePersonalDetails() {
-    this.osid = this.stateData?.id
+    this.osid = this.stateData?.entityId
     this.entity = this.stateData?.entity
     if (this.entity === "StudentFromUP" && this.userEmail === "Regulator") {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
         .subscribe(
           (response: any) => {
-            // if(response.responseData.length){
-            const candidateDetailList = JSON.parse(response.responseData.claim.propertyData)
-            this.osid = response.responseData.claim.osid;
-            this.urlDataResponse = candidateDetailList.docproof;
+
+            console.log("c",response.responseData.courseName)
+            this.osid = response.responseData.osid;
+            this.urlDataResponse = response.responseData.docproof;
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               if (this.urlData.length) {
@@ -272,21 +270,21 @@ export class NewRegnCertDetailsComponent {
 
             // this.listOfFiles = this.candidateDetailList[0].docproof;
             this.newRegCertDetailsformGroup.patchValue({
-              email: candidateDetailList.email,
-              mobNumber: candidateDetailList.phoneNumber,
-              applicantName: candidateDetailList.name,
-              adhr: candidateDetailList.aadhaarNo,
-              motherName: candidateDetailList.mothersName,
-              fatherName: candidateDetailList.fathersName,
-              dob: candidateDetailList.dateOfBirth,
-              gender: candidateDetailList.gender,
-              al1: candidateDetailList.address,
-              al2: candidateDetailList.address,
-              state: candidateDetailList.state,
-              pin: candidateDetailList.pincode,
-              district: candidateDetailList.district,
-              country: candidateDetailList.country,
-              credType: candidateDetailList.credType,
+              email:response.responseData.email,
+              mobNumber: response.responseData.phoneNumber,
+              applicantName: response.responseData.name,
+              adhr: response.responseData.aadhaarNo,
+              motherName: response.responseData.mothersName,
+              fatherName: response.responseData.fathersName,
+              dob: response.responseData.dateOfBirth,
+              gender: response.responseData.gender,
+              al1: response.responseData.address,
+              al2: response.responseData.address,
+              state: response.responseData.state,
+              pin: response.responseData.pincode,
+              district: response.responseData.district,
+              country: response.responseData.country,
+              credType: response.responseData.credType,
 
 
 
@@ -299,20 +297,21 @@ export class NewRegnCertDetailsComponent {
               new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1
 
 
-            const joinM = candidateDetailList.joiningMonth;
+            const joinM = response.responseData.joiningMonth;
             const jm = this.monthMap[joinM]
-            const passM = candidateDetailList.passingMonth;
+            const passM = response.responseData.passingMonth;
             const pm = this.monthMap[joinM]
 
             this.newRegCourseDetailsformGroup.patchValue({
-              courseName: candidateDetailList.courseName,
-              collegeName: candidateDetailList.nursingCollage,
-              examBody: candidateDetailList.examBody,
+              courseName: response.responseData.courseName,
+              collegeName: response.responseData.nursingCollage,
+              examBody: response.responseData.examBody,
+              university:response.responseData.university,
 
-              joinDate: candidateDetailList.joiningYear + "-" + jm + "-01",
-              rollNum: candidateDetailList.finalYearRollNo,
-              passDate: candidateDetailList.passingYear + "-" + pm + "-01",
-              requestType: candidateDetailList.requestType
+              joinDate: response.responseData.joiningYear + "-" + jm + "-01",
+              rollNum: response.responseData.finalYearRollNo,
+              passDate: response.responseData.passingYear + "-" + pm + "-01",
+              requestType: response.responseData.requestType
             });
 
             // }
@@ -327,10 +326,8 @@ export class NewRegnCertDetailsComponent {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
         .subscribe(
           (response: any) => {
-            // if(response.responseData.length){
-            const candidateDetailList = JSON.parse(response.responseData.claim.propertyData)
-            this.osid = response.responseData.claim.osid;
-            this.urlDataResponse = candidateDetailList.docproof;
+            this.osid = response.responseData.osid;
+            this.urlDataResponse = response.responseData.docproof;
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               if (this.urlData.length) {
@@ -350,23 +347,22 @@ export class NewRegnCertDetailsComponent {
 
 
 
-            // this.listOfFiles = this.candidateDetailList[0].docproof;
             this.newRegCertDetailsformGroup.patchValue({
-              email: candidateDetailList.email,
-              mobNumber: candidateDetailList.phoneNumber,
-              applicantName: candidateDetailList.name,
-              adhr: candidateDetailList.aadhaarNo,
-              motherName: candidateDetailList.mothersName,
-              fatherName: candidateDetailList.fathersName,
-              dob: candidateDetailList.dateOfBirth,
-              gender: candidateDetailList.gender,
-              al1: candidateDetailList.address,
-              al2: candidateDetailList.address,
-              state: candidateDetailList.state,
-              pin: candidateDetailList.pincode,
-              district: candidateDetailList.district,
-              country: candidateDetailList.country,
-              credType: candidateDetailList.credType,
+              email: response.responseData.email,
+              mobNumber: response.responseData.phoneNumber,
+              applicantName: response.responseData.name,
+              adhr: response.responseData.aadhaarNo,
+              motherName: response.responseData.mothersName,
+              fatherName: response.responseData.fathersName,
+              dob: response.responseData.dateOfBirth,
+              gender: response.responseData.gender,
+              al1: response.responseData.address,
+              al2: response.responseData.address,
+              state: response.responseData.state,
+              pin: response.responseData.pincode,
+              district: response.responseData.district,
+              country: response.responseData.country,
+              credType: response.responseData.credType,
 
 
 
@@ -379,20 +375,20 @@ export class NewRegnCertDetailsComponent {
               new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1
 
 
-            const joinM = candidateDetailList.joiningMonth;
+            const joinM = response.responseData.joiningMonth;
             const jm = this.monthMap[joinM]
-            const passM = candidateDetailList.passingMonth;
+            const passM = response.responseData.passingMonth;
             const pm = this.monthMap[joinM]
 
             this.newRegCourseDetailsformGroup.patchValue({
-              courseName: candidateDetailList.courseName,
-              collegeName: candidateDetailList.nursingCollage,
-              examBody: candidateDetailList.examBody,
+              courseName: response.responseData.courseName,
+              collegeName: response.responseData.nursingCollage,
+              examBody: response.responseData.examBody,
 
-              joinDate: candidateDetailList.joiningYear + "-" + jm + "-01",
-              rollNum: candidateDetailList.finalYearRollNo,
-              passDate: candidateDetailList.passingYear + "-" + pm + "-01",
-              requestType: candidateDetailList.requestType
+              joinDate: response.responseData.joiningYear + "-" + jm + "-01",
+              rollNum: response.responseData.finalYearRollNo,
+              passDate: response.responseData.passingYear + "-" + pm + "-01",
+              requestType: response.responseData.requestType
             });
 
             console.log(this.newRegCourseDetailsformGroup.value.joinDate)
@@ -604,7 +600,7 @@ export class NewRegnCertDetailsComponent {
         this.convertUrlList = this.urlList.join(',')
         this.updateStudentBody =
         {
-          "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
+          // "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
           "candidatePic": "arun.jpg",
           "joiningYear": joinYear.toString(),
           "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
@@ -622,7 +618,7 @@ export class NewRegnCertDetailsComponent {
           "paymentStatus": "SUCCESS",
           "feeReciptNo": "12345678",
           "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
-          "dateOfBirth": this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString(),
+          // "dateOfBirth": this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString(),
           "barCode": "123457",
           "nursingCollage": value.collegeName,
           "passingYear": passYear.toString(),
@@ -776,16 +772,12 @@ export class NewRegnCertDetailsComponent {
   showInfo(option: any) {
     this.selectLink(option);
     switch (option) {
-      case 'Payment Details':
-        this.paymentDetails = !this.paymentDetails
-        break;
+      
       case 'Candidate Details':
         this.candidateDetails = true;
-        this.paymentDetails = false;
         break;
       case 'Course Details':
         this.candidateDetails = false;
-        this.paymentDetails = false;
         break;
       default:
 
@@ -852,6 +844,7 @@ export class NewRegnCertDetailsComponent {
   navToPreviousPage() {
     this.location.back()
   }
+  
   getStatusColorClass(status: string): string {
     switch (status) {
       case 'OPEN':
@@ -953,4 +946,5 @@ export class NewRegnCertDetailsComponent {
     doc.save(`Certificate_${this.newRegCourseDetailsformGroup.controls['rollNum'].value}_.pdf`)
 
   }
+
 }
