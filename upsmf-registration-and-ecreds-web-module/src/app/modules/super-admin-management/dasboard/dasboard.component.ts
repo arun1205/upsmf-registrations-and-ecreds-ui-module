@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClaimDashBoardData, ClaimsTableData, DashBoardData, TableColumn } from 'src/app/interfaces';
 import { BaseServiceService } from 'src/app/services/base-service.service';
+import { BreadcrumbItem } from '../../shared';
 
 @Component({
   selector: 'app-dasboard',
@@ -18,6 +19,10 @@ export class DasboardComponent {
   adminData:DashBoardData []=[];
   adminClaimData:ClaimDashBoardData[]=[];
   adminClaimTableColumns: TableColumn[]=[];
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Workspace', url: '/super-admin' },
+    { label: 'Dashboard', url: '/super-admin/dashboard' },
+  ];
   constructor(
     private router: Router,
     private baseService: BaseServiceService  ) { 
