@@ -9,10 +9,12 @@ import { mergeMap } from 'rxjs';
   styleUrls: ['./payment-success-failure.component.scss']
 })
 export class PaymentSuccessFailureComponent implements OnInit {
-  isSuccess:boolean = true;
+  isSuccess:boolean = false;
   paymentResponse:string = ''
   resData:any;
   getMakeClaimbody:any;
+  transactionAmt:string = ''
+  transactionId:string = ''
 constructor(private router: Router,
   private route: ActivatedRoute,
   private baseService: BaseServiceService){
@@ -29,9 +31,17 @@ ngOnInit(): void {
   
   this.route.queryParams.subscribe((param)=>{
   console.log('param',param)
-  if(param['resp']){
+  if(param['resp']=== 'success'){
+    this.isSuccess = true;
+    this.transactionAmt = param['transaction_amount'];
+    this.transactionId = param['transaction_id']
     this.paymentResponse = param['resp']
     this.makeClaim()
+  }
+  else {
+    this.isSuccess = false;
+    this.transactionAmt = '';
+    this.transactionId = '';
   }
   
   })
@@ -40,6 +50,7 @@ ngOnInit(): void {
     if (this.paymentResponse === 'success' && this.resData) {
       const updateStudent = {
         "paymentStatus": "SUCCESS",
+        "feeReciptNo": this.transactionId
       }
       this.baseService.updateStudentData$(this.resData.osId, updateStudent, this.resData.endPointUrl)
         .pipe(
