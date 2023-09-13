@@ -25,11 +25,17 @@ export class HttpService {
    *
    * @param requestParam interface
    */
- get(requestParam: RequestParam): Observable<ServerResponse> {
+ get(requestParam: RequestParam, isPdfDownload? : Boolean): Observable<ServerResponse> {
+
   const httpOptions: HttpOptions = {
     headers: requestParam.header ? requestParam.header : this.getHeader(),
-    params: requestParam.param
+    params: requestParam.param,
   };
+
+   if (isPdfDownload) { //for pdf download
+     httpOptions.responseType = 'blob' as 'json'
+   }
+  
   return this.http.get<Response>(this.baseUrl + requestParam.url, httpOptions).pipe(
     mergeMap((data:Response)=>{
       // if(data.status !== 200){
