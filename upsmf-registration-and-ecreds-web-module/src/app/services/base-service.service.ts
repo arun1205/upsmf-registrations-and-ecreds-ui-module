@@ -221,6 +221,14 @@ export class BaseServiceService  extends HttpService   {
     return this.get(reqParam);
   
   }
+  getCredentials$(entity:string,entityId:string,attestationName:string,attestationId:string){
+    const reqParam:RequestParam={
+      url:this.configService.urlConFig.URLS.STUDENT.DOWNLOAD_CREDENTIALS + entity +"/"+ entityId + "/attestation" +"/"+ attestationName +"/"+ attestationId,
+      header:this.headers
+    }
+    return this.get(reqParam);
+
+  }
   getAllClaims$(){
     const header  = {
       'Accept': 'application/json'
