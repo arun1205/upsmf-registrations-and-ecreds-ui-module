@@ -892,19 +892,8 @@ export class NewRegnCertDetailsComponent {
       this.attestationId=this.stateData.attestationId
       this.baseService.getCredentials$(this.entity,this.entityId,this.attestationName,this.attestationId)
       .subscribe((response: any)=>{
-        console.log(response)
-        var blob = new Blob([response], { type: 'application/pdf' });
-                  saveAs(blob, 'report.pdf');
-          //     },
-          //     e => { throwError(e); }
-          // );
-        // this.blob = new Blob([response], {type: 'application/pdf'});
-
-        // var downloadURL = window.URL.createObjectURL(response);
-        // var link = document.createElement('a');
-        // link.href = downloadURL;
-        // link.download = "help.pdf";
-        // link.click();
+        const fileName = "Certificate.pdf";
+        saveAs(response.responseData, fileName);
       })
     }
     else{
