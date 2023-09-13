@@ -120,6 +120,7 @@ export class NewRegnCertDetailsComponent {
     this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     this.stateData = this.stateData?.body
+    console.log(this.stateData)
 
 
   }
@@ -194,7 +195,7 @@ export class NewRegnCertDetailsComponent {
         Validators.required]),
       state: new FormControl('UP', [
         Validators.required]),
-      pin: new FormControl('302001', [
+      pin: new FormControl('', [
         Validators.required, Validators.minLength(6),
         Validators.pattern("^[0-9]*$")]
       ),
@@ -316,7 +317,8 @@ export class NewRegnCertDetailsComponent {
               joinDate: candidateDetailList.joiningYear + "-" + jm + "-01",
               rollNum: candidateDetailList.finalYearRollNo,
               passDate: candidateDetailList.passingYear + "-" + pm + "-01",
-              requestType: candidateDetailList.requestType
+              requestType: candidateDetailList.requestType,
+              diplomaNumber:candidateDetailList.diplomaNumber
             });
 
             // }
@@ -396,7 +398,7 @@ export class NewRegnCertDetailsComponent {
               joinDate: candidateDetailList.joiningYear + "-" + jm + "-01",
               rollNum: candidateDetailList.finalYearRollNo,
               passDate: candidateDetailList.passingYear + "-" + pm + "-01",
-              requestType: candidateDetailList.requestType
+              requestType: candidateDetailList.requestType,
             });
 
             console.log(this.newRegCourseDetailsformGroup.value.joinDate)
@@ -410,7 +412,7 @@ export class NewRegnCertDetailsComponent {
     }
     else {
 
-      if (this.entity === "StudentOutsideUP") {
+      if (this.stateData.origin === "StudentOutsideUP" || this.stateData.entity==="StudentOutsideUP") {
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
         // switch (this.stateData?.origin) {
 
@@ -500,7 +502,9 @@ export class NewRegnCertDetailsComponent {
                 rollNum: this.candidateDetailList[0]?.finalYearRollNo,
                 passDate: this.candidateDetailList[0]?.passingYear + "-" + month + "-01",
                 requestType: this.candidateDetailList[0]?.requestType,
-                university:this.candidateDetailList[0]?.university
+                university:this.candidateDetailList[0]?.university,
+                diplomaNumber:this.candidateDetailList[0]?.diplomaNumber
+
               });
 
             }
@@ -628,7 +632,7 @@ export class NewRegnCertDetailsComponent {
           "joiningMonth": joinMonth,
           "passingMonth": passMonth,
           // "email": this.newRegCertDetailsformGroup.value.email,
-          "paymentStatus": "INPROGRESS",
+          "paymentStatus": "PENDING",
           "feeReciptNo": "NA",
           "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
           "dateOfBirth": this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString(),
@@ -656,7 +660,8 @@ export class NewRegnCertDetailsComponent {
           "certificateNo": "NA",
           "university": value.university,
           "candidateSignature": "NA",
-          "validityUpto": "NA"
+          "validityUpto": "NA",
+          "certificateNumber": "NA"
 
         }
 

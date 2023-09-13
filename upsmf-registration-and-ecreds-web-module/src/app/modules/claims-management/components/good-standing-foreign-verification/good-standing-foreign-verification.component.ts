@@ -686,7 +686,7 @@ export class GoodStandingForeignVerificationComponent {
         "maidenName": this.goodStandingForeignVerificationformGroup.value.maidenName,
         "professionalQualification": this.goodStandingForeignVerificationformGroup.value.proQual,
         "registrationNumber": this.goodStandingForeignVerificationformGroup.value.regnNum,
-        "paymentStatus": "INPROGRESS",
+        "paymentStatus": "PENDING",
         "claimType": this.stateData?.body.type,
         "state": this.goodStandingForeignVerificationformGroup.value.state,
         "country": this.goodStandingForeignVerificationformGroup.value.country,
@@ -768,7 +768,7 @@ export class GoodStandingForeignVerificationComponent {
           "maidenName": this.goodStandingForeignVerificationformGroup.value.maidenName,
           "professionalQualification": this.goodStandingForeignVerificationformGroup.value.proQual,
           "registrationNumber": this.goodStandingForeignVerificationformGroup.value.regnNum,
-          "paymentStatus": "INPROGREE",
+          "paymentStatus": "PENDING",
           "claimType": this.stateData.body.type,
           "state": this.goodStandingForeignVerificationformGroup.value.state,
           "country": this.goodStandingForeignVerificationformGroup.value.country,
@@ -871,26 +871,15 @@ export class GoodStandingForeignVerificationComponent {
     return;
   }
   handlePayment() {
-    if (this.stateData.body.status === 'APPROVED') {
-      this.entity = this.stateData.body.entity;
-      this.entityId = this.stateData.body.entityId;
-      this.attestationName = this.stateData.body.attestationName;
-      this.attestationId = this.stateData.body.attestationId
+    if(this.stateData.body.status ==='APPROVED'){
+      this.entity= this.stateData.entity;
+      this.entityId=this.stateData.entityId;
+      this.attestationName=this.stateData.attestationName;
+      this.attestationId=this.stateData.attestationId
       this.baseService.getCredentials$(this.entity,this.entityId,this.attestationName,this.attestationId)
       .subscribe((response: any)=>{
-        console.log(response)
-        var blob = new Blob([response], { type: 'application/pdf' });
-                  saveAs(blob, 'report.pdf');
-          //     },
-          //     e => { throwError(e); }
-          // );
-        // this.blob = new Blob([response], {type: 'application/pdf'});
-
-        // var downloadURL = window.URL.createObjectURL(response);
-        // var link = document.createElement('a');
-        // link.href = downloadURL;
-        // link.download = "help.pdf";
-        // link.click();
+        const fileName = "Certificate.pdf";
+        saveAs(response.responseData, fileName);
       })
     }
     else {

@@ -25,7 +25,7 @@ export class AdminRegnCertificateDetailsComponent {
   links = ['Candidate Details', 'Course Details']
 
   logo = '../../../../../assets/images/sunbird_logo.png';
-  internalLogo = '../../../../../assets/images/up_smf_logo-24_x_24.png'; 
+  internalLogo = '../../../../../assets/images/up_smf_logo-24_x_24.png';
   newRegCertformGroup: FormGroup;
   public newRegCertDetailsformGroup: FormGroup;
   newRegCourseDetailsformGroup: FormGroup;
@@ -106,12 +106,12 @@ export class AdminRegnCertificateDetailsComponent {
     public dialog: MatDialog,
   ) {
     this.userEmail = this.baseService.getUserRole()[0]
- 
+
     this.stateList = allStateList;
     this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     this.stateData = this.stateData?.body
-    console.log("data",this.stateData)
+    console.log("data", this.stateData)
 
 
   }
@@ -242,11 +242,11 @@ export class AdminRegnCertificateDetailsComponent {
     this.osid = this.stateData?.entityId
     this.entity = this.stateData?.entity
     if (this.entity === "StudentFromUP" && this.userEmail === "Regulator") {
-      this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
+      this.baseService.getCandidatePersonalDetailsRegulator$(this.entity, this.osid)
         .subscribe(
           (response: any) => {
 
-            console.log("c",response.responseData.courseName)
+            console.log("c", response.responseData.courseName)
             this.osid = response.responseData.osid;
             this.urlDataResponse = response.responseData.docproof;
             if (!!this.urlDataResponse) {
@@ -270,7 +270,7 @@ export class AdminRegnCertificateDetailsComponent {
 
             // this.listOfFiles = this.candidateDetailList[0].docproof;
             this.newRegCertDetailsformGroup.patchValue({
-              email:response.responseData.email,
+              email: response.responseData.email,
               mobNumber: response.responseData.phoneNumber,
               applicantName: response.responseData.name,
               adhr: response.responseData.aadhaarNo,
@@ -306,12 +306,13 @@ export class AdminRegnCertificateDetailsComponent {
               courseName: response.responseData.courseName,
               collegeName: response.responseData.nursingCollage,
               examBody: response.responseData.examBody,
-              university:response.responseData.university,
+              university: response.responseData.university,
 
               joinDate: response.responseData.joiningYear + "-" + jm + "-01",
               rollNum: response.responseData.finalYearRollNo,
               passDate: response.responseData.passingYear + "-" + pm + "-01",
-              requestType: response.responseData.requestType
+              requestType: response.responseData.requestType,
+              diplomaNumber: response.responseData.diplomaNumber
             });
 
             // }
@@ -323,7 +324,7 @@ export class AdminRegnCertificateDetailsComponent {
 
     }
     else if (this.entity === "StudentOutsideUP" && this.userEmail === "Regulator") {
-      this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
+      this.baseService.getCandidatePersonalDetailsRegulator$(this.entity, this.osid)
         .subscribe(
           (response: any) => {
             this.osid = response.responseData.osid;
@@ -388,7 +389,11 @@ export class AdminRegnCertificateDetailsComponent {
               joinDate: response.responseData.joiningYear + "-" + jm + "-01",
               rollNum: response.responseData.finalYearRollNo,
               passDate: response.responseData.passingYear + "-" + pm + "-01",
-              requestType: response.responseData.requestType
+              requestType: response.responseData.requestType,
+              university: response.responseData.university,
+              diplomaNumber: response.responseData.diplomaNumber
+
+
             });
 
             console.log(this.newRegCourseDetailsformGroup.value.joinDate)
@@ -491,7 +496,8 @@ export class AdminRegnCertificateDetailsComponent {
                 joinDate: this.candidateDetailList[0]?.joiningYear + "-" + month + "-01",
                 rollNum: this.candidateDetailList[0]?.finalYearRollNo,
                 passDate: this.candidateDetailList[0]?.passingYear + "-" + month + "-01",
-                requestType: this.candidateDetailList[0]?.requestType
+                requestType: this.candidateDetailList[0]?.requestType,
+                university: this.candidateDetailList[0]?.university
               });
 
             }
@@ -507,7 +513,7 @@ export class AdminRegnCertificateDetailsComponent {
   newRegCertDetailsformGroupSubmit(value: any) {
     this.submitted = true;
     // if (this.newRegCertDetailsformGroup.valid) {
-      this.candidateDetails = false;
+    this.candidateDetails = false;
     // }
 
   }
@@ -521,6 +527,7 @@ export class AdminRegnCertificateDetailsComponent {
       }
       this.baseService.approveClaim$(osid, approveBody)
         .subscribe((response) => {
+          this.navToPreviousPage();
         })
     }
     else if (this.entity === "StudentOutsideUP" && this.userEmail === "Regulator") {
@@ -574,6 +581,7 @@ export class AdminRegnCertificateDetailsComponent {
 
           }
           this.baseService.sendMailOutsideUp$(mailBody).subscribe((response) => {
+            this.navToPreviousPage();
           })
 
         }
@@ -582,8 +590,13 @@ export class AdminRegnCertificateDetailsComponent {
 
 
     }
+    else if (this.stateData.status) {
+      this.paymentDetails = true;
+    }
+
     else {
-      if (this.newRegCourseDetailsformGroup.valid) {
+      if (!this.stateData.status && this.newRegCourseDetailsformGroup.valid) {
+
 
         const joinDate = new Date(this.newRegCourseDetailsformGroup.get('joinDate')?.value);
 
@@ -772,7 +785,7 @@ export class AdminRegnCertificateDetailsComponent {
   showInfo(option: any) {
     this.selectLink(option);
     switch (option) {
-      
+
       case 'Candidate Details':
         this.candidateDetails = true;
         break;
@@ -793,7 +806,7 @@ export class AdminRegnCertificateDetailsComponent {
   }
 
   takeAcceptRejectAction(entity: string) {
-    if (entity === "StudentFromUP") {
+    if (this.entity === "StudentFromUP") {
       const message = `Reason For Rejection`;
       // const resDialog = new DialogModel( message);
       const shouldShowFileUpload = false;
@@ -817,6 +830,8 @@ export class AdminRegnCertificateDetailsComponent {
           const osid = this.stateData?.id
           this.baseService.approveClaim$(osid, approveBody)
             .subscribe((response) => {
+              this.navToPreviousPage();
+
             })
 
         }
@@ -844,7 +859,7 @@ export class AdminRegnCertificateDetailsComponent {
   navToPreviousPage() {
     this.location.back()
   }
-  
+
   getStatusColorClass(status: string): string {
     switch (status) {
       case 'OPEN':
@@ -939,7 +954,7 @@ export class AdminRegnCertificateDetailsComponent {
         doc.addImage(this.internalLogo, 173, 23, 5, 5);
         const text = 'Please scan this QR code to approve / reject the claim'; // Replace with your desired text
         doc.setFontSize(7)
-        doc.text(text,145, 40 );
+        doc.text(text, 145, 40);
       }
     });
 

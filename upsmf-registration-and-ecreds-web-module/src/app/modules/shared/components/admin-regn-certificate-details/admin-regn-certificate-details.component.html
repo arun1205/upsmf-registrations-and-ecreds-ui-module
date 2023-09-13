@@ -520,7 +520,7 @@
                                             <button type="button" class="button" mat-raised-button color="primary"
                                                 (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
                                         </div>
-                                        <div class="button-group" *ngIf="this.stateData?.status==='APPROVED'">
+                                        <div class="button-group" *ngIf="(this.stateData?.status==='APPROVED' || this.stateData?.status==='REJECTED')">
                                             <button type="button" class="button" mat-raised-button color="primary"
                                                 (click)="navToPreviousPage()">Back to list</button>
 
