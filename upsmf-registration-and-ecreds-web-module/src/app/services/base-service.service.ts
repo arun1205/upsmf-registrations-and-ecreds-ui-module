@@ -222,9 +222,16 @@ export class BaseServiceService  extends HttpService   {
   
   }
   getCredentials$(entity:string,entityId:string,attestationName:string,attestationId:string){
+    const header = {
+      'Accept': 'application/pdf',
+      'Authorization': `Bearer ${localStorage.getItem("token")}`,
+      'responseType': 'blob'
+
+
+    };
     const reqParam:RequestParam={
       url:this.configService.urlConFig.URLS.STUDENT.DOWNLOAD_CREDENTIALS + entity +"/"+ entityId + "/attestation" +"/"+ attestationName +"/"+ attestationId,
-      header:this.headers
+      header:header
     }
     return this.get(reqParam);
 
