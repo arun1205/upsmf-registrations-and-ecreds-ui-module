@@ -506,9 +506,9 @@ export class AdminRegnCertificateDetailsComponent {
 
   newRegCertDetailsformGroupSubmit(value: any) {
     this.submitted = true;
-    if (this.newRegCertDetailsformGroup.valid) {
+    // if (this.newRegCertDetailsformGroup.valid) {
       this.candidateDetails = false;
-    }
+    // }
 
   }
   onNewRegCourseDetailsformSubmit(value: any) {
