@@ -263,6 +263,19 @@ export class BaseServiceService  extends HttpService   {
    
   }
 
+  getUserEmail(){
+    var token:any
+    token =localStorage.getItem('token')
+    let tokenId:any = ''
+    tokenId = token
+   console.log('accessTOken',tokenId)
+   const helper = new JwtHelperService();
+   const decoded= helper.decodeToken(tokenId);
+   console.log(decoded)
+   return decoded.email
+
+  }
+
   getCourses(courseUrl:string){
     const reqParam: RequestParam = {
       url: courseUrl,
