@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ApproveClaim, ClaimDetails, ClaimsTableData, SentMailBody, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding, studentUpdate } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
-
+import { LocalStorageService } from "../core/services/localstorage-service/local-storage.service";
 import { environment } from 'src/environments/environment';
 import { ConfigService, RequestParam, ServerResponse } from '../modules/shared';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -17,7 +17,8 @@ export class BaseServiceService  extends HttpService   {
     'Accept': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem("token")}` };
  //baseUrl: string;
-  constructor(private httpClient: HttpClient,private configService: ConfigService) { 
+  constructor(private httpClient: HttpClient,private configService: ConfigService,
+    private localStorageService:LocalStorageService) { 
     super(httpClient);
     this.baseUrl = environment.apiUrl;
   }
@@ -257,9 +258,9 @@ export class BaseServiceService  extends HttpService   {
   }
 
 
-  getUserRole(){
+  async getUserRole(){
     var token:any
-    token =localStorage.getItem('token')
+    token =await this.localStorageService.getItem('token')
     let tokenId:any = ''
     tokenId = token
    console.log('accessTOken',tokenId)
@@ -272,7 +273,7 @@ export class BaseServiceService  extends HttpService   {
 
   getUserEmail(){
     var token:any
-    token =localStorage.getItem('token')
+    token =await this.localStorageService.getItem('token')
     let tokenId:any = ''
     tokenId = token
    console.log('accessTOken',tokenId)

@@ -17,8 +17,8 @@ export class LoginPageComponent implements OnInit {
     private authService: AuthService,
     private baseService: BaseServiceService){
     this.loginForm = new FormGroup({
-      emailphno: new FormControl('', [Validators.required, this.emailOrPhoneValidator()]),
-      password: new FormControl('',Validators.required)
+      emailphno: new FormControl('student84@yopmail.com', [Validators.required, this.emailOrPhoneValidator()]),
+      password: new FormControl('Student@84',Validators.required)
 
     })
   }
@@ -26,7 +26,10 @@ export class LoginPageComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
       // Redirect to the home page if logged in
-      this.userRole= this.baseService.getUserRole()[0];
+       this.baseService.getUserRole().then((res)=>{
+        console.log(res)
+      //  this.userRole=
+      });
       switch (this.userRole) {
        case 'StudentFromUP':
          this.router.navigate(['/claims/manage']);

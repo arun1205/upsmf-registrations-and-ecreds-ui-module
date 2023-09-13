@@ -38,6 +38,9 @@ export class ManageClaimsComponent {
   ngOnInit(): void {
     this.initializeColumns();
     console.log(this.claimsTableColumns)
+  
+  }
+  ngAfterViewInit(): void{
     this.getclaims();
     console.log(this.claims)
   }
