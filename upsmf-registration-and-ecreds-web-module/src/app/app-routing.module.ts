@@ -5,6 +5,7 @@ import { PaymentSuccessFailureComponent } from './payment-success-failure/paymen
 import { AuthGuard } from './core/guard/auth.guard';
 import { AdminRegnCertificateDetailsComponent } from './modules/shared/components/admin-regn-certificate-details/admin-regn-certificate-details.component';
 import { AdminGoodStandingForeignVerificationComponent } from './modules/shared/components/admin-good-standing-foreign-verification/admin-good-standing-foreign-verification.component';
+import { UserProfileComponent } from './modules/shared/components/user-profile/user-profile.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,9 @@ const routes: Routes = [
   {
     path:'goodStanding-foreign-claim/:id', component: AdminGoodStandingForeignVerificationComponent
   },
+  {
+    path:'user-profile',component: UserProfileComponent
+  }
   
 ];
 
