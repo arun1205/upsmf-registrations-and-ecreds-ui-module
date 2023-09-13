@@ -25,7 +25,7 @@ export class HttpService {
    *
    * @param requestParam interface
    */
- get(requestParam: RequestParam, isPdfDownload? : any): Observable<ServerResponse> {
+ get(requestParam: RequestParam, isPdfDownload? : Boolean): Observable<ServerResponse> {
 
   const httpOptions: HttpOptions = {
     headers: requestParam.header ? requestParam.header : this.getHeader(),
