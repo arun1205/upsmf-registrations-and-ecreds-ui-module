@@ -273,11 +273,11 @@
                                     <div class="buttons">
                                         <div class="button-group">
                                             <button class="button" mat-raised-button
-                                                color="primary"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
+                                                color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
                                         </div>
                                         <div class="button-group" *ngIf="!this.stateData.body.status==='OPEN'">
                                             <button class="button" mat-raised-button
-                                                color="primary"><mat-icon>keyboard_backspace</mat-icon>Back to
+                                                color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Back to
                                                 list</button>
 
                                         </div>

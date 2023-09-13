@@ -292,8 +292,8 @@
                                             <mat-form-field appearance ="outline">
                                                 <mat-label>Course Name</mat-label>
                                               <mat-select (selectionChange)="requestTypeSelected($event)" formControlName="courseName">
-                                                <span *ngFor='let course of courseList;let i = index'>
-                                                    <mat-option [value]="course">{{course}}</mat-option>
+                                                <span *ngFor='let courseName of courseList;let i = index'>
+                                                    <mat-option [value]="courseName">{{courseName}}</mat-option>
                                                 </span>
                                               </mat-select>
                                         </mat-form-field>

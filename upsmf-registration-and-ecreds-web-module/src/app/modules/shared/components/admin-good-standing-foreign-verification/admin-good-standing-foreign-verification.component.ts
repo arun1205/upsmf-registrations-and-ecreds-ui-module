@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import jsPDF from 'jspdf';
+import {Location } from '@angular/common';
 import autoTable from 'jspdf-autotable';
 import { DialogBoxComponent, DialogModel } from '../dialog-box/dialog-box.component';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -64,6 +65,7 @@ export class AdminGoodStandingForeignVerificationComponent {
   constructor(private formBuilder: FormBuilder, private baseService: BaseServiceService,
     private router: Router,
     public dialog: MatDialog,
+    private location: Location,
     private configService: ConfigService,
     private http: HttpService,
     private route: ActivatedRoute,
@@ -178,8 +180,8 @@ export class AdminGoodStandingForeignVerificationComponent {
               fatherName: response.responseData.fathersName,
               dob: response.responseData.dob,
               gender: response.responseData.gender,
-              al1: response.responseData.presentAddress,
-              al2: response.responseData.presentAddress,
+              al1: response.responseData.address,
+              al2: response.responseData.address,
               state: response.responseData.state,
               pin: response.responseData.pincode,
               district: response.responseData.district,
@@ -317,6 +319,9 @@ export class AdminGoodStandingForeignVerificationComponent {
       }
 
     });
+  }
+  navToPreviousPage() {
+    this.location.back()
   }
   onReset() {
     this.createQRCode().then((qrCodeURL: any) => {
