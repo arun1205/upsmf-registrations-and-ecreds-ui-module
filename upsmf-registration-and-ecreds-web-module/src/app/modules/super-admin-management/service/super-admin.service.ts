@@ -23,14 +23,32 @@ export class SuperAdminService extends HttpService {
     this.userManagementbaseURL =  environment.usermanagementApiURL
   }
 
+  // getAllUsers(): Observable<any>  {
+  //   const request = {
+  //     "offset":"300",
+  //      "size":"700"
+  //   };
+  //   // const  reqParam: RequestParam = { url: this.configService.urlConFig.URLS.USER.GET_ALL_USERS}
+  //   const reqParam: RequestParam = {
+  //     url: this.userManagementbaseURL + this.configService.urlConFig.URLS.USER.GET_ALL_USERS,
+  //     header: {
+  //       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJSR3RkMkZzeG1EMnJER3I4dkJHZ0N6MVhyalhZUzBSSyJ9.kMLn6177rvY53i0RAN3SPD5m3ctwaLb32pMYQ65nBdA',
+  //     },
+  //     data: request
+  //   }
+  //   return this.userPost(reqParam);
+  // } 
+
   getAllUsers(): Observable<any>  {
     const request = {
-      "offset":"300",
-       "size":"700"
+      "offset": 0,
+      "limit": 1000,
+      "fieldName": "department",
+      "fieldValue": "registration"
     };
     // const  reqParam: RequestParam = { url: this.configService.urlConFig.URLS.USER.GET_ALL_USERS}
     const reqParam: RequestParam = {
-      url: this.userManagementbaseURL + this.configService.urlConFig.URLS.USER.GET_ALL_USERS,
+      url: this.userManagementbaseURL + this.configService.urlConFig.URLS.USER.GET_USER_DETAILS_DEPARTMENT,
       header: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJSR3RkMkZzeG1EMnJER3I4dkJHZ0N6MVhyalhZUzBSSyJ9.kMLn6177rvY53i0RAN3SPD5m3ctwaLb32pMYQ65nBdA',
       },
@@ -67,6 +85,17 @@ export class SuperAdminService extends HttpService {
   deactivateUser(request: any): Observable<any>  {
     const  reqParam: RequestParam = { 
       url: this.userManagementbaseURL + this.configService.urlConFig.URLS.USER.DELETE_USER,
+      header: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJSR3RkMkZzeG1EMnJER3I4dkJHZ0N6MVhyalhZUzBSSyJ9.kMLn6177rvY53i0RAN3SPD5m3ctwaLb32pMYQ65nBdA',
+      },
+      data: request
+    }
+    return this.userPost(reqParam);
+  }
+
+  activateUser(request: any): Observable<any>  {
+    const  reqParam: RequestParam = { 
+      url: this.userManagementbaseURL + this.configService.urlConFig.URLS.USER.ACTIVATE_USER,
       header: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJSR3RkMkZzeG1EMnJER3I4dkJHZ0N6MVhyalhZUzBSSyJ9.kMLn6177rvY53i0RAN3SPD5m3ctwaLb32pMYQ65nBdA',
       },
