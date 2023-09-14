@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import jsPDF from 'jspdf';
+import {Location } from '@angular/common';
 import autoTable from 'jspdf-autotable';
 import { DialogBoxComponent, DialogModel } from '../dialog-box/dialog-box.component';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -11,6 +12,7 @@ import { BaseServiceService } from 'src/app/services/base-service.service';
 import { Observable } from 'rxjs';
 import { applabels } from 'src/app/messages/labels';
 import * as QRCode from 'qrcode';
+import { BreadcrumbItem } from '../../interfaces';
 
 @Component({
   selector: 'app-admin-good-standing-foreign-verification',
@@ -59,11 +61,21 @@ export class AdminGoodStandingForeignVerificationComponent {
 
   profQualificationArray = ['ANM', 'Midwife', 'HW', 'Nurse', 'Bsc Nursing'];
 
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Workspace', url: '/admin' },
+    { label: 'Claim Manage', url: '/admin/manage-claim' },
+    // { label: 'Claim Certificate', url: '/admin/view-claim' },
+    { label: 'View Claim ', url: '/admin/goodStanding-foreign-claim' },
+
+
+  ];
+
   activity: Observable<any>;
 
   constructor(private formBuilder: FormBuilder, private baseService: BaseServiceService,
     private router: Router,
     public dialog: MatDialog,
+    private location: Location,
     private configService: ConfigService,
     private http: HttpService,
     private route: ActivatedRoute,
@@ -178,8 +190,8 @@ export class AdminGoodStandingForeignVerificationComponent {
               fatherName: response.responseData.fathersName,
               dob: response.responseData.dob,
               gender: response.responseData.gender,
-              al1: response.responseData.presentAddress,
-              al2: response.responseData.presentAddress,
+              al1: response.responseData.address,
+              al2: response.responseData.address,
               state: response.responseData.state,
               pin: response.responseData.pincode,
               district: response.responseData.district,
@@ -262,7 +274,7 @@ export class AdminGoodStandingForeignVerificationComponent {
 
   onGoodStandingForeignVerificationformSubmit(value: any) {
     const osid = this.stateData.body.id
-    console.log("id....", osid)
+    console.log("value....", value)
 
     // if(this.entity==="StudentForeignVerification" && this.userEmail==="Regulator"){
     const message = `Enter the email`;
@@ -295,28 +307,32 @@ export class AdminGoodStandingForeignVerificationComponent {
         this.convertUrlList = this.listOfFiles.join(',')
         const mailBody = {
           outsideEntityMailId: result.reason,
-          name: this.goodStandingForeignVerificationformGroup.value.applicantName,
-          gender: this.goodStandingForeignVerificationformGroup.value.gender,
+          name: this.goodStandingForeignVerificationformGroup.value.maidenName,
+          gender: "NA",
           council: details.council,
           email: this.goodStandingForeignVerificationformGroup.value.email,
-          examBody: value.examBody,
+          examBody: "UPSMF",
           docProofs: [this.convertUrlList],
-          diplomaNumber: value.diplomaNumber,
-          nursingCollage: value.collegeName,
+          diplomaNumber: "NA",
+          nursingCollage: value.tcName,
           courseState: "aaaaa",
           courseCouncil: "BBB",
           state: this.goodStandingForeignVerificationformGroup.value.state,
           country: this.goodStandingForeignVerificationformGroup.value.country,
-          // state: this.newRegCertDetailsformGroup.value.state,
+          // state: this.goodStandingForeignVerificationformGroup.value.state,
           attachment: result.file,
 
         }
         this.baseService.sendMailOutsideUp$(mailBody).subscribe((response) => {
+          
         })
 
       }
 
     });
+  }
+  navToPreviousPage() {
+    this.location.back()
   }
   onReset() {
     this.createQRCode().then((qrCodeURL: any) => {
