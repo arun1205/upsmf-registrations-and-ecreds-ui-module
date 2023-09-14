@@ -181,7 +181,7 @@ export class AddUserComponent {
           }
       ],
       attributes: {
-         module: "registration",
+        department: "registration",
         // departmentName:  role === 'NODALOFFICER' ? department: role === 'GRIEVANCEADMIN' || role === 'ADMIN' ? -1 : null,
         phoneNumber: phoneNo,
         role: role,
@@ -283,6 +283,7 @@ export class AddUserComponent {
         }
     ],
     attributes: {
+      department: "registration",
       // module: "grievance",
       // departmentName:  role === 'NODALOFFICER' ? department: role === 'GRIEVANCEADMIN' || role === 'ADMIN' ? -1 : null,
       phoneNumber: e.phoneNo,
@@ -307,7 +308,7 @@ export class AddUserComponent {
     if(err.status === 200) {
       // this.toastrService.showToastr("User updated successfully!", 'Success', 'success', '');
       // this.isProcessing = false;
-      this.getUserDetails();
+       this.getUserDetails();
       this.navigateToHome();
     }
     else {

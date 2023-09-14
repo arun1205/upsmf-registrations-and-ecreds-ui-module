@@ -92,7 +92,6 @@ export class ManageUsersComponent {
       next: (res) => {
         console.log(res)
         this.isDataLoading = false;
-        res.shift()
         this.users = res.map((user:any) => {
           const { username, firstName, lastName, enabled, email, attributes, id } = user;
           let name = '';
@@ -193,14 +192,37 @@ export class ManageUsersComponent {
             userName: event.id
         }
         }
-        this.superAdminService.deactivateUser(request).subscribe({
-          next: (res) => {
-            this.users.splice(userIndex,1,updatedUserData);
-         },
-         error: (err) => {  
-            this.users.splice(userIndex,1,event);
-           // Handle the error here in case of login failure
-         }});
+        if(status == 'activate'){
+          this.superAdminService.activateUser(request).subscribe({
+            next: (res) => {
+              console.log(res)
+              this.getAllUsers();
+            },
+            error: (err) => {
+              if(err.status== 200){
+                this.getAllUsers();
+              }
+              console.log(err);
+            }
+          })
+        }
+        else {
+          this.superAdminService.deactivateUser(request).subscribe({
+            next: (res) => {
+              console.log(res)
+              this.users.splice(userIndex,1,updatedUserData);
+              this.getAllUsers();
+           },
+           error: (err) => {
+            if(err.status == 200){
+              this.getAllUsers();
+            }  
+            console.log(err);
+              this.users.splice(userIndex,1,event);
+             // Handle the error here in case of login failure
+           }});
+        }
+        
        }
        this.users.splice(userIndex,1,event);
        this.initializeColumns();
