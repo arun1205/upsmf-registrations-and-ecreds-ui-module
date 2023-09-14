@@ -2,6 +2,8 @@
     "URLS": {
         "LOGIN": "/api/v1/user/keycloak/usrlogin",
         "SIGN_UP":"api/v1/StudentFromUP/invite",
+        "GET_OTP":"/api/v1/user/keycloak/otp",
+        "OTP_LOGIN":"/api/v1/user/keycloak/usrlogin",
         "CLAIMS": {
             "GET_ALL_CLAIMS": "api/v2/StudentFromUP/claims",
             "GET_ALL_CLAIMS_ADMIN": "api/v1/Regulator/claims",

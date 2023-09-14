@@ -134,7 +134,40 @@
 
                       
                         <div class="input-container" style="margin-top:2%;">
-                            <button class="text-class action-btns" [disabled]="!registerForm.valid" type="submit" mat-raised-button color="primary">Sign Up</button>
+                            <button class="text-class action-btns" [disabled]="!registerForm.valid" type="submit" mat-raised-button color="primary">GET OTP</button>
+                        </div>
+                        
+                        
+                    </form>
+                </div>
+            </div>
+            
+
+        </div>
+
+        <!-- OTP FORM -->
+        <div class="register-otp-container" *ngIf="isOtpEnable">
+            <div class="register-content">
+                <h2 class="register-text">Sign Up</h2>
+                <div class="register-inputs" >
+                   
+                    <form class="register-section" [formGroup]="otpForm" (ngSubmit)="signUpOtpform(otpForm.value)">
+                    
+                      
+                        <div class="input-container">
+                            <h4 >Enter OTP</h4>
+                            <mat-form-field appearance="outline" class="text-class">
+                                <mat-label>Enter OTP</mat-label>
+                                <input type="password" matInput placeholder="0-0-0-0-0-0" formControlName="otp" type="text" >
+                                <mat-hint style="color: gray;">Enter the 6 digit OTP sent to your email / phone number</mat-hint>
+                            </mat-form-field>
+
+
+                        </div>
+
+                      
+                        <div class="input-container" style="margin-top:2%;">
+                            <button class="text-class action-btns" [disabled]="!otpForm.valid" type="submit" mat-raised-button color="primary">SUBMIT</button>
                         </div>
                         
                         
