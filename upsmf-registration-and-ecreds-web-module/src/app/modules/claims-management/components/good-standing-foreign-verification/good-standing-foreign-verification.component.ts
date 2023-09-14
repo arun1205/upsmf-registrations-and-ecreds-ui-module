@@ -9,7 +9,7 @@ import { DatePipe, Location } from '@angular/common';
 import { mergeMap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent, DialogModel } from 'src/app/modules/shared/components/dialog-box/dialog-box.component';
-import { ConfigService } from 'src/app/modules/shared';
+import { BreadcrumbItem, ConfigService } from 'src/app/modules/shared';
 import { HttpService } from 'src/app/core/services/http-service/http.service';
 import html2canvas from 'html2canvas';
 import jspdf, { jsPDF } from 'jspdf';
@@ -65,6 +65,12 @@ export class GoodStandingForeignVerificationComponent {
   paymentResponse: any;
 
   profQualificationArray = ['ANM', 'Midwife', 'HW', 'Nurse', 'Bsc Nursing'];
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Claim Registration Certificate', url: '/claims/new' },
+    { label: 'Claim Details', url: '/claims/good-stand-frgn-cert' },
+    
+  ];
 
   activity: Observable<any>;
 
@@ -307,8 +313,8 @@ export class GoodStandingForeignVerificationComponent {
               fatherName: this.candidateDetailList[0]?.fathersName,
               dob: this.candidateDetailList[0]?.dob,
               gender: this.candidateDetailList[0]?.gender,
-              al1: this.candidateDetailList[0]?.presentAddress,
-              al2: this.candidateDetailList[0]?.presentAddress,
+              al1: this.candidateDetailList[0]?.address,
+              al2: this.candidateDetailList[0]?.address,
               state: this.candidateDetailList[0].state,
               pin: this.candidateDetailList[0]?.pincode,
               district: this.candidateDetailList[0]?.district,
@@ -374,7 +380,7 @@ export class GoodStandingForeignVerificationComponent {
     else {
       if (this.stateData.body.entity) {
         this.getEndPoint();
-        { { (this.stateData.body.entity === 'ForeignVerifyReq') ? this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails() } }
+        { { (this.stateData.body.entity === 'StudentForeignVerification') ? this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails() } }
 
       }
       else {
