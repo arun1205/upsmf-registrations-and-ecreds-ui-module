@@ -94,6 +94,14 @@ export class AdminRegnCertificateDetailsComponent {
   stateData: any;
   selectedLink: string = 'Candidate Details';
   requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Workspace', url: '/admin' },
+    { label: 'Claim Manage', url: '/admin/manage-claim' },
+    // { label: 'Claim Certificate', url: '/admin/view-claim' },
+    { label: 'View Claim ', url: '/admin/registration-claim' },
+
+
+  ];
 
 
   constructor(private formBuilder: FormBuilder,

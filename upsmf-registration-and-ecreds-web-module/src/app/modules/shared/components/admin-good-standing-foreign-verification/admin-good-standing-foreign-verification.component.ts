@@ -12,6 +12,7 @@ import { BaseServiceService } from 'src/app/services/base-service.service';
 import { Observable } from 'rxjs';
 import { applabels } from 'src/app/messages/labels';
 import * as QRCode from 'qrcode';
+import { BreadcrumbItem } from '../../interfaces';
 
 @Component({
   selector: 'app-admin-good-standing-foreign-verification',
@@ -59,6 +60,15 @@ export class AdminGoodStandingForeignVerificationComponent {
 
 
   profQualificationArray = ['ANM', 'Midwife', 'HW', 'Nurse', 'Bsc Nursing'];
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Workspace', url: '/admin' },
+    { label: 'Claim Manage', url: '/admin/manage-claim' },
+    // { label: 'Claim Certificate', url: '/admin/view-claim' },
+    { label: 'View Claim ', url: '/admin/goodStanding-foreign-claim' },
+
+
+  ];
 
   activity: Observable<any>;
 
@@ -264,7 +274,7 @@ export class AdminGoodStandingForeignVerificationComponent {
 
   onGoodStandingForeignVerificationformSubmit(value: any) {
     const osid = this.stateData.body.id
-    console.log("id....", osid)
+    console.log("value....", value)
 
     // if(this.entity==="StudentForeignVerification" && this.userEmail==="Regulator"){
     const message = `Enter the email`;
@@ -297,23 +307,24 @@ export class AdminGoodStandingForeignVerificationComponent {
         this.convertUrlList = this.listOfFiles.join(',')
         const mailBody = {
           outsideEntityMailId: result.reason,
-          name: this.goodStandingForeignVerificationformGroup.value.applicantName,
-          gender: this.goodStandingForeignVerificationformGroup.value.gender,
+          name: this.goodStandingForeignVerificationformGroup.value.maidenName,
+          gender: "NA",
           council: details.council,
           email: this.goodStandingForeignVerificationformGroup.value.email,
-          examBody: value.examBody,
+          examBody: "UPSMF",
           docProofs: [this.convertUrlList],
-          diplomaNumber: value.diplomaNumber,
-          nursingCollage: value.collegeName,
+          diplomaNumber: "NA",
+          nursingCollage: value.tcName,
           courseState: "aaaaa",
           courseCouncil: "BBB",
           state: this.goodStandingForeignVerificationformGroup.value.state,
           country: this.goodStandingForeignVerificationformGroup.value.country,
-          // state: this.newRegCertDetailsformGroup.value.state,
+          // state: this.goodStandingForeignVerificationformGroup.value.state,
           attachment: result.file,
 
         }
         this.baseService.sendMailOutsideUp$(mailBody).subscribe((response) => {
+          
         })
 
       }

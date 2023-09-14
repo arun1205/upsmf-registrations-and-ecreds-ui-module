@@ -16,6 +16,7 @@ import * as QRCode from 'qrcode';
 import { saveAs } from 'file-saver';
 
 
+
 @Component({
   selector: 'app-new-regn-cert-details',
   templateUrl: './new-regn-cert-details.component.html',
@@ -59,8 +60,10 @@ export class NewRegnCertDetailsComponent {
 
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Claim Registration Certificate', url: '/claims/new' },
-    { label: 'Claim Details', url: '/claims/new-regn-cert' }
+    { label: 'Claim Details', url: '/claims/new-regn-cert-details' },
+    
   ];
+  
 
   osid: string;
   entity: string;
@@ -97,6 +100,8 @@ export class NewRegnCertDetailsComponent {
   stateData: any;
   selectedLink: string = 'Candidate Details';
   requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
+
+ 
 
 
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe,
