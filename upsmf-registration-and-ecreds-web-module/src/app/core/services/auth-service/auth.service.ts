@@ -95,6 +95,7 @@ export class AuthService extends HttpService{
   }
 
   logout(): void {
+    
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_DATA);
     localStorage.removeItem('payData');

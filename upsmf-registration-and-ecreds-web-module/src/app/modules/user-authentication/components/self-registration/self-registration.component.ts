@@ -3,6 +3,7 @@ import { Validators } from '@angular/forms';
 import {  AbstractControl, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth-service/auth.service';
+import { BaseServiceService } from 'src/app/services/base-service.service';
 
 @Component({
   selector: 'app-self-registration',
@@ -14,9 +15,11 @@ export class SelfRegistrationComponent implements OnInit{
   otpForm:FormGroup;
   isOtpEnable:boolean = false;
   userName:any
+  userRole:any;
 
   constructor(private authService:AuthService,
-    private router: Router){
+    private router: Router,
+    private baseService: BaseServiceService ){
 
   }
 
@@ -95,7 +98,10 @@ export class SelfRegistrationComponent implements OnInit{
             },
             error:(err)=>{
               console.log(err)
-              this.isOtpEnable = true
+              if(err.status == 200){
+                this.isOtpEnable = true
+              }
+              
             }
           })
           // this.router.navigate(['/login'])
@@ -114,8 +120,30 @@ export class SelfRegistrationComponent implements OnInit{
       next:(res)=>{
         console.log(res)
         this.router.navigate(['/login'])
+        if(res){
+          this.authService.saveUserData(res);
+          if(this.authService.isLoggedIn()){
+            this.userRole= this.baseService.getUserRole()[0];
+            switch (this.userRole) {
+             case 'StudentFromUP':
+               this.router.navigate(['/claims/manage']);
+               break;
+             case 'SuperAdmin':
+               this.router.navigate(['/super-admin']);
+               break;
+             case 'Regulator':
+                 this.router.navigate(['/admin']);
+                 break;
+             default:
+             
+           }
+          }
+       
+          // this.router.navigate(['/claims/manage'])
+       }
       },
       error:(err)=>{
+        console.log(err)
          this.router.navigate(['/login'])
       }
     })
