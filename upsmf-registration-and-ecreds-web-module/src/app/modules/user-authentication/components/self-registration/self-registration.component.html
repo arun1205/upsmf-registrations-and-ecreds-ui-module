@@ -53,7 +53,7 @@
         <div class="image-cls">
             <img style="width: 26rem;" src="../../assets/images/sunbird_logo.png" alt="UPSMF logo">
         </div>
-        <div class="register-main-container">
+        <div class="register-main-container" *ngIf="!isOtpEnable">
             <div class="register-content">
                 <h2 class="register-text">Sign Up</h2>
                 <div class="register-inputs" >

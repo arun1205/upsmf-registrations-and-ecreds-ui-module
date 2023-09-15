@@ -49,11 +49,11 @@ export class AuthService extends HttpService{
     return this.userPost(reqParam);
   }
 
-  otpLogin(username:string,otp:any): Observable<any> {
+  otpLogin(email:string,otp:any): Observable<any> {
     // Implement your login API call and get the JWT token
     const reqParam: RequestParam = {
-      url: this.usermanagementApiURL + this.configService.urlConFig.URLS.LOGIN,
-      data: {username,otp},
+      url: this.usermanagementApiURL + this.configService.urlConFig.URLS.OTP_LOGIN,
+      data: {email,otp},
       header: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

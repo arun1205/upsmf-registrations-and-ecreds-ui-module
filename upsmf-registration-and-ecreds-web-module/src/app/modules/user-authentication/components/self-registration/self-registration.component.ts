@@ -95,6 +95,7 @@ export class SelfRegistrationComponent implements OnInit{
             },
             error:(err)=>{
               console.log(err)
+              this.isOtpEnable = true
             }
           })
           // this.router.navigate(['/login'])
@@ -112,6 +113,10 @@ export class SelfRegistrationComponent implements OnInit{
     this.authService.otpLogin(this.userName, value.otp).subscribe({
       next:(res)=>{
         console.log(res)
+        this.router.navigate(['/login'])
+      },
+      error:(err)=>{
+         this.router.navigate(['/login'])
       }
     })
     }
