@@ -49,7 +49,39 @@ export class AuthService extends HttpService{
     return this.userPost(reqParam);
   }
 
-  saveUserData(userData: any):void {
+  otpLogin(email:string,otp:any): Observable<any> {
+    // Implement your login API call and get the JWT token
+    const reqParam: RequestParam = {
+      url: this.usermanagementApiURL + this.configService.urlConFig.URLS.OTP_LOGIN,
+      data: {email,otp},
+      header: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJSR3RkMkZzeG1EMnJER3I4dkJHZ0N6MVhyalhZUzBSSyJ9.kMLn6177rvY53i0RAN3SPD5m3ctwaLb32pMYQ65nBdA',
+      }
+    }
+    return this.userPost(reqParam);
+  }
+
+  getOtp(username:string): Observable<any> {
+    // Implement your login API call and get the JWT token
+    const reqParam: RequestParam = {
+      url: this.usermanagementApiURL + this.configService.urlConFig.URLS.GET_OTP,
+      data: {username},
+      header: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJSR3RkMkZzeG1EMnJER3I4dkJHZ0N6MVhyalhZUzBSSyJ9.kMLn6177rvY53i0RAN3SPD5m3ctwaLb32pMYQ65nBdA',
+      }
+    }
+    return this.userPost(reqParam);
+  }
+
+  // saveUserData(userData: any):void {
+  //   this.saveToken(userData?.accessToken);
+  //   localStorage.setItem(this.USER_DATA,JSON.stringify(userData));
+  // }
+  async saveUserData(userData: any): Promise<void> {
     this.saveToken(userData?.accessToken);
     localStorage.setItem(this.USER_DATA,JSON.stringify(userData));
   }
@@ -63,6 +95,7 @@ export class AuthService extends HttpService{
   }
 
   logout(): void {
+    
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_DATA);
     localStorage.removeItem('payData');
