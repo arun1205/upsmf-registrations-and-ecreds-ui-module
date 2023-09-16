@@ -201,7 +201,7 @@ export class BaseServiceService  extends HttpService   {
         return this.get(reqParam);
       }
 
-  getClaims$() {
+  getClaims$(email:string) {
  /*    const headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -213,9 +213,9 @@ export class BaseServiceService  extends HttpService   {
     return this.httpClient.get<any>("http://localhost:8081/api/v1/Regulator/claims/", { 'headers': headers });
   
    */
-
+    // `${this.baseUrl + this.configService.urlConFig.URLS.USER.GET_USERDETAILS_BY_ID}?id=${id}`
     const reqParam: RequestParam = {
-      url: this.configService.urlConFig.URLS.CLAIMS.GET_ALL_CLAIMS,  
+      url: `${this.configService.urlConFig.URLS.CLAIMS.GET_ALL_CLAIMS}?email=${email}`,  
       header: this.headers
     }
     return this.get(reqParam);
