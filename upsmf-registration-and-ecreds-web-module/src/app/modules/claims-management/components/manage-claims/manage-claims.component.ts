@@ -25,6 +25,7 @@ export class ManageClaimsComponent {
     'January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'
   ];
+  userEmail:string = ''
 
   isDataLoading: boolean = false;
   constructor(
@@ -32,13 +33,14 @@ export class ManageClaimsComponent {
     private baseService: BaseServiceService  ) { 
       this.stateData = this.router?.getCurrentNavigation()?.extras.state;
       console.log("stateData:",this.stateData)
+      this.userEmail = this.baseService.getUserEmail()
 
     }
 
   ngOnInit(): void {
     this.initializeColumns();
     console.log(this.claimsTableColumns)
-    this.getclaims();
+    this.getclaims(this.userEmail);
     console.log(this.claims)
   }
 
@@ -206,9 +208,9 @@ export class ManageClaimsComponent {
   //   ) 
   // }
 
-  getclaims() {
+  getclaims(email:string) {
     this.isDataLoading = true;
-   this.baseService.getClaims$().subscribe({
+   this.baseService.getClaims$(email).subscribe({
     next:(res)=>{
       this.claims = res.responseData
    if(this.claims){
