@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { DatePipe, Location } from '@angular/common';
 import { BaseServiceService } from 'src/app/services/base-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -191,7 +191,7 @@ export class NewRegnCertDetailsComponent {
       fatherName: new FormControl('', [
         Validators.required]),
       dob: new FormControl('', [
-        Validators.required]),
+        Validators.required,this.validateMinAge(15) as ValidatorFn]),
       al1: new FormControl('', [
         Validators.required]),
       al2: new FormControl('', [
@@ -237,7 +237,6 @@ export class NewRegnCertDetailsComponent {
         Validators.required]),
       requestType: new FormControl('', [
         Validators.required]),
-      diplomaNumber: new FormControl(''),
       stateName: new FormControl(''),
       date: new FormControl(''),
       newCouncil: new FormControl(''),
@@ -249,6 +248,19 @@ export class NewRegnCertDetailsComponent {
     this.getCandidatePersonalDetails();
 
   }
+  validateMinAge(minAge: number) {
+      return (control: FormControl) => {
+        const selectedDate = new Date(control.value);
+        const currentDate = new Date();
+        const age = currentDate.getFullYear() - selectedDate.getFullYear();
+  
+        if (age < minAge) {
+          return { invalidMinAge: true };
+        }
+  
+        return null;
+      };
+    }
 
   getCandidatePersonalDetails() {
     this.osid = this.stateData?.id
@@ -323,7 +335,7 @@ export class NewRegnCertDetailsComponent {
               rollNum: candidateDetailList.finalYearRollNo,
               passDate: candidateDetailList.passingYear + "-" + pm + "-01",
               requestType: candidateDetailList.requestType,
-              diplomaNumber:candidateDetailList.diplomaNumber
+              
             });
 
             // }
@@ -508,7 +520,7 @@ export class NewRegnCertDetailsComponent {
                 passDate: this.candidateDetailList[0]?.passingYear + "-" + month + "-01",
                 requestType: this.candidateDetailList[0]?.requestType,
                 university:this.candidateDetailList[0]?.university,
-                diplomaNumber:this.candidateDetailList[0]?.diplomaNumber
+                
 
               });
 
@@ -581,7 +593,7 @@ export class NewRegnCertDetailsComponent {
             email: this.newRegCertDetailsformGroup.value.email,
             examBody: value.examBody,
             docProofs: [this.convertUrlList],
-            diplomaNumber: value.diplomaNumber,
+            diplomaNumber: "NA",
             nursingCollage: value.collegeName,
             courseState: "aaaaa",
             courseCouncil: "BBB",
@@ -656,7 +668,6 @@ export class NewRegnCertDetailsComponent {
           "requestType": value.requestType,
           "docproof": this.convertUrlList,
           "regNumber": this.stateData?.regNo ? this.stateData?.regNo : "NA",
-          "diplomaNumber": value.diplomaNumber,
           "courseState": value.stateName ? value.stateName : "NA",
           "courseCouncil": value.newCouncil ? value.newCouncil : "NA",
           "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
@@ -670,22 +681,22 @@ export class NewRegnCertDetailsComponent {
 
         }
 
-        if (this.osid) {
-          const paymentData = {
-            osId: this.osid,
-            origin: this.stateData?.origin,
-            endPointUrl: this.endPointUrl
-          }
-          localStorage.setItem('payData', JSON.stringify(paymentData))
-          this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
-            .subscribe(
-              (response) => {
-                this.paymentDetails = true;
+          if (this.osid) {
+            const paymentData = {
+              osId: this.osid,
+              origin: this.stateData?.origin,
+              endPointUrl: this.endPointUrl
+            }
+            localStorage.setItem('payData', JSON.stringify(paymentData))
+            this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
+              .subscribe(
+                (response) => {
+                  this.paymentDetails = true;
 
 
-              },
-            )
-        } else {
+                },
+              )
+          } else {
           this.updateStudentBody = {
             ...this.updateStudentBody,
             email: this.newRegCertDetailsformGroup.value.email,
@@ -885,7 +896,7 @@ export class NewRegnCertDetailsComponent {
   }
   getPaymentStatusColorClass(status: string): string {
     switch (status) {
-      case 'INPROGRESS':
+      case 'PENDING':
         return 'open';
       case 'SUCCESS':
         return 'closed';
@@ -976,7 +987,6 @@ export class NewRegnCertDetailsComponent {
         [this.labels.university, this.newRegCourseDetailsformGroup.controls['university'].value],
         [this.labels.examBody, this.newRegCourseDetailsformGroup.controls['examBody'].value],
         [this.labels.rollNum, this.newRegCourseDetailsformGroup.controls['rollNum'].value],
-        [this.labels.diplomaNumber, this.newRegCourseDetailsformGroup.controls['diplomaNumber'].value],
         [this.labels.joinDate, this.newRegCourseDetailsformGroup.controls['joinDate'].value],
         [this.labels.passDate, this.newRegCourseDetailsformGroup.controls['passDate'].value],
 

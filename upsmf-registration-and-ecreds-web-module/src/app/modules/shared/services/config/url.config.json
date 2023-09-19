@@ -22,8 +22,12 @@
             "OUTSIDE_UP_UPDATE":"api/v1/StudentOutsideUP/",
             "UPDATE_GOODSTANDING":"api/v1/StudentGoodstanding/",
             "UPDATE_FOREIGNVERIFICATION":"api/v1/StudentForeignVerification/",
-            "GET_COURSES_OUTSIDE":"api/v1/category/StudentOutsideUP/",
-            "DOWNLOAD_CREDENTIALS":"api/v2/"
+            "GET_COURSES_OUTSIDE":"api/v1/allcourse/StudentFromUP",
+            "DOWNLOAD_CREDENTIALS":"api/v2/",
+            "DOWNLOAD_CREDENTIALS_DIPLOMA":"api/v1/DiplomaFromUP/",
+            "GET_DIPLOMA_DETAILS":"api/v1/DiplomaFromUP/search",
+            "DIPLOMA_PAYMENT":"claim-ms/api/v1/Payment",
+            "STUDENT_OSID":"api/v1/StudentFromUP/search"
         },
         "ADMIN":
         {

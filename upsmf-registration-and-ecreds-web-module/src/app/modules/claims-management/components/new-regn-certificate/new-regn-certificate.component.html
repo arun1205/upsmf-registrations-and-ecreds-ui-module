@@ -81,20 +81,27 @@
                             </div>
                             <div class="from-up" *ngIf = "this.newRegCertformGroup.controls['courseType'].value === 'Diploma'">
                                 <div class="applicant-details" >
-                                    <h4>Qualification</h4>
+                                    <h4>Date of Birth</h4>
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Select here</mat-label>
+                                        <!-- <mat-label>Select here</mat-label>
                                         <mat-select (selectionChange)="qualificationSelected($event)" formControlName="qualificationType">
                                             <span *ngFor='let qualification of qualificationsTypesArray;let i = index'>
                                                 <mat-option [value]="qualification">{{qualification}}</mat-option>
                                             </span>
                                         </mat-select>
                                         <mat-error *ngIf="newRegCertformGroup.controls['qualificationType'].invalid">
+                                        </mat-error> -->
+                                        <mat-label>Choose a date</mat-label>
+                                        <input matInput [matDatepicker]="picker" formControlName="dob">
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-error *ngIf="newRegCertformGroup.controls['dob'].invalid">
+                                            Minimum age requirement is 15.
                                         </mat-error>
+                                        <mat-datepicker #picker></mat-datepicker>
                                     </mat-form-field>
                                 </div>
                                 <div class="applicant-details" >
-                                    <h4>Registration number</h4>
+                                    <h4>Roll number</h4>
                                     <mat-form-field appearance="outline">
                                         <input matInput placeholder="Registration Number" formControlName="regNo">
                                         <mat-error *ngIf="newRegCertformGroup.controls['regNo'].invalid">

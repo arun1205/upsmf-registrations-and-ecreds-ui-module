@@ -10,6 +10,7 @@ import { MaterialModule } from '../../src/app/material/material.module';
 import { BaseInterceptorInterceptor } from './services/base-interceptor.interceptor';
 import { PaymentSuccessFailureComponent } from './payment-success-failure/payment-success-failure.component';
 import { SharedModule } from './modules/shared';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { SharedModule } from './modules/shared';
     SharedModule
     
   ],
-  providers: [ { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptorInterceptor, multi: true }
+  providers: [ DatePipe,{ provide: HTTP_INTERCEPTORS, useClass: BaseInterceptorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

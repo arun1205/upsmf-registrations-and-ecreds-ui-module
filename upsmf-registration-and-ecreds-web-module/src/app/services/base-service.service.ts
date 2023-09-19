@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ApproveClaim, ClaimDetails, ClaimsTableData, SentMailBody, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding, studentUpdate } from '../interfaces/interfaces';
+import { ApproveClaim, ClaimDetails, ClaimsTableData, SentMailBody, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding, diplomaBody, diplomaPaymentBody, studentUpdate, studentosIdBody } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -230,6 +230,15 @@ export class BaseServiceService  extends HttpService   {
     return this.get(reqParam, true); // pass true as second param for pdf download
 
   }
+  getDiplomaCredentials$(osid:string){
+    this.headers.Accept = 'application/pdf'
+    const reqParam: RequestParam = {
+      url: this.configService.urlConFig.URLS.STUDENT.DOWNLOAD_CREDENTIALS_DIPLOMA + osid,
+      header: this.headers
+    }
+    return this.get(reqParam, true); // pass true as second param for pdf download
+
+  }
   getAllClaims$(){
     const header  = {
       'Accept': 'application/json'
@@ -285,6 +294,7 @@ export class BaseServiceService  extends HttpService   {
     return this.get(reqParam);
   
   }
+ 
 
    generate_uuidv4(){
     var dt = new Date().getTime();
@@ -314,6 +324,31 @@ export class BaseServiceService  extends HttpService   {
       }
       return this.get(reqParam);
     }
+    getDiploma$(body:diplomaBody){
+      const reqParam:RequestParam={
+        url:this.configService.urlConFig.URLS.STUDENT.GET_DIPLOMA_DETAILS,
+        data:body,
+        header:this.headers
+      }
+      return this.post(reqParam)
+    }
+    diplomaPayment$(body:diplomaPaymentBody){
+      const reqParam:RequestParam={
+        url:this.configService.urlConFig.URLS.STUDENT.DIPLOMA_PAYMENT,
+        data:body,
+        header:this.headers
+      }
+      return this.post(reqParam)
+    }
+    getStudentosid$(body:studentosIdBody){
+      const reqParam:RequestParam={
+        url:this.configService.urlConFig.URLS.STUDENT.STUDENT_OSID,
+        data:body,
+        header:this.headers
+      }
+      return this.post(reqParam)
+    }
+    
 
   
  

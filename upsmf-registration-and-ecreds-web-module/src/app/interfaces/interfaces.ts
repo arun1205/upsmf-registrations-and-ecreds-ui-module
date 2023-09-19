@@ -24,6 +24,16 @@ export interface ClaimsTableData {
     
     
   }
+  export interface  diplomaBody{
+    filters:object; 
+    // finalYearRollNo:object;
+    // dateOfBirth:object;
+    // eq:string
+  }
+  export interface studentosIdBody{
+    filters:object; 
+
+  }
 
   export interface UsersTableData {
     status: string;
@@ -238,6 +248,15 @@ export interface ClaimsTableData {
     email?: string;
     phone?: string;
     ticketId?: number;
+  }
+  export interface diplomaPaymentBody{
+    osid:string,
+    name:string,
+    finalYearRollNo:string,
+    paymentAmount:string,
+    transactionId:string,
+    dateOfPayment:string | undefined,
+    paymentStatus:string
   }
 
 
