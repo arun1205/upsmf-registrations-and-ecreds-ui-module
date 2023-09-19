@@ -5,6 +5,7 @@ import { NewClaimsMenuComponent } from './components/new-claims-menu/new-claims-
 import { NewRegnCertificateComponent } from './components/new-regn-certificate/new-regn-certificate.component';
 import { NewRegnCertDetailsComponent } from './components/new-regn-cert-details/new-regn-cert-details.component';
 import { GoodStandingForeignVerificationComponent } from './components/good-standing-foreign-verification/good-standing-foreign-verification.component';
+import { RegnDiplomaCertDetailsComponent } from './components/regn-diploma-cert-details/regn-diploma-cert-details.component';
 
 
 
@@ -25,6 +26,9 @@ const routes: Routes = [
     path: 'new-regn-cert-details', component: NewRegnCertDetailsComponent, pathMatch: 'full',
   },
   {
+    path:'regn-diploma-cert-details',component: RegnDiplomaCertDetailsComponent, pathMatch:'full'
+  },
+  {
     path: 'good-stand-frgn-cert', component: GoodStandingForeignVerificationComponent, pathMatch: 'full',
   },
   {
@@ -36,6 +40,7 @@ const routes: Routes = [
   {
     path: 'foreign-goodstanding/:id', component: GoodStandingForeignVerificationComponent, pathMatch: 'full',
   },
+  
   
 
 ];

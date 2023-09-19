@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
 import { BaseServiceService } from '../../../../services/base-service.service';
 import { map } from 'rxjs/internal/operators/map';
@@ -344,7 +344,7 @@ export class GoodStandingForeignVerificationComponent {
       fatherName: new FormControl('', [
         Validators.required]),
       dob: new FormControl('', [
-        Validators.required]),
+        Validators.required,this.validateMinAge(15) as ValidatorFn]),
       al1: new FormControl('', [
         Validators.required]),
       al2: new FormControl('', [
@@ -400,6 +400,19 @@ export class GoodStandingForeignVerificationComponent {
     // else{
     //   this.getCandidatePersonalDetailsForeign();
     // }
+  }
+  validateMinAge(minAge: number) {
+    return (control: FormControl) => {
+      const selectedDate = new Date(control.value);
+      const currentDate = new Date();
+      const age = currentDate.getFullYear() - selectedDate.getFullYear();
+
+      if (age < minAge) {
+        return { invalidMinAge: true };
+      }
+
+      return null;
+    };
   }
   navigateToUrl(item: any) {
     window.open(item, "_blank");
@@ -1022,7 +1035,7 @@ export class GoodStandingForeignVerificationComponent {
   }
   getPaymentStatusColorClass(status: string): string {
     switch (status) {
-      case 'INPROGRESS':
+      case 'PENDING':
         return 'open';
       case 'SUCCESS':
         return 'closed';

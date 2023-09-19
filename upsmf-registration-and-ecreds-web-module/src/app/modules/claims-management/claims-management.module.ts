@@ -12,6 +12,7 @@ import { NewRegnCertificateComponent } from './components/new-regn-certificate/n
 import { ReactiveFormsModule } from '@angular/forms';
 import { NewRegnCertDetailsComponent } from './components/new-regn-cert-details/new-regn-cert-details.component';
 import { GoodStandingForeignVerificationComponent } from './components/good-standing-foreign-verification/good-standing-foreign-verification.component';
+import { RegnDiplomaCertDetailsComponent } from './components/regn-diploma-cert-details/regn-diploma-cert-details.component';
 
 
 
@@ -21,7 +22,8 @@ import { GoodStandingForeignVerificationComponent } from './components/good-stan
     NewClaimsMenuComponent,
     NewRegnCertificateComponent,
     NewRegnCertDetailsComponent,
-    GoodStandingForeignVerificationComponent
+    GoodStandingForeignVerificationComponent,
+    RegnDiplomaCertDetailsComponent,
   ],
   imports: [
     CommonModule,
