@@ -542,7 +542,9 @@ export class RegnDiplomaCertDetailsComponent {
         "university": value.university,
         "candidateSignature": "NA",
         "validityUpto": "NA",
-        "certificateNumber": "NA"
+        "certificateNumber": "NA",
+        "courseType":this.stateData.courseType,
+
 
       }
 

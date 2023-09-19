@@ -125,7 +125,7 @@ export class NewRegnCertDetailsComponent {
     this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     this.stateData = this.stateData?.body
-    console.log(this.stateData)
+    console.log("statedatae",this.stateData)
 
 
   }
@@ -649,6 +649,7 @@ export class NewRegnCertDetailsComponent {
           "joiningMonth": joinMonth,
           "passingMonth": passMonth,
           // "email": this.newRegCertDetailsformGroup.value.email,
+          "courseType":this.stateData.courseType,
           "paymentStatus": "PENDING",
           "feeReciptNo": "NA",
           "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
