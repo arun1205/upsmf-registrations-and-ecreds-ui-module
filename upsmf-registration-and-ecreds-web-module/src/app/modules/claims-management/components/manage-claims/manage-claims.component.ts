@@ -25,6 +25,7 @@ export class ManageClaimsComponent {
     'January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'
   ];
+  userEmail:string = ''
 
   isDataLoading: boolean = false;
   constructor(
@@ -32,13 +33,14 @@ export class ManageClaimsComponent {
     private baseService: BaseServiceService  ) { 
       this.stateData = this.router?.getCurrentNavigation()?.extras.state;
       console.log("stateData:",this.stateData)
+      this.userEmail = this.baseService.getUserEmail()
 
     }
 
   ngOnInit(): void {
     this.initializeColumns();
     console.log(this.claimsTableColumns)
-    this.getclaims();
+    this.getclaims(this.userEmail);
     console.log(this.claims)
   }
 
@@ -190,19 +192,44 @@ export class ManageClaimsComponent {
     ];
   }
 
-  getclaims() {
-    this.isDataLoading = true;
-   this.baseService.getClaims$().subscribe(
-      (res) =>{
-        this.claims = res.responseData
-        console.log('this.claims', res);
-        this.pendingClaims = this.claims.filter(claim => claim['status'] === 'OPEN');
-        this.approvedClaims = this.claims.filter(claim => claim['status'] === 'APPROVED');
-        this.rejectedClaims = this.claims.filter(claim => claim['status']==='REJECTED');
-        console.log('pendingClaims', this.pendingClaims)
-        this.isDataLoading = false;
+  // getclaims() {
+  //   this.isDataLoading = true;
+  //  this.baseService.getClaims$().subscribe(
+  //     (res) =>{
+  //       this.claims = res.responseData
+  //       console.log('this.claims', res);
+  //       this.pendingClaims = this.claims.filter(claim => claim['status'] === 'OPEN');
+  //       this.approvedClaims = this.claims.filter(claim => claim['status'] === 'APPROVED');
+  //       this.rejectedClaims = this.claims.filter(claim => claim['status']==='REJECTED');
+  //       console.log('pendingClaims', this.pendingClaims)
+  //       this.isDataLoading = false;
 
-      }, 
+  //     }, 
+  //   ) 
+  // }
+
+  getclaims(email:string) {
+    this.isDataLoading = true;
+   this.baseService.getClaims$(email).subscribe({
+    next:(res)=>{
+      this.claims = res.responseData
+   if(this.claims){
+       console.log('this.claims', res);
+       this.pendingClaims = this.claims?.filter(claim => claim['status'] === 'OPEN');
+       this.approvedClaims = this.claims?.filter(claim => claim['status'] === 'APPROVED');
+       this.rejectedClaims = this.claims?.filter(claim => claim['status'] === 'REJECTED');
+       console.log('pendingClaims', this.pendingClaims)
+       this.isDataLoading = false;
+   }
+   else {
+    this.isDataLoading = false;
+   }
+    },
+    error:(err)=>{
+    console.log(err)
+    }
+   }
+     
     ) 
   }
 

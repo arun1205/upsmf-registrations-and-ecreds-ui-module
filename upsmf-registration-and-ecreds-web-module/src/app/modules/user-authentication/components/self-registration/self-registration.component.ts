@@ -3,6 +3,7 @@ import { Validators } from '@angular/forms';
 import {  AbstractControl, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth-service/auth.service';
+import { BaseServiceService } from 'src/app/services/base-service.service';
 
 @Component({
   selector: 'app-self-registration',
@@ -11,9 +12,14 @@ import { AuthService } from 'src/app/core/services/auth-service/auth.service';
 })
 export class SelfRegistrationComponent implements OnInit{
   registerForm:FormGroup;
+  otpForm:FormGroup;
+  isOtpEnable:boolean = false;
+  userName:any
+  userRole:any;
 
   constructor(private authService:AuthService,
-    private router: Router){
+    private router: Router,
+    private baseService: BaseServiceService ){
 
   }
 
@@ -37,10 +43,12 @@ export class SelfRegistrationComponent implements OnInit{
       emailphno: new FormControl('',[Validators.required, this.emailOrPhoneValidator()]),
       phoneNumber: new FormControl('', Validators.required),
       secretToken: new FormControl('',[Validators.required,this.passwordValidator]),
-       confirmPassword: new FormControl('', Validators.required)
-
-     
+       confirmPassword: new FormControl('', Validators.required)     
     });
+
+    this.otpForm =  new FormGroup({
+      otp: new FormControl('', Validators.required)
+    })
   }
   
   passwordValidator(control: FormControl): { [key: string]: boolean } | null {
@@ -78,11 +86,25 @@ export class SelfRegistrationComponent implements OnInit{
   signUpform(value:any){
     const  {name, emailphno, phoneNumber, secretToken } = value
     console.log('signUp',value)
+    this.userName= emailphno
     this.authService.Signup(name, emailphno, phoneNumber, secretToken).subscribe({
       next:(res)=>{
         console.log('res',res)
         if(res.params.status === 'SUCCESSFUL'){
-          this.router.navigate(['/login'])
+          this.authService.getOtp(emailphno).subscribe({
+            next:(res)=>{
+              console.log('otpRes',res)
+              this.isOtpEnable = true
+            },
+            error:(err)=>{
+              console.log(err)
+              if(err.status == 200){
+                this.isOtpEnable = true
+              }
+              
+            }
+          })
+          // this.router.navigate(['/login'])
         }
       }, 
       error: (err) => {
@@ -91,5 +113,40 @@ export class SelfRegistrationComponent implements OnInit{
       }
     })
   }
+
+
+  signUpOtpform(value:any) {
+    this.authService.otpLogin(this.userName, value.otp).subscribe({
+      next:(res)=>{
+        console.log(res)
+        this.router.navigate(['/login'])
+        if(res){
+          this.authService.saveUserData(res);
+          if(this.authService.isLoggedIn()){
+            this.userRole= this.baseService.getUserRole()[0];
+            switch (this.userRole) {
+             case 'StudentFromUP':
+               this.router.navigate(['/claims/manage']);
+               break;
+             case 'SuperAdmin':
+               this.router.navigate(['/super-admin']);
+               break;
+             case 'Regulator':
+                 this.router.navigate(['/admin']);
+                 break;
+             default:
+             
+           }
+          }
+       
+          // this.router.navigate(['/claims/manage'])
+       }
+      },
+      error:(err)=>{
+        console.log(err)
+         this.router.navigate(['/login'])
+      }
+    })
+    }
  
 }

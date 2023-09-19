@@ -6,7 +6,7 @@
         <div class="login-main-container">
             <div class="login-content">
                 <h2 class="login-text">Login</h2>
-                <div class="login-inputs" >
+                <div class="login-inputs" *ngIf="!isEnableOtpLogin" >
                    
                     <form class="login-section" [formGroup]="loginForm" (ngSubmit)="signInForm(loginForm.value)">
                         <div class="input-container">
@@ -29,15 +29,69 @@
                         <div class="input-container" style="margin-top:6%;">
                             <button class="text-class action-btns" [disabled]="!loginForm.valid" type="submit" mat-raised-button color="primary">SIGN IN</button>
                         </div>
-                        <div class="mt2  align-center">OR</div>
                         <div class="input-container" style="margin-top:2%;">
-                            <button class="text-class action-btns" (click)="navigateToSignupPage()" type="submit" mat-raised-button color="primary">SIGN UP</button>
+                            <button class="text-class action-btns"  type="submit" mat-raised-button color="primary" (click)="signInWithOtp()">SIGN IN WITH OTP</button>
+                        </div>
+                        <div class="mt2  align-center">OR</div>
+                        <div class="input-container" style="margin-top:1%;">
+                            <h5 class="hint-msg" (click)="navigateToSignupPage()">Sign Up</h5>
+                            <!-- <button class="text-class action-btns" (click)="navigateToSignupPage()" type="submit" mat-raised-button color="primary">SIGN UP</button> -->
                         </div>
                         
                     </form>
                     <!-- <div class="mt2 text-align">OR</div>
                         <h5 class="hint-msg" (click)="navigateToSignupPage()">Sign Up</h5> -->
                 </div>
+
+                 <!-- get otp with email -->
+                 <div class="login-inputs" *ngIf="isEnableOtpLogin && !isOtpForm">
+                   
+                    <form class="login-section" [formGroup]="loginForm" (ngSubmit)="getOTP()">
+                        <div class="input-container">
+                            <h4>Email Id</h4>
+                            <mat-form-field appearance="outline" class="text-class">
+                                <mat-label>Email Id</mat-label>
+                                <input matInput placeholder="Enter Email" formControlName="emailphno" type="email" >
+                            </mat-form-field>
+                            <label style="color:red" *ngIf="loginForm.get('emailphno')?.hasError('invalidInput') ">Invalid email.</label>
+
+                        </div>
+
+                        <!-- <div class="first-container" style="margin-top:6%;">
+                            <button class="text-class action-btns" type="submit"  mat-raised-button color="primary">GET OTP</button>
+                            <h5 class="hint-msg" (click)="navigateBackToLoginEmailPassword()">Go back, login with email and password</h5>
+                        </div> -->
+                        <div class="input-container" style="margin-top:6%;">
+                            <button class="text-class action-btns"  type="submit" mat-raised-button color="primary">GET OTP</button>
+                            <h5 class="hint-msg" (click)="navigateBackToLoginEmailPassword()">Go back, login with email and password</h5>
+                        </div>
+                    
+                    </form>
+                </div>
+
+                 <!-- send otp -->
+               <div class="login-inputs" *ngIf="isEnableOtpLogin && isOtpForm">
+                <form class="login-section" [formGroup]="otpForm" (ngSubmit)="SubmitOTP()">
+                    <div class="input-container">
+                        <h4>OTP</h4>
+                        <mat-form-field appearance="outline" class="text-class">
+                            <mat-label>OTP</mat-label>
+                            <input matInput type="text" maxlength="6" placeholder="0 - 0 - 0 - 0 - 0 - 0" formControlName="otp">
+                            <mat-hint style="color: gray;">Enter the 6 digit OTP sent to your email address</mat-hint>
+                        </mat-form-field>
+                        <span class="resendOTP-class" (click)="getOTP()">Re-send</span>
+                        <mat-error *ngIf="otpForm.controls['otp'].hasError('pattern') && (otpForm.controls['otp'].dirty || otpForm.controls['otp'].touched)">
+                            OTP should contain digits only
+                        </mat-error>
+                    </div>
+
+                    <div class="input-container" style="margin-top:6%;">
+                        <button class="text-class action-btns" [disabled]="!otpForm.valid" type="submit"  mat-raised-button color="primary">SIGN IN</button>
+                        <h5 class="hint-msg" (click)="navigateBackToEmail()">Go back, re-enter the email</h5>
+                    </div>
+                
+                </form>
+           </div>
             </div>
             
 

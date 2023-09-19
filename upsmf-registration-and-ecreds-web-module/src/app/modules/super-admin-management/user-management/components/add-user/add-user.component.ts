@@ -176,7 +176,7 @@ export class AddUserComponent {
         credentials: [
           {
               "type": "password",
-              "value": "ka09eF$299",
+              "value": "Welcome@123",
               "temporary": "false"
           }
       ],
@@ -278,7 +278,7 @@ export class AddUserComponent {
       credentials: [
         {
             "type": "password",
-            "value": "ka09eF$299",
+            "value": "Welcome@123",
             "temporary": "false"
         }
     ],
