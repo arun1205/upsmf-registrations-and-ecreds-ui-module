@@ -98,6 +98,8 @@ export class NewRegnCertDetailsComponent {
   profileFileName:any;
   uplaodedFiles:any;
   filePreview:any;
+  todayDate=new Date();
+  maxDate=this.todayDate;
 
   stateData: any;
   selectedLink: string = 'Candidate Details';
@@ -151,7 +153,7 @@ export class NewRegnCertDetailsComponent {
   }
 
   getEndPoint() {
-    switch (this.stateData?.origin) {
+    switch (this.stateData?.origin|| this.stateData?.entity) {
 
       case 'StudentOutsideUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
@@ -326,7 +328,7 @@ export class NewRegnCertDetailsComponent {
             const joinM = candidateDetailList.joiningMonth;
             const jm = this.monthMap[joinM]
             const passM = candidateDetailList.passingMonth;
-            const pm = this.monthMap[joinM]
+            const pm = this.monthMap[passM]
 
             this.newRegCourseDetailsformGroup.patchValue({
               courseName: candidateDetailList.courseName,
@@ -464,6 +466,7 @@ export class NewRegnCertDetailsComponent {
           (response: any) => {
             if (response.responseData.length) {
               this.candidateDetailList = response.responseData
+              console.log("data",this.candidateDetailList[0])
               this.osid = this.candidateDetailList[0].osid;
               this.urlDataResponse = this.candidateDetailList[0].docproof;
               this.filePreview= this.candidateDetailList[0].candidatePic;
@@ -691,7 +694,8 @@ export class NewRegnCertDetailsComponent {
           "university": value.university,
           "candidateSignature": "NA",
           "validityUpto": "NA",
-          "certificateNumber": "NA"
+          "certificateNumber": "NA",
+          "diplomaNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA"
 
         }
 
