@@ -95,7 +95,9 @@ export class NewRegnCertDetailsComponent {
   courseUrl: string = ''
   paymentResponse: any;
   updateStudentBody: any;
-
+  profileFileName:any;
+  uplaodedFiles:any;
+  filePreview:any;
 
   stateData: any;
   selectedLink: string = 'Candidate Details';
@@ -464,6 +466,17 @@ export class NewRegnCertDetailsComponent {
               this.candidateDetailList = response.responseData
               this.osid = this.candidateDetailList[0].osid;
               this.urlDataResponse = this.candidateDetailList[0].docproof;
+              this.filePreview= this.candidateDetailList[0].candidatePic;
+              if(!!this.filePreview){
+                const fileName = this.filePreview.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop();
+                const getuploadObject = {
+                  name: extractLastPart,
+                  url: this.filePreview
+                }
+                this.filePreview = getuploadObject
+              }
+
 
 
               if (!!this.urlDataResponse) {
@@ -635,7 +648,7 @@ export class NewRegnCertDetailsComponent {
         this.updateStudentBody =
         {
           "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
-          "candidatePic": "arun.jpg",
+          "candidatePic": this.filePreview.url,
           "joiningYear": joinYear.toString(),
           "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
           "gender": this.newRegCertDetailsformGroup.value.gender,
@@ -723,6 +736,37 @@ export class NewRegnCertDetailsComponent {
 
   navigateToUrl(item: any) {
     window.open(item, "_blank");
+  }
+
+  onProfileChanged(event?:any){
+   let selectedUploadFile = event.target.files[0];
+   console.log(selectedUploadFile)
+  //  this.profileFileName = selectedUploadFile.name
+   this.uploadProfileData(selectedUploadFile)
+  }
+
+  uploadProfileData(selectedFile:any){
+    const formData = new FormData();
+    formData.append('files', selectedFile)
+    this.baseService.uploadFiles$(this.osid,formData,this.endPointUrl).subscribe({
+      next:(res)=>{
+      console.log('profileData',res)
+      this.uplaodedFiles =res.result
+      console.log(this.uplaodedFiles)
+      const UrlwithoutComma = this.uplaodedFiles.replace(/,*$/, '');
+      const fileName = this.uplaodedFiles.split('/').pop();
+      const extractLastPart = fileName?.split('_').pop();
+      const getuploadObject = {
+        name: extractLastPart,
+        url: UrlwithoutComma
+      }
+      this.filePreview = getuploadObject
+      console.log('getuploadObject',this.filePreview)
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    })
   }
 
 

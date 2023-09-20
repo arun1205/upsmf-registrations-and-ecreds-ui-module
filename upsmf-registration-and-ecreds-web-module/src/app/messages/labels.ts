@@ -30,7 +30,8 @@ export const applabels = {
     proQual:"Professional Qualification ",
     tcName:"Name of Training Centre",
     regnNum:"Registration Number",
-    placeOfWork:"Place where you worked with full details"
+    placeOfWork:"Place where you worked with full details",
+    uploadPhoto: "Upload Photo"
     
 
 
