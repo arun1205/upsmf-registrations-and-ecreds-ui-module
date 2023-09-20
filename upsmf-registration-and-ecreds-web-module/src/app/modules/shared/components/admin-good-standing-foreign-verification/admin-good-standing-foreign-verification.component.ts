@@ -46,6 +46,8 @@ export class AdminGoodStandingForeignVerificationComponent {
   userRole: any;
   userEmail: any;
   urlDataResponse: string;
+  entityId: string;
+  entityName: string
   entity: string;
   osid: string;
   stateData: any;
@@ -60,6 +62,22 @@ export class AdminGoodStandingForeignVerificationComponent {
 
 
   profQualificationArray = ['ANM', 'Midwife', 'HW', 'Nurse', 'Bsc Nursing'];
+  months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  monthMap: { [key: string]: string } = {
+    "January": "01",
+    "February": "02",
+    "March": "03",
+    "April": "04",
+    "May": "05",
+    "June": "06",
+    "July": "07",
+    "August": "08",
+    "September": "09",
+  }
 
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Workspace', url: '/admin' },
@@ -110,6 +128,8 @@ export class AdminGoodStandingForeignVerificationComponent {
           (response: any) => {
             console.log("data", response)
             this.urlDataResponse = response.responseData.docproof;
+            this.entityId=response.responseData.studentGoodstandingVerification[0].entityId
+            this.entityName=response.responseData.studentGoodstandingVerification[0].entityName
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               console.log('urlDaaaa', this.urlData)
@@ -127,6 +147,10 @@ export class AdminGoodStandingForeignVerificationComponent {
                 });
               }
             }
+            const joinM = response.responseData.joiningMonth;
+            const jm = this.monthMap[joinM]
+            const passM = response.responseData.passingMonth;
+            const pm = this.monthMap[passM]
             this.goodStandingForeignVerificationformGroup.patchValue({
               maidenName: response.responseData.name,
               mrdName: response.responseData.marriedName,
@@ -138,7 +162,7 @@ export class AdminGoodStandingForeignVerificationComponent {
               dob: response.responseData.dob,
               gender: response.responseData.gender,
               al1: response.responseData.presentAddress,
-              al2: response.responseData.presentAddress,
+              // al2: response.responseData.presentAddress,
               state: response.responseData.state,
               pin: response.responseData.pincode,
               district: response.responseData.district,
@@ -146,8 +170,9 @@ export class AdminGoodStandingForeignVerificationComponent {
               placeOfWork: response.responseData.workPlace,
               tcName: response.responseData.trainingCenter,
               regnNum: response.responseData.registrationNumber,
-              proQual: response.responseData.professionalQualification
-
+              proQual: response.responseData.professionalQualification,
+              joinDate: response.responseData.joiningYear + "-" + jm + "-01",
+              passDate: response.responseData.passingYear + "-" + pm + "-01",
             });
           });
     }
@@ -163,6 +188,8 @@ export class AdminGoodStandingForeignVerificationComponent {
         .subscribe(
           (response: any) => {
             this.urlDataResponse = response.responseData.docproof;
+            this.entityId=response.responseData.StudentForeignVerify[0].entityId
+            this.entityName=response.responseData.StudentForeignVerify[0].entityName
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               console.log('urlDaaaa', this.urlData)
@@ -180,6 +207,10 @@ export class AdminGoodStandingForeignVerificationComponent {
                 });
               }
             }
+            const joinM = response.responseData.joiningMonth;
+            const jm = this.monthMap[joinM]
+            const passM = response.responseData.passingMonth;
+            const pm = this.monthMap[passM]
             this.goodStandingForeignVerificationformGroup.patchValue({
               maidenName: response.responseData.name,
               mrdName: response.responseData.marriedName,
@@ -191,7 +222,7 @@ export class AdminGoodStandingForeignVerificationComponent {
               dob: response.responseData.dob,
               gender: response.responseData.gender,
               al1: response.responseData.address,
-              al2: response.responseData.address,
+              // al2: response.responseData.address,
               state: response.responseData.state,
               pin: response.responseData.pincode,
               district: response.responseData.district,
@@ -199,7 +230,9 @@ export class AdminGoodStandingForeignVerificationComponent {
               placeOfWork: response.responseData.workPlace,
               tcName: response.responseData.trainingCenter,
               regnNum: response.responseData.registrationNumber,
-              proQual: response.responseData.professionalQualification
+              proQual: response.responseData.professionalQualification,
+              joinDate: response.responseData.joiningYear + "-" + jm + "-01",
+              passDate: response.responseData.passingYear + "-" + pm + "-01",
 
             });
           });
@@ -239,6 +272,10 @@ export class AdminGoodStandingForeignVerificationComponent {
         Validators.required]),
       regnNum: new FormControl('', [
         Validators.required]),
+        joinDate: new FormControl('', [
+          Validators.required]),
+        passDate: new FormControl('', [
+          Validators.required]),
       tcName: new FormControl('', [
         Validators.required]),
       placeOfWork: new FormControl('', [
@@ -306,6 +343,8 @@ export class AdminGoodStandingForeignVerificationComponent {
         //convert to string with commaa separated
         this.convertUrlList = this.listOfFiles.join(',')
         const mailBody = {
+          entityId:this.entityId,
+          entityName:this.entityName,
           outsideEntityMailId: result.reason,
           name: this.goodStandingForeignVerificationformGroup.value.maidenName,
           gender: "NA",
@@ -324,7 +363,7 @@ export class AdminGoodStandingForeignVerificationComponent {
 
         }
         this.baseService.sendMailOutsideUp$(mailBody).subscribe((response) => {
-          
+          this.navToPreviousPage();
         })
 
       }
@@ -357,8 +396,8 @@ export class AdminGoodStandingForeignVerificationComponent {
         [this.labels.mrdName, this.goodStandingForeignVerificationformGroup.controls['mrdName'].value],
         [this.labels.fatherName, this.goodStandingForeignVerificationformGroup.controls['fatherName'].value],
         [this.labels.dob, this.goodStandingForeignVerificationformGroup.controls['dob'].value],
-        [this.labels.al1, this.goodStandingForeignVerificationformGroup.controls['al1'].value],
-        [this.labels.al2, this.goodStandingForeignVerificationformGroup.controls['al2'].value],
+        ["Address", this.goodStandingForeignVerificationformGroup.controls['al1'].value],
+        // [this.labels.al2, this.goodStandingForeignVerificationformGroup.controls['al2'].value],
         [this.labels.district, this.goodStandingForeignVerificationformGroup.controls['district'].value],
         [this.labels.state, this.goodStandingForeignVerificationformGroup.controls['state'].value],
         [this.labels.pin, this.goodStandingForeignVerificationformGroup.controls['pin'].value],
