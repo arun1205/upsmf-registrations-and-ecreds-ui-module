@@ -48,6 +48,7 @@ export class AdminGoodStandingForeignVerificationComponent {
   urlDataResponse: string;
   entityId: string;
   entityName: string
+  filePreview:any;
   entity: string;
   osid: string;
   stateData: any;
@@ -77,6 +78,9 @@ export class AdminGoodStandingForeignVerificationComponent {
     "July": "07",
     "August": "08",
     "September": "09",
+    "October":"10",
+    "November":"11",
+    "December":"12"
   }
 
   breadcrumbItems: BreadcrumbItem[] = [
@@ -133,6 +137,16 @@ export class AdminGoodStandingForeignVerificationComponent {
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               console.log('urlDaaaa', this.urlData)
+              this.filePreview= response.responseData.studentGoodstandingVerification[0].candidatePic;
+              if(!!this.filePreview){
+                const fileName = this.filePreview.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop();
+                const getuploadObject = {
+                  name: extractLastPart,
+                  url: this.filePreview
+                }
+                this.filePreview = getuploadObject
+              }
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
                   const parts = url.split('=');
@@ -151,6 +165,7 @@ export class AdminGoodStandingForeignVerificationComponent {
             const jm = this.monthMap[joinM]
             const passM = response.responseData.passingMonth;
             const pm = this.monthMap[passM]
+            console.log("pass",passM)
             this.goodStandingForeignVerificationformGroup.patchValue({
               maidenName: response.responseData.name,
               mrdName: response.responseData.marriedName,
@@ -171,8 +186,8 @@ export class AdminGoodStandingForeignVerificationComponent {
               tcName: response.responseData.trainingCenter,
               regnNum: response.responseData.registrationNumber,
               proQual: response.responseData.professionalQualification,
-              joinDate: response.responseData.joiningYear + "-" + jm + "-01",
-              passDate: response.responseData.passingYear + "-" + pm + "-01",
+              joinDate: response.responseData.joiningDate,
+              passDate: response.responseData.courseDate,
             });
           });
     }
@@ -193,6 +208,16 @@ export class AdminGoodStandingForeignVerificationComponent {
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               console.log('urlDaaaa', this.urlData)
+              this.filePreview= response.responseData.candidatePic;
+              if(!!this.filePreview){
+                const fileName = this.filePreview.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop();
+                const getuploadObject = {
+                  name: extractLastPart,
+                  url: this.filePreview
+                }
+                this.filePreview = getuploadObject
+              }
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
                   const parts = url.split('=');
@@ -207,10 +232,14 @@ export class AdminGoodStandingForeignVerificationComponent {
                 });
               }
             }
+            const month = (new Date(Date.parse(response.responseData.joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
+              "0" + (new Date(Date.parse(response.responseData.joiningMonth + " 1, 2012")).getMonth() + 1) :
+              new Date(Date.parse(response.responseData.joiningMonth + " 1, 2012")).getMonth() + 1
             const joinM = response.responseData.joiningMonth;
             const jm = this.monthMap[joinM]
             const passM = response.responseData.passingMonth;
             const pm = this.monthMap[passM]
+            
             this.goodStandingForeignVerificationformGroup.patchValue({
               maidenName: response.responseData.name,
               mrdName: response.responseData.marriedName,
@@ -256,8 +285,8 @@ export class AdminGoodStandingForeignVerificationComponent {
         Validators.required]),
       al1: new FormControl('', [
         Validators.required]),
-      al2: new FormControl('', [
-        Validators.required]),
+      // al2: new FormControl('', [
+      //   Validators.required]),
       district: new FormControl('', [
         Validators.required]),
       state: new FormControl('', [
@@ -280,6 +309,7 @@ export class AdminGoodStandingForeignVerificationComponent {
         Validators.required]),
       placeOfWork: new FormControl('', [
         Validators.required]),
+        
       email: new FormControl('', [
         Validators.required,
         Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -352,7 +382,7 @@ export class AdminGoodStandingForeignVerificationComponent {
           email: this.goodStandingForeignVerificationformGroup.value.email,
           examBody: "UPSMF",
           docProofs: [this.convertUrlList],
-          diplomaNumber: "NA",
+          diplomaNumber: "",
           nursingCollage: value.tcName,
           courseState: "aaaaa",
           courseCouncil: "BBB",
@@ -409,6 +439,8 @@ export class AdminGoodStandingForeignVerificationComponent {
         [this.labels.regnNum, this.goodStandingForeignVerificationformGroup.controls['regnNum'].value],
         // [this.labels.attach,this.newRegCertDetailsformGroup.controls['attach'].value ],  
         [this.labels.placeOfWork, this.goodStandingForeignVerificationformGroup.controls['placeOfWork'].value],
+        [this.labels.joinDate, this.goodStandingForeignVerificationformGroup.controls['joinDate'].value],
+        [this.labels.passDate, this.goodStandingForeignVerificationformGroup.controls['passDate'].value],
 
 
       ],

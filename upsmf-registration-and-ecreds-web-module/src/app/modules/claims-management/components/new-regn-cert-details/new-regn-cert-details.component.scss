@@ -160,4 +160,20 @@ mat-form-field{
     margin-bottom: 11px;
     width: 72%;
   }
+  .person-details{
+    display: flex;
+    flex-direction: column;
+  }
+  .pr-details{
+    display: flex;
+    flex-direction: row;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    justify-content: space-between;
+  }
+  img{
+    width: 7rem;
+    height: 7rem;
+    margin-top: 2rem;
+  }
   

@@ -8,7 +8,7 @@ export const applabels = {
     dob: "Date Of Birth",
     credType: " Credentials Type",
     gender: "Gender",
-    al1:"Address Line 1",
+    al1:"Address",
     al2:"Address Line 2",
     district:"District",
     state:" State",

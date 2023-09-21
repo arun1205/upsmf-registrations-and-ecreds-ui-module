@@ -188,7 +188,7 @@ export class RegnDiplomaCertDetailsComponent {
   }
 
   getEndPoint() {
-    switch (this.stateData?.origin) {
+    switch (this.stateData?.origin || this.stateData?.entity) {
 
       case 'StudentOutsideUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
@@ -319,7 +319,7 @@ export class RegnDiplomaCertDetailsComponent {
       }
       this.baseService.getDiploma$(this.diplomaBody).subscribe((response) => {
         if (Array.isArray(response)) {
-          console.log(response[0])
+          console.log("tye",response[0])
           this.urlDataResponse = response[0].docproof;
           this.name = response[0].name;
           this.finalYearRollNo = response[0].finalYearRollNo;
@@ -903,7 +903,7 @@ export class RegnDiplomaCertDetailsComponent {
         if (result) {
           const approveBody = {
             action: "REJECT_CLAIM",
-            note: reason
+            notes: reason
           }
           const osid = this.stateData?.id
           this.baseService.approveClaim$(osid, approveBody)

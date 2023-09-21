@@ -67,6 +67,8 @@ export class NewRegnCertDetailsComponent {
 
   osid: string;
   entity: string;
+  id:string;
+  reason:string;
 
   months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -200,8 +202,8 @@ export class NewRegnCertDetailsComponent {
         Validators.required,this.validateMinAge(15) as ValidatorFn]),
       al1: new FormControl('', [
         Validators.required]),
-      al2: new FormControl('', [
-        Validators.required]),
+    //  al2 : new FormControl('', [
+    //     Validators.required]),
       district: new FormControl('', [
         Validators.required]),
       state: new FormControl('UP', [
@@ -271,6 +273,7 @@ export class NewRegnCertDetailsComponent {
   getCandidatePersonalDetails() {
     this.osid = this.stateData?.id
     this.entity = this.stateData?.entity
+    this.id=this.stateData?.id
     if (this.entity === "StudentFromUP" && this.userEmail === "Regulator") {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
         .subscribe(
@@ -309,7 +312,7 @@ export class NewRegnCertDetailsComponent {
               dob: candidateDetailList.dateOfBirth,
               gender: candidateDetailList.gender,
               al1: candidateDetailList.address,
-              al2: candidateDetailList.address,
+              // al2: candidateDetailList.address,
               state: candidateDetailList.state,
               pin: candidateDetailList.pincode,
               district: candidateDetailList.district,
@@ -390,7 +393,7 @@ export class NewRegnCertDetailsComponent {
               dob: candidateDetailList.dateOfBirth,
               gender: candidateDetailList.gender,
               al1: candidateDetailList.address,
-              al2: candidateDetailList.address,
+              // al2: candidateDetailList.address,
               state: candidateDetailList.state,
               pin: candidateDetailList.pincode,
               district: candidateDetailList.district,
@@ -466,6 +469,8 @@ export class NewRegnCertDetailsComponent {
       this.baseService.getCandidatePersonalDetails$(this.endPointUrl)
         .subscribe(
           (response: any) => {
+            this.id=this.stateData?.id
+            this.getRejectReasonStudent()
             if (response.responseData.length) {
               this.candidateDetailList = response.responseData
               console.log("data",this.candidateDetailList[0])
@@ -525,7 +530,7 @@ export class NewRegnCertDetailsComponent {
                 dob: this.candidateDetailList[0]?.dateOfBirth,
                 gender: this.candidateDetailList[0]?.gender,
                 al1: this.candidateDetailList[0]?.address,
-                al2: this.candidateDetailList[0]?.address,
+                // al2: this.candidateDetailList[0]?.address,
                 state: this.candidateDetailList[0].state,
                 pin: this.candidateDetailList[0]?.pincode,
                 district: this.candidateDetailList[0]?.district,
@@ -539,14 +544,18 @@ export class NewRegnCertDetailsComponent {
               const month = (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
                 "0" + (new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1) :
                 new Date(Date.parse(this.candidateDetailList[0]?.joiningMonth + " 1, 2012")).getMonth() + 1
+                const joinM = this.candidateDetailList[0].joiningMonth;
+                const jm = this.monthMap[joinM]
+                const passM = this.candidateDetailList[0].passingMonth;
+                const pm = this.monthMap[passM]
 
               this.newRegCourseDetailsformGroup.patchValue({
                 courseName: this.candidateDetailList[0]?.courseName,
                 collegeName: this.candidateDetailList[0]?.nursingCollage,
                 examBody: this.candidateDetailList[0]?.examBody,
-                joinDate: this.candidateDetailList[0]?.joiningYear + "-" + month + "-01",
+                joinDate: this.candidateDetailList[0]?.joiningYear + "-" + jm + "-01",
                 rollNum: this.candidateDetailList[0]?.finalYearRollNo,
-                passDate: this.candidateDetailList[0]?.passingYear + "-" + month + "-01",
+                passDate: this.candidateDetailList[0]?.passingYear + "-" + pm + "-01",
                 requestType: this.candidateDetailList[0]?.requestType,
                 university:this.candidateDetailList[0]?.university,
                 
@@ -576,7 +585,7 @@ export class NewRegnCertDetailsComponent {
     if (this.entity === "StudentFromUP" && this.userEmail === "Regulator") {
       const approveBody = {
         action: "GRANT_CLAIM",
-        note: "Registration Certificate"
+        notes: "Registration Certificate"
       }
       this.baseService.approveClaim$(osid, approveBody)
         .subscribe((response) => {
@@ -942,7 +951,7 @@ export class NewRegnCertDetailsComponent {
         if (result) {
           const approveBody = {
             action: "REJECT_CLAIM",
-            note: reason
+            notes: reason
           }
           const osid = this.stateData?.id
           this.baseService.approveClaim$(osid, approveBody)
@@ -1096,5 +1105,11 @@ export class NewRegnCertDetailsComponent {
 
     doc.save(`Certificate_${this.newRegCourseDetailsformGroup.controls['rollNum'].value}_.pdf`)
 
+  }
+  getRejectReasonStudent(){
+    this.baseService.getReasonStudent$(this.id).subscribe((response)=>{
+      this.reason=response.responseData.notes[1].notes
+      console.log("reason",response.responseData.notes[0].notes)
+    })
   }
 }
