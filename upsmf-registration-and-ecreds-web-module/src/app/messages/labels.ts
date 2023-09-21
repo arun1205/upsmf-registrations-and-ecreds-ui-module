@@ -31,7 +31,8 @@ export const applabels = {
     tcName:"Name of Training Centre",
     regnNum:"Registration Number",
     placeOfWork:"Place where you worked with full details",
-    uploadPhoto: "Upload Photo"
+    uploadPhoto: "Upload Photo",
+    uploadSignature:"Upload Signature"
     
 
 

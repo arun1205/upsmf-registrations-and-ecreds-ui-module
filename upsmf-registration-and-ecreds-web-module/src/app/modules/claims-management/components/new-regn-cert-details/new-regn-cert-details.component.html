@@ -221,6 +221,25 @@
                                                     </mat-error>
                                                 </mat-form-field>
                                             </div>
+                                            <h4>{{labels.uploadSignature}}</h4>
+                                            <div class="upload-pic-ui">
+                                               <div *ngIf="fileSignPreview">
+                                                   {{fileSignPreview.name}}
+                                               </div>
+                                              <div>
+                                               <label  for="fileUpload3" class="custom-file-upload">
+                                                   <a mat-button color="primary">Browse
+                                                        </a>
+                                               </label>
+                                               <label  *ngIf="fileSignPreview" class="custom-file-upload">
+                                                       <a mat-button color="primary" (click)="navigateToUrl(fileSignPreview.url)">preview
+                                                            </a>
+                                                   </label>
+                                               <input type="file" id="fileUpload3" style="display: none;" enctype="multipart/form-data"
+                                                       (change)="onSignatureChanged($event)"   accept=".pdf,.docx,.jpeg, .png, .jpg" />
+                                              </div>
+                                             
+                                            </div>
 
                                         <!-- </div> -->
                                         <h4>{{labels.uploadPhoto}}</h4>
