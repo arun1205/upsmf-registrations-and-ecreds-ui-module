@@ -80,7 +80,7 @@ export class GoodStandingForeignVerificationComponent {
   selectedLink: string = 'Candidate Details';
   paymentResponse: any;
 
-  profQualificationArray = ['ANM', 'Midwife', 'HW', 'Nurse', 'Bsc Nursing'];
+  profQualificationArray = ['A.N.M', 'Midwife', 'H.W', 'Nurse', 'B.SC.Nursing'];
 
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Claim Registration Certificate', url: '/claims/new' },
@@ -225,8 +225,8 @@ export class GoodStandingForeignVerificationComponent {
               placeOfWork: this.candidateDetailList[0]?.workPlace,
               tcName: this.candidateDetailList[0]?.trainingCenter,
               proQual: this.candidateDetailList[0]?.professionalQualification,
-              joinDate: this.candidateDetailList[0].joiningYear + "-" + jm + "-01",
-              passDate: this.candidateDetailList[0].passingYear + "-" + pm + "-01",
+              joinDate: this.candidateDetailList[0].joiningDate,
+              passDate: this.candidateDetailList[0].courseDate,
 
             });
 
@@ -751,10 +751,12 @@ export class GoodStandingForeignVerificationComponent {
         "country": this.goodStandingForeignVerificationformGroup.value.country,
         "pincode": this.goodStandingForeignVerificationformGroup.value.pin,
         "district": this.goodStandingForeignVerificationformGroup.value.district,
-        "joiningMonth": joinMonth,
-        "passingMonth": passMonth,
-        "joiningYear": joinYear.toString(),
-        "passingYear": passYear.toString(),
+        // "joiningMonth": joinMonth,
+        // "passingMonth": passMonth,
+        // "joiningYear": joinYear.toString(),
+        // "passingYear": passYear.toString(),
+        "joiningDate":this.datePipe.transform(this.goodStandingForeignVerificationformGroup.get('joinDate')?.value, "yyyy-MM-dd")?.toString(),
+        "courseDate" : this.datePipe.transform(this.goodStandingForeignVerificationformGroup.get('passDate')?.value,"yyyy-MM-dd")?.toString()
 
 
 
@@ -814,7 +816,7 @@ export class GoodStandingForeignVerificationComponent {
         const jMonth = joinDate.getMonth();
         const pMonth = passDate.getMonth();
         const joinYear = joinDate.getFullYear();
-        const passYear = joinDate.getFullYear();
+        const passYear = passDate.getFullYear();
 
         const joinMonth = this.months[jMonth];
         const passMonth = this.months[pMonth];
