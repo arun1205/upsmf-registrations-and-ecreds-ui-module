@@ -95,6 +95,7 @@ export class AdminRegnCertificateDetailsComponent {
   courseUrl: string = ''
   paymentResponse: any;
   updateStudentBody: any;
+  fileSignPreview:any;
 
 
   stateData: any;
@@ -264,6 +265,16 @@ export class AdminRegnCertificateDetailsComponent {
             console.log("c", response.responseData.courseName)
             this.osid = response.responseData.osid;
             this.urlDataResponse = response.responseData.docproof;
+            this.fileSignPreview =  response.responseData.candidateSignature;
+              if(!!this.fileSignPreview){
+                const fileName = this.fileSignPreview.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop();
+                const getuploadObject = {
+                  name: extractLastPart,
+                  url: this.fileSignPreview
+                }
+                this.fileSignPreview = getuploadObject
+              }
             this.filePreview= response.responseData.candidatePic;
 
             if(!!this.filePreview){

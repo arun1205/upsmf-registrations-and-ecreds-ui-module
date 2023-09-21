@@ -60,6 +60,7 @@ export class AdminGoodStandingForeignVerificationComponent {
   selectedLink: string = 'Candidate Details';
   paymentResponse: any;
   isInactive = true;
+  
 
 
   profQualificationArray = ['ANM', 'Midwife', 'HW', 'Nurse', 'Bsc Nursing'];

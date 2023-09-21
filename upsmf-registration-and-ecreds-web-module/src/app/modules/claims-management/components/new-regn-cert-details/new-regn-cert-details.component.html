@@ -37,18 +37,27 @@
                                     </div> 
                                     <div class="full-details">
                                         <!-- <div class="applicant-details">-->
-                                            <div class="applicant-details" *ngIf="!this.candidateDetailList[0]?.paymentStatus">
-                                                <h4>{{labels.applicantName}}</h4>
-                                                <mat-form-field appearance="outline" >
-                                                    <input matInput placeholder="Applicant Name" formControlName="applicantName">
-                                                    <mat-error *ngIf="newRegCertDetailsformGroup.controls['applicantName'].invalid">
-                                                    </mat-error>
-                                                </mat-form-field>
+                                            <div class="pr-details" >
+                                                <div class="person-details">
+                                                    <h4>{{labels.applicantName}}</h4>
+                                                    <mat-form-field appearance="outline" >
+                                                        <input matInput placeholder="Applicant Name" formControlName="applicantName">
+                                                        <mat-error *ngIf="newRegCertDetailsformGroup.controls['applicantName'].invalid">
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="person-details" *ngIf="this.candidateDetailList[0]?.paymentStatus==='SUCCESS'">
+                                                    <div class="image-container">
+                                                        <img [src]="filePreview?.url" alt="Image" />
+                                                        <img [src]="fileSignPreview?.url" alt="Image" />
+                                                    </div>
+                                
+                                                </div>
                                             </div>
                                         <!-- </div> -->
 
                                         <!-- <div class="ml4 flex flex-column"> -->
-                                            <div class="pr-details" *ngIf="this.candidateDetailList[0]?.paymentStatus">
+                                            <!-- <div class="pr-details" *ngIf="this.candidateDetailList[0]?.paymentStatus==='SUCCESS'">
                                                 <div class="person-details">
                                                     <h4>{{labels.applicantName}}</h4>
                                                     <mat-form-field appearance="outline" >
@@ -60,9 +69,12 @@
                                                 <div class="person-details">
                                                     <div class="image-container">
                                                         <img [src]="filePreview?.url" alt="Image" />
-                                                      </div>
+                                                        <img [src]="filePreview?.url" alt="Image" />
+                                                    </div>
+                                
                                                 </div>
-                                            </div>
+                                                
+                                            </div> -->
                                             <div class="applicant-details">
                                             <h4>{{labels.mobNumber}}</h4>
                                             <mat-form-field appearance="outline">
