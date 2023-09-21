@@ -32,20 +32,38 @@
                                                 <h3 class="status">STATUS : {{this.stateData?.status}}</h3>
                                             </div>
                                             <div class="status-reason" *ngIf="this.stateData?.status === 'REJECTED'">
-                                                <h3>{{this.stateData?.status}}</h3>
+                                                <h3>Reason : {{reason}}</h3>
                                             </div>                                            
                                     </div> 
                                     <div class="full-details">
-                                        <div class="applicant-details">
-                                            <h4>{{labels.applicantName}}</h4>
-                                            <mat-form-field appearance="outline" >
-                                                <input matInput placeholder="Applicant Name" formControlName="applicantName">
-                                                <mat-error *ngIf="newRegCertDetailsformGroup.controls['applicantName'].invalid">
-                                                </mat-error>
-                                            </mat-form-field>
+                                        <!-- <div class="applicant-details">-->
+                                            <div class="applicant-details" *ngIf="!this.candidateDetailList[0]?.paymentStatus">
+                                                <h4>{{labels.applicantName}}</h4>
+                                                <mat-form-field appearance="outline" >
+                                                    <input matInput placeholder="Applicant Name" formControlName="applicantName">
+                                                    <mat-error *ngIf="newRegCertDetailsformGroup.controls['applicantName'].invalid">
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
                                         <!-- </div> -->
 
                                         <!-- <div class="ml4 flex flex-column"> -->
+                                            <div class="pr-details" *ngIf="this.candidateDetailList[0]?.paymentStatus">
+                                                <div class="person-details">
+                                                    <h4>{{labels.applicantName}}</h4>
+                                                    <mat-form-field appearance="outline" >
+                                                        <input matInput placeholder="Applicant Name" formControlName="applicantName">
+                                                        <mat-error *ngIf="newRegCertDetailsformGroup.controls['applicantName'].invalid">
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="person-details">
+                                                    <div class="image-container">
+                                                        <img [src]="filePreview?.url" alt="Image" />
+                                                      </div>
+                                                </div>
+                                            </div>
+                                            <div class="applicant-details">
                                             <h4>{{labels.mobNumber}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="Mobile Number" formControlName="mobNumber">
@@ -141,14 +159,14 @@
                                             <!-- </div> -->
 
                                             <!-- <div class=" flex flex-column ml4 mt3"> -->
-                                                <div class="address-details">
+                                                <!-- <div class="address-details">
                                                     <h4>{{labels.al2}}</h4>
                                                     <mat-form-field appearance="outline" >
                                                         <input matInput placeholder="Address Line 2" formControlName="al2">
                                                         <mat-error *ngIf="newRegCertDetailsformGroup.controls['al2'].invalid">
                                                         </mat-error>
                                                     </mat-form-field>
-                                                </div>
+                                                </div> -->
 
                                             <!-- </div> -->
                                         </div>
@@ -242,25 +260,27 @@
                                             </div>
 
                                         <!-- </div> -->
-                                        <h4>{{labels.uploadPhoto}}</h4>
-                                         <div class="upload-pic-ui">
-                                            <div *ngIf="filePreview">
-                                                {{filePreview.name}}
+                                        <div *ngIf="!this.candidateDetailList[0]?.paymentStatus">
+                                            <h4>{{labels.uploadPhoto}}</h4>
+                                            <div class="upload-pic-ui">
+                                                <div *ngIf="filePreview">
+                                                    {{filePreview.name}}
+                                                </div>
+                                                <div>
+                                                    <label for="fileUpload2" class="custom-file-upload">
+                                                        <a mat-button color="primary">Browse
+                                                        </a>
+                                                    </label>
+                                                    <label *ngIf="filePreview" class="custom-file-upload">
+                                                        <a mat-button color="primary" (click)="navigateToUrl(filePreview.url)">preview
+                                                        </a>
+                                                    </label>
+                                                    <input type="file" id="fileUpload2" style="display: none;" enctype="multipart/form-data"
+                                                        (change)="onProfileChanged($event)" accept=".pdf,.docx,.jpeg, .png, .jpg" />
+                                                </div>
+                                        
                                             </div>
-                                           <div>
-                                            <label  for="fileUpload2" class="custom-file-upload">
-                                                <a mat-button color="primary">Browse
-                                                     </a>
-                                            </label>
-                                            <label  *ngIf="filePreview" class="custom-file-upload">
-                                                    <a mat-button color="primary" (click)="navigateToUrl(filePreview.url)">preview
-                                                         </a>
-                                                </label>
-                                            <input type="file" id="fileUpload2" style="display: none;" enctype="multipart/form-data"
-                                                    (change)="onProfileChanged($event)"   accept=".pdf,.docx,.jpeg, .png, .jpg" />
-                                           </div>
-                                          
-                                         </div>
+                                        </div>
                                         <!-- <div class="upload-column">
                                                 <label for="fileUpload1" class="custom-file-upload">
                                                     <a mat-button color="primary">+ Add 

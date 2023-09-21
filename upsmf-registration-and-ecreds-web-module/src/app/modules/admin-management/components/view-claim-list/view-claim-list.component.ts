@@ -20,6 +20,7 @@ export class ViewClaimListComponent {
   approvedClaimsTableColumns: TableColumn[] = [];
   rejectedClaimsTableColumns: TableColumn[] = [];
   stateData: any;
+  osid:string;
   monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'
@@ -199,12 +200,12 @@ export class ViewClaimListComponent {
           return `${month} ${day}, ${year}`;
         }
       },
-      {
-        columnDef: 'notes',
-        header: 'Reason for Rejection',
-        isSortable: true,
-        cell: (element: Record<string, any>) => `${element['notes']}`
-      },
+      // {
+      //   columnDef: 'notes',
+      //   header: 'Reason for Rejection',
+      //   isSortable: true,
+      //   cell: (element: Record<string, any>) => `${element['notes']}`
+      // },
       {
         columnDef: 'isLink',
         header: '',
@@ -215,13 +216,15 @@ export class ViewClaimListComponent {
 
     ];
   }
+ 
   getclaimsAdmin(){
       
     this.isDataLoading = true;
    this.baseService.getRegistrationClaimsAdmin$().subscribe(
       (res) =>{
         this.claims = res.responseData.content
-        console.log('this.claims', this.claims);
+        this.osid = res.responseData.content[0].id;
+        console.log('this.claims', this.osid);
         
         if(this.stateData?.type==="regnCertfromUP"){
           this.pendingClaims = this.claims.filter(claim => (claim['status'] === 'OPEN')&&(claim['entity']==='StudentFromUP'));

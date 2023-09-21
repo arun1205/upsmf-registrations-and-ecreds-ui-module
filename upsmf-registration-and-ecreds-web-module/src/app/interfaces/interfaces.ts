@@ -83,7 +83,7 @@ export interface ClaimsTableData {
   }
   export interface ApproveClaim{
     action:string,
-    note:string
+    notes:string
   }
   export interface SentMailBody{
     outsideEntityMailId:string,

@@ -29,7 +29,8 @@
             "DOWNLOAD_CREDENTIALS_DIPLOMA":"api/v1/DiplomaFromUP/",
             "GET_DIPLOMA_DETAILS":"api/v1/DiplomaFromUP/search",
             "DIPLOMA_PAYMENT":"claim-ms/api/v1/Payment",
-            "STUDENT_OSID":"api/v1/StudentFromUP/search"
+            "STUDENT_OSID":"api/v1/StudentFromUP/search",
+            "STUDENT_REJECT_REASON":"api/v1/StudentFromUP/claims/"
         },
         "ADMIN":
         {
@@ -37,7 +38,8 @@
             "GET_ALL_CLAIMS_ADMIN": "api/v1/Regulator/claims",
             "GRANT_CLAIM":"api/v1/Regulator/claims/",
             "SENTMAIL_OUTSIDEUP":"api/v1/Regulator/sendEcPendingItemMail",
-            "GET_ADMIN_DETAILS":"api/v1/Regulator/"
+            "GET_ADMIN_DETAILS":"api/v1/Regulator/",
+            "REJECT_REASON":"api/v1/Regulator/claims/"
         },
         "USER": {
             "CREATE_COUNCIL_USER": "api/v1/CouncilAdmin/invite",

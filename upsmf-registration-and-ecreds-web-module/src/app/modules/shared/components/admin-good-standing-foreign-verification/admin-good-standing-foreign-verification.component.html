@@ -64,14 +64,34 @@
                                     </div>
                                 </div>
                                 <div class="full-details">
+                                    <div class="pr-details">
+                                        <div class="person-details">
+                                            <!-- <div class=" mt3 "> -->
+                                                <h4>{{labels.maidenName}}</h4>
+                                                <mat-form-field appearance="outline">
+                                                    <input matInput placeholder="Maiden Name" formControlName="maidenName">
+                                                    <mat-error
+                                                        *ngIf="goodStandingForeignVerificationformGroup.controls['maidenName'].invalid">
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div class="person-details">
+                                            <div class="image-container">
+                                                <img [src]="filePreview?.url" alt="Image" />
+                                              </div>
+                                        </div>
+                                    </div>
                                     <div class="applicant-details">
-                                        <h4>{{labels.maidenName}}</h4>
+                                        
+                                        <!-- <h4>{{labels.maidenName}}</h4>
                                         <mat-form-field appearance="outline">
                                             <input matInput placeholder="Maiden Name" formControlName="maidenName">
                                             <mat-error
                                                 *ngIf="goodStandingForeignVerificationformGroup.controls['maidenName'].invalid">
                                             </mat-error>
                                         </mat-form-field>
+                                        <div class="candidate_pic"></div> -->
                                         <!-- </div> -->
                                         <!-- <div class="ml4 flex flex-column"> -->
                                         <h4>{{labels.mrdName}}</h4>
@@ -112,8 +132,7 @@
                                             </mat-form-field>
                                             <!-- </div> -->
                                         </div>
-                                        <div class="address-details">
-                                            <!-- <div> -->
+                                        <!-- <div class="address-details">
                                             <h4>{{labels.al2}}</h4>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="Address Line 2" formControlName="al2">
@@ -121,8 +140,7 @@
                                                     *ngIf="goodStandingForeignVerificationformGroup.controls['al2'].invalid">
                                                 </mat-error>
                                             </mat-form-field>
-                                            <!-- </div> -->
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="place-details">
                                         <div class="address-details">
@@ -251,6 +269,25 @@
                                                 *ngIf="goodStandingForeignVerificationformGroup.controls['placeOfWork'].invalid">
                                             </mat-error>
                                         </mat-form-field>
+                                        <!-- <h4>{{labels.uploadPhoto}}</h4>
+                                        <div class="upload-pic-ui">
+                                           <div *ngIf="filePreview">
+                                               {{filePreview.name}}
+                                           </div>
+                                          <div>
+                                           <label  for="fileUpload2" class="custom-file-upload">
+                                               <a mat-button   color="primary">Browse
+                                                    </a>
+                                           </label>
+                                           <label  *ngIf="filePreview" class="custom-file-upload">
+                                                   <a mat-button  color="primary" (click)="navigateToUrl(filePreview.url)">preview
+                                                        </a>
+                                               </label>
+                                           <input type="file" id="fileUpload2" style="display: none;" enctype="multipart/form-data"
+                                                   (change)="onProfileChanged($event)"   accept=".pdf,.docx,.jpeg, .png, .jpg" />
+                                          </div>
+
+                                        </div> -->
                                         <!-- </div> -->
                                         <h4>Attach file(s)</h4>
 

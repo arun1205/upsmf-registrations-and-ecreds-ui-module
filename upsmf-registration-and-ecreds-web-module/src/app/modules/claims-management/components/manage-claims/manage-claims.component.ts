@@ -175,12 +175,12 @@ export class ManageClaimsComponent {
           return `${month} ${day}, ${year}`;
         }
       },
-      {
-        columnDef: 'notes',
-        header: 'Reason for Rejection',
-        isSortable: true,
-        cell: (element: Record<string, any>) => `${element['notes']}`
-      },
+      // {
+      //   columnDef: 'notes',
+      //   header: 'Reason for Rejection',
+      //   isSortable: true,
+      //   cell: (element: Record<string, any>) => `${element['notes']}`
+      // },
       {
         columnDef: 'isLink',
         header: '',

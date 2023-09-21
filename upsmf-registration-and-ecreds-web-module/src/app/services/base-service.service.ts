@@ -357,10 +357,26 @@ export class BaseServiceService extends HttpService {
       data: body,
       header: this.getHeaders()
     }
-    return this.post(reqParam)
+   return this.post(reqParam)
+  }
+  getReasonAdmin$(osid:string){
+    const reqParam:RequestParam={
+      url:this.configService.urlConFig.URLS.ADMIN.REJECT_REASON + osid,
+      header:this.getHeaders()
+    }
+    return this.get(reqParam)
+
+  }
+  getReasonStudent$(osid:string){
+    const reqParam:RequestParam={
+      url:this.configService.urlConFig.URLS.STUDENT.STUDENT_REJECT_REASON + osid,
+      header:this.getHeaders()
+    }
+    return this.get(reqParam)
+
   }
 
 
-
+    
 
 }

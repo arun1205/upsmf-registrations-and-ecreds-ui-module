@@ -79,6 +79,11 @@ export class GoodStandingForeignVerificationComponent {
   paymentDetails: boolean = false;
   selectedLink: string = 'Candidate Details';
   paymentResponse: any;
+  profileFileName:any;
+  uplaodedFiles:any;
+  filePreview:any;
+  todayDate=new Date();
+  maxDate=this.todayDate;
 
   profQualificationArray = ['A.N.M', 'Midwife', 'H.W', 'Nurse', 'B.SC.Nursing'];
 
@@ -160,7 +165,7 @@ export class GoodStandingForeignVerificationComponent {
               dob: candidateDetailList.dob,
               gender: candidateDetailList.gender,
               al1: candidateDetailList.presentAddress,
-              al2: candidateDetailList.presentAddress,
+              // al2: candidateDetailList.presentAddress,
               state: candidateDetailList.state,
               pin: candidateDetailList.pincode,
               district: candidateDetailList.district,
@@ -189,6 +194,16 @@ export class GoodStandingForeignVerificationComponent {
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               console.log('urlDaaaa', this.urlData)
+              this.filePreview= this.candidateDetailList[0].candidatePic;
+              if(!!this.filePreview){
+                const fileName = this.filePreview.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop();
+                const getuploadObject = {
+                  name: extractLastPart,
+                  url: this.filePreview
+                }
+                this.filePreview = getuploadObject
+              }
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
                   const parts = url.split('=');
@@ -216,7 +231,7 @@ export class GoodStandingForeignVerificationComponent {
               dob: this.candidateDetailList[0]?.dob,
               gender: this.candidateDetailList[0]?.gender,
               al1: this.candidateDetailList[0]?.presentAddress,
-              al2: this.candidateDetailList[0]?.presentAddress,
+              // al2: this.candidateDetailList[0]?.presentAddress,
               state: this.candidateDetailList[0].state,
               pin: this.candidateDetailList[0]?.pincode,
               district: this.candidateDetailList[0]?.district,
@@ -278,7 +293,7 @@ export class GoodStandingForeignVerificationComponent {
               dob: candidateDetailList.dob,
               gender: candidateDetailList.gender,
               al1: candidateDetailList.presentAddress,
-              al2: candidateDetailList.presentAddress,
+              // al2: candidateDetailList.presentAddress,
               state: candidateDetailList.state,
               pin: candidateDetailList.pincode,
               district: candidateDetailList.district,
@@ -303,13 +318,23 @@ export class GoodStandingForeignVerificationComponent {
             console.log("det", this.candidateDetailList[0])
             this.osid = this.candidateDetailList[0].osid;
             this.urlDataResponse = this.candidateDetailList[0].docproof;
-            const joinM = this.candidateDetailList[0].joiningMonth;
-            const jm = this.monthMap[joinM]
-            const passM = this.candidateDetailList[0].passingMonth;
-            const pm = this.monthMap[passM]
+            const month = (new Date(Date.parse(this.candidateDetailList[0].joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
+            "0" + (new Date(Date.parse(this.candidateDetailList[0].joiningMonth + " 1, 2012")).getMonth() + 1) :
+            new Date(Date.parse(this.candidateDetailList[0].joiningMonth + " 1, 2012")).getMonth() + 1
+            
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
-              console.log('urlDaaaa', this.urlData)
+              console.log('urlDaaaa',this.urlData)
+              this.filePreview= this.candidateDetailList[0].candidatePic;
+              if(!!this.filePreview){
+                const fileName = this.filePreview.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop();
+                const getuploadObject = {
+                  name: extractLastPart,
+                  url: this.filePreview
+                }
+                this.filePreview = getuploadObject
+              }
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
                   const parts = url.split('=');
@@ -337,7 +362,7 @@ export class GoodStandingForeignVerificationComponent {
               dob: this.candidateDetailList[0]?.dob,
               gender: this.candidateDetailList[0]?.gender,
               al1: this.candidateDetailList[0]?.address,
-              al2: this.candidateDetailList[0]?.address,
+              // al2: this.candidateDetailList[0]?.address,
               state: this.candidateDetailList[0].state,
               pin: this.candidateDetailList[0]?.pincode,
               district: this.candidateDetailList[0]?.district,
@@ -346,8 +371,8 @@ export class GoodStandingForeignVerificationComponent {
               placeOfWork: this.candidateDetailList[0]?.workPlace,
               tcName: this.candidateDetailList[0]?.trainingCenter,
               proQual: this.candidateDetailList[0]?.professionalQualification,
-              joinDate: this.candidateDetailList[0].joiningYear + "-" + jm + "-01",
-              passDate: this.candidateDetailList[0].passingYear + "-" + pm + "-01",
+              joinDate: this.candidateDetailList[0].joiningYear + "-" + month + "-01",
+              passDate: this.candidateDetailList[0].passingYear + "-" + month + "-01",
               // docproof:this.candidateDetailList[0]?.docproof
 
 
@@ -372,8 +397,8 @@ export class GoodStandingForeignVerificationComponent {
         Validators.required, this.validateMinAge(15) as ValidatorFn]),
       al1: new FormControl('', [
         Validators.required]),
-      al2: new FormControl('', [
-        Validators.required]),
+      // al2: new FormControl('', [
+      //   Validators.required]),
       district: new FormControl('', [
         Validators.required]),
       state: new FormControl('', [
@@ -729,7 +754,7 @@ export class GoodStandingForeignVerificationComponent {
       const updateStudentGoodstandingBody = {
         "name": this.goodStandingForeignVerificationformGroup.value.maidenName,
         "fathersName": this.goodStandingForeignVerificationformGroup.value.fatherName,
-        "presentAddress": `${this.goodStandingForeignVerificationformGroup.value.al1} ${this.goodStandingForeignVerificationformGroup.value.al2}`,
+        "presentAddress": `${this.goodStandingForeignVerificationformGroup.value.al1}`,
         "phoneNumber": this.goodStandingForeignVerificationformGroup.value.mobNumber,
         "email": this.goodStandingForeignVerificationformGroup.value.email,
         "trainingCenter": this.goodStandingForeignVerificationformGroup.value.tcName,
@@ -740,7 +765,8 @@ export class GoodStandingForeignVerificationComponent {
         "validityOfRegistration": "2023-12-31",
         "dob": this.datePipe.transform(this.goodStandingForeignVerificationformGroup.value.dob, "yyyy-MM-dd")?.toString(),
         "docproof": this.convertUrlList,
-        "candidatePic": "pic1.jpg",
+         // "candidatePic": "pic1.jpg",
+         "candidatePic": this.filePreview.url,
         "marriedName": this.goodStandingForeignVerificationformGroup.value.mrdName,
         "maidenName": this.goodStandingForeignVerificationformGroup.value.maidenName,
         "professionalQualification": this.goodStandingForeignVerificationformGroup.value.proQual,
@@ -828,7 +854,7 @@ export class GoodStandingForeignVerificationComponent {
         const updateStudentForeignVerificationBody = {
           "name": this.goodStandingForeignVerificationformGroup.value.maidenName,
           "fathersName": this.goodStandingForeignVerificationformGroup.value.fatherName,
-          "address": `${this.goodStandingForeignVerificationformGroup.value.al1} ${this.goodStandingForeignVerificationformGroup.value.al2}`,
+          "address": `${this.goodStandingForeignVerificationformGroup.value.al1} `,
           "phoneNumber": this.goodStandingForeignVerificationformGroup.value.mobNumber,
           "email": this.goodStandingForeignVerificationformGroup.value.email,
           "trainingCenter": this.goodStandingForeignVerificationformGroup.value.tcName,
@@ -839,7 +865,8 @@ export class GoodStandingForeignVerificationComponent {
           "validityOfRegistration": "2023-12-31",
           "dob": this.datePipe.transform(this.goodStandingForeignVerificationformGroup.value.dob, "yyyy-MM-dd")?.toString(),
           "docproof": this.convertUrlList,
-          "candidatePic": "pic1.jpg",
+          // "candidatePic": "pic1.jpg",
+          "candidatePic": this.filePreview.url,
           "marriedName": this.goodStandingForeignVerificationformGroup.value.mrdName,
           "maidenName": this.goodStandingForeignVerificationformGroup.value.maidenName,
           "professionalQualification": this.goodStandingForeignVerificationformGroup.value.proQual,
@@ -1104,4 +1131,34 @@ export class GoodStandingForeignVerificationComponent {
         return '';
     }
   }
+  onProfileChanged(event?:any){
+    let selectedUploadFile = event.target.files[0];
+    console.log(selectedUploadFile)
+   //  this.profileFileName = selectedUploadFile.name
+    this.uploadProfileData(selectedUploadFile)
+   }
+ 
+   uploadProfileData(selectedFile:any){
+     const formData = new FormData();
+     formData.append('files', selectedFile)
+     this.baseService.uploadFiles$(this.osid,formData,this.endPointUrl).subscribe({
+       next:(res)=>{
+       console.log('profileData',res)
+       this.uplaodedFiles =res.result
+       console.log(this.uplaodedFiles)
+       const UrlwithoutComma = this.uplaodedFiles.replace(/,*$/, '');
+       const fileName = this.uplaodedFiles.split('/').pop();
+       const extractLastPart = fileName?.split('_').pop();
+       const getuploadObject = {
+         name: extractLastPart,
+         url: UrlwithoutComma
+       }
+       this.filePreview = getuploadObject
+       console.log('getuploadObject',this.filePreview)
+       },
+       error:(err)=>{
+         console.log(err)
+       }
+     })
+   }
 }

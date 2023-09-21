@@ -48,6 +48,7 @@ export class AdminRegnCertificateDetailsComponent {
   urlList: any;
   updatedUrlList: any;
   urlDataResponse: string;
+  filePreview:any;
   entityId: string;
   entityName: string;
   docsResponseUrl: string;
@@ -62,7 +63,9 @@ export class AdminRegnCertificateDetailsComponent {
   // ];
 
   osid: string;
+  id:string;
   entity: string;
+  reason:string;
 
   months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -190,8 +193,8 @@ export class AdminRegnCertificateDetailsComponent {
         Validators.required]),
       al1: new FormControl('', [
         Validators.required]),
-      al2: new FormControl('', [
-        Validators.required]),
+      // al2: new FormControl('', [
+      //   Validators.required]),
       district: new FormControl('', [
         Validators.required]),
       state: new FormControl('UP', [
@@ -250,15 +253,27 @@ export class AdminRegnCertificateDetailsComponent {
 
   getCandidatePersonalDetails() {
     this.osid = this.stateData?.entityId
+    this.id=this.stateData?.id
     this.entity = this.stateData?.entity
     if (this.entity === "StudentFromUP" && this.userEmail === "Regulator") {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.entity, this.osid)
         .subscribe(
           (response: any) => {
-
+           this.getRejectReasonAdmin()
             console.log("c", response.responseData.courseName)
             this.osid = response.responseData.osid;
             this.urlDataResponse = response.responseData.docproof;
+            this.filePreview= response.responseData.candidatePic;
+
+            if(!!this.filePreview){
+              const fileName = this.filePreview.split('/').pop();
+              const extractLastPart = fileName?.split('_').pop();
+              const getuploadObject = {
+                name: extractLastPart,
+                url: this.filePreview
+              }
+              this.filePreview = getuploadObject
+            }
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               if (this.urlData.length) {
@@ -280,6 +295,7 @@ export class AdminRegnCertificateDetailsComponent {
 
             // this.listOfFiles = this.candidateDetailList[0].docproof;
             this.newRegCertDetailsformGroup.patchValue({
+
               email: response.responseData.email,
               mobNumber: response.responseData.phoneNumber,
               applicantName: response.responseData.name,
@@ -289,7 +305,7 @@ export class AdminRegnCertificateDetailsComponent {
               dob: response.responseData.dateOfBirth,
               gender: response.responseData.gender,
               al1: response.responseData.address,
-              al2: response.responseData.address,
+              // al2: response.responseData.address,
               state: response.responseData.state,
               pin: response.responseData.pincode,
               district: response.responseData.district,
@@ -341,6 +357,17 @@ export class AdminRegnCertificateDetailsComponent {
             this.urlDataResponse = response.responseData.docproof;
             this.entityId=response.responseData.studentVerification[0].entityId
             this.entityName=response.responseData.studentVerification[0].entityName
+            this.filePreview= response.responseData.candidatePic;
+
+            if(!!this.filePreview){
+              const fileName = this.filePreview.split('/').pop();
+              const extractLastPart = fileName?.split('_').pop();
+              const getuploadObject = {
+                name: extractLastPart,
+                url: this.filePreview
+              }
+              this.filePreview = getuploadObject
+            }
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               if (this.urlData.length) {
@@ -370,7 +397,7 @@ export class AdminRegnCertificateDetailsComponent {
               dob: response.responseData.dateOfBirth,
               gender: response.responseData.gender,
               al1: response.responseData.address,
-              al2: response.responseData.address,
+              // al2: response.responseData.address,
               state: response.responseData.state,
               pin: response.responseData.pincode,
               district: response.responseData.district,
@@ -391,7 +418,7 @@ export class AdminRegnCertificateDetailsComponent {
             const joinM = response.responseData.joiningMonth;
             const jm = this.monthMap[joinM]
             const passM = response.responseData.passingMonth;
-            const pm = this.monthMap[joinM]
+            const pm = this.monthMap[passM]
 
             this.newRegCourseDetailsformGroup.patchValue({
               courseName: response.responseData.courseName,
@@ -486,7 +513,7 @@ export class AdminRegnCertificateDetailsComponent {
                 dob: this.candidateDetailList[0]?.dateOfBirth,
                 gender: this.candidateDetailList[0]?.gender,
                 al1: this.candidateDetailList[0]?.address,
-                al2: this.candidateDetailList[0]?.address,
+                // al2: this.candidateDetailList[0]?.address,
                 state: this.candidateDetailList[0].state,
                 pin: this.candidateDetailList[0]?.pincode,
                 district: this.candidateDetailList[0]?.district,
@@ -535,7 +562,7 @@ export class AdminRegnCertificateDetailsComponent {
     if (this.entity === "StudentFromUP") {
       const approveBody = {
         action: "GRANT_CLAIM",
-        note: "Registration Certificate"
+        notes: "Registration Certificate"
       }
       this.baseService.approveClaim$(osid, approveBody)
         .subscribe((response) => {
@@ -584,7 +611,7 @@ export class AdminRegnCertificateDetailsComponent {
             email: this.newRegCertDetailsformGroup.value.email,
             examBody: value.examBody,
             docProofs: [this.convertUrlList],
-            diplomaNumber: value.diplomaNumber,
+            diplomaNumber: "",
             nursingCollage: value.collegeName,
             courseState: "aaaaa",
             courseCouncil: "BBB",
@@ -835,11 +862,12 @@ export class AdminRegnCertificateDetailsComponent {
 
       dialogRef.afterClosed().subscribe(result => {
         const reason = result;
+        console.log(reason.value)
 
         if (result) {
           const approveBody = {
             action: "REJECT_CLAIM",
-            note: reason
+            notes: reason.reason
           }
           const osid = this.stateData?.id
           this.baseService.approveClaim$(osid, approveBody)
@@ -942,7 +970,7 @@ export class AdminRegnCertificateDetailsComponent {
         [this.labels.dob, this.newRegCertDetailsformGroup.controls['dob'].value],
         [this.labels.credType, this.newRegCertDetailsformGroup.controls['credType'].value],
         [this.labels.gender, this.newRegCertDetailsformGroup.controls['gender'].value],
-        ["Address", this.newRegCertDetailsformGroup.controls['al2'].value],
+        ["Address", this.newRegCertDetailsformGroup.controls['al1'].value],
         // [this.labels.al2, this.newRegCertDetailsformGroup.controls['al2'].value],
         [this.labels.district, this.newRegCertDetailsformGroup.controls['district'].value],
         [this.labels.state, this.newRegCertDetailsformGroup.controls['state'].value],
@@ -974,6 +1002,12 @@ export class AdminRegnCertificateDetailsComponent {
 
     doc.save(`Certificate_${this.newRegCourseDetailsformGroup.controls['rollNum'].value}_.pdf`)
 
+  }
+  getRejectReasonAdmin(){
+    this.baseService.getReasonAdmin$(this.id).subscribe((response)=>{
+      this.reason=response.responseData.notes[1].notes
+      console.log("reason",response.responseData.notes[0].notes)
+    })
   }
 
 }
