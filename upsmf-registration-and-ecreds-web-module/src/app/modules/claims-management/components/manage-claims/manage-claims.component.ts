@@ -240,7 +240,7 @@ export class ManageClaimsComponent {
     const candidateDetails=JSON.parse(value.propertyData)
     console.log("details",candidateDetails)
     //this.router.navigate(['/:'+id], {state: {data: e}});
-    if(value.entity==="StudentFromUP" && candidateDetails.courseType==="Degree" ){
+    if(value.entity==="StudentFromUP" && candidateDetails.courseType==="degree" ){
       this.router.navigate(['/claims', value.id], { state: { body: value } });
       // this.router.navigate(['/claims/gdfrgn', e.id], { state: { data: e } });
 
