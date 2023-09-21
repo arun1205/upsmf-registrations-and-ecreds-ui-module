@@ -42,6 +42,9 @@ export class GoodStandingForeignVerificationComponent {
     "July": "07",
     "August": "08",
     "September": "09",
+    "October":"10",
+    "November":"11",
+    "December":"12"
   }
 
   goodStandingForeignVerificationformGroup: FormGroup;
@@ -349,7 +352,10 @@ export class GoodStandingForeignVerificationComponent {
                 });
               }
             }
-
+            const joinM = this.candidateDetailList[0].joiningMonth;
+            const jm = this.monthMap[joinM]
+            const passM = this.candidateDetailList[0].passingMonth;
+            const pm = this.monthMap[passM]
             this.goodStandingForeignVerificationformGroup.patchValue({
               maidenName: this.candidateDetailList[0]?.name,
               mrdName: this.candidateDetailList[0]?.marriedName,
@@ -371,8 +377,8 @@ export class GoodStandingForeignVerificationComponent {
               placeOfWork: this.candidateDetailList[0]?.workPlace,
               tcName: this.candidateDetailList[0]?.trainingCenter,
               proQual: this.candidateDetailList[0]?.professionalQualification,
-              joinDate: this.candidateDetailList[0].joiningYear + "-" + month + "-01",
-              passDate: this.candidateDetailList[0].passingYear + "-" + month + "-01",
+              joinDate: this.candidateDetailList[0].joiningYear + "-" + jm + "-01",
+              passDate: this.candidateDetailList[0].passingYear + "-" + pm + "-01",
               // docproof:this.candidateDetailList[0]?.docproof
 
 
