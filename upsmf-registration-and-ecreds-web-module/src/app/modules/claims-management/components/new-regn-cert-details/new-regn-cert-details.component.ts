@@ -97,7 +97,9 @@ export class NewRegnCertDetailsComponent {
   updateStudentBody: any;
   profileFileName:any;
   uplaodedFiles:any;
+  uplaodedSignFiles:any;
   filePreview:any;
+  fileSignPreview:any;
   todayDate=new Date();
   maxDate=this.todayDate;
 
@@ -470,6 +472,17 @@ export class NewRegnCertDetailsComponent {
               this.osid = this.candidateDetailList[0].osid;
               this.urlDataResponse = this.candidateDetailList[0].docproof;
               this.filePreview= this.candidateDetailList[0].candidatePic;
+              this.fileSignPreview =  this.candidateDetailList[0].candidateSignature;
+              if(!!this.fileSignPreview){
+                const fileName = this.fileSignPreview.split('/').pop();
+                const extractLastPart = fileName?.split('_').pop();
+                const getuploadObject = {
+                  name: extractLastPart,
+                  url: this.fileSignPreview
+                }
+                this.fileSignPreview = getuploadObject
+              }
+
               if(!!this.filePreview){
                 const fileName = this.filePreview.split('/').pop();
                 const extractLastPart = fileName?.split('_').pop();
@@ -641,7 +654,7 @@ export class NewRegnCertDetailsComponent {
         const jMonth = joinDate.getMonth();
         const pMonth = passDate.getMonth();
         const joinYear = joinDate.getFullYear();
-        const passYear = joinDate.getFullYear();
+        const passYear = passDate.getFullYear();
 
         const joinMonth = this.months[jMonth];
         const passMonth = this.months[pMonth];
@@ -692,7 +705,7 @@ export class NewRegnCertDetailsComponent {
           "claimType": "registration",
           "certificateNo": "NA",
           "university": value.university,
-          "candidateSignature": "NA",
+          "candidateSignature": this.fileSignPreview.url,
           "validityUpto": "NA",
           "certificateNumber": "NA",
           "diplomaNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA"
@@ -740,6 +753,36 @@ export class NewRegnCertDetailsComponent {
 
   navigateToUrl(item: any) {
     window.open(item, "_blank");
+  }
+  onSignatureChanged(event?:any){
+    let selectedUploadFile = event.target.files[0];
+    console.log(selectedUploadFile)
+   //  this.profileFileName = selectedUploadFile.name
+    this.uploadSignatureData(selectedUploadFile)
+   }
+
+   uploadSignatureData(selectedFile:any){
+    const formData = new FormData();
+    formData.append('files', selectedFile)
+    this.baseService.uploadFiles$(this.osid,formData,this.endPointUrl).subscribe({
+      next:(res)=>{
+      console.log('profileData',res)
+      this.uplaodedSignFiles =res.result
+      console.log(this.uplaodedSignFiles)
+      const UrlwithoutComma = this.uplaodedSignFiles.replace(/,*$/, '');
+      const fileName = this.uplaodedSignFiles.split('/').pop();
+      const extractLastPart = fileName?.split('_').pop();
+      const getuploadObject = {
+        name: extractLastPart,
+        url: UrlwithoutComma
+      }
+      this.fileSignPreview = getuploadObject
+      console.log('getuploadObject',this.fileSignPreview)
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    })
   }
 
   onProfileChanged(event?:any){
