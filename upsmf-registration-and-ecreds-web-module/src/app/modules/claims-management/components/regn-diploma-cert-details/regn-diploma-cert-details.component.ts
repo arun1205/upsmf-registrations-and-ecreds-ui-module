@@ -288,6 +288,8 @@ export class RegnDiplomaCertDetailsComponent {
     });
    
     this.getEndPoint();
+    this.newRegCertDetailsformGroup.disable();
+    this.newRegCourseDetailsformGroup.disable();
     this.getCandidatePersonalDetails();
     
 
@@ -1108,6 +1110,10 @@ export class RegnDiplomaCertDetailsComponent {
 
     doc.save(`Certificate_${this.newRegCourseDetailsformGroup.controls['rollNum'].value}_.pdf`)
 
+  }
+  onEditClick(){
+    this.newRegCertDetailsformGroup.enable();
+    this.newRegCourseDetailsformGroup.enable();
   }
 }
 
