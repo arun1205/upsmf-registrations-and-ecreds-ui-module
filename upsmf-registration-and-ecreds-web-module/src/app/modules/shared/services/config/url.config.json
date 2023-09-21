@@ -39,7 +39,8 @@
             "GRANT_CLAIM":"api/v1/Regulator/claims/",
             "SENTMAIL_OUTSIDEUP":"api/v1/Regulator/sendEcPendingItemMail",
             "GET_ADMIN_DETAILS":"api/v1/Regulator/",
-            "REJECT_REASON":"api/v1/Regulator/claims/"
+            "REJECT_REASON":"api/v1/Regulator/claims/",
+            "CREATE_QR":"claim-ms/api/v1/generateVerifyLink/"
         },
         "USER": {
             "CREATE_COUNCIL_USER": "api/v1/CouncilAdmin/invite",

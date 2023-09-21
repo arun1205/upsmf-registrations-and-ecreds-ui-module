@@ -352,10 +352,10 @@ export class GoodStandingForeignVerificationComponent {
                 });
               }
             }
-            const joinM = this.candidateDetailList[0].joiningMonth;
-            const jm = this.monthMap[joinM]
-            const passM = this.candidateDetailList[0].passingMonth;
-            const pm = this.monthMap[passM]
+              const joinM = this.candidateDetailList[0].joiningMonth;
+              const jm = this.monthMap[joinM]
+              const passM = this.candidateDetailList[0].passingMonth;
+              const pm = this.monthMap[passM]
             this.goodStandingForeignVerificationformGroup.patchValue({
               maidenName: this.candidateDetailList[0]?.name,
               mrdName: this.candidateDetailList[0]?.marriedName,

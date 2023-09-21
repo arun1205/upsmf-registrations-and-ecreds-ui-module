@@ -107,6 +107,8 @@ export class RegnDiplomaCertDetailsComponent {
 
 
   stateData: any;
+  candetails:any;
+
   selectedLink: string = 'Candidate Details';
   requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
 
@@ -134,6 +136,7 @@ export class RegnDiplomaCertDetailsComponent {
     this.credTypeList = credentialsType
     this.stateData = this.router?.getCurrentNavigation()?.extras.state;
     this.stateData = this.stateData?.body
+    console.log("stateData",this.stateData)
 
   }
 
@@ -285,6 +288,8 @@ export class RegnDiplomaCertDetailsComponent {
     });
    
     this.getEndPoint();
+    this.newRegCertDetailsformGroup.disable();
+    this.newRegCourseDetailsformGroup.disable();
     this.getCandidatePersonalDetails();
     
 
@@ -317,13 +322,61 @@ export class RegnDiplomaCertDetailsComponent {
           }
         }
       }
+      // console.log(this.candetails.paymentStatus)
+      if(this.stateData.entity){
+        this.candetails=JSON.parse(this.stateData.propertyData)
+        console.log("details....",this.candetails)
+        this.newRegCertDetailsformGroup.patchValue({
+          email: this.candetails.email,
+          mobNumber: this.candetails.phoneNumber,
+          applicantName: this.candetails.name,
+          adhr: this.candetails.aadhaarNo,
+          motherName: this.candetails.mothersName,
+          fatherName: this.candetails.fathersName,
+          dob: this.candetails.dateOfBirth,
+          gender: this.candetails.gender,
+          al1: this.candetails.address,
+          al2: this.candetails.address,
+          state: this.candetails.state,
+          pin: this.candetails.pincode,
+          district: this.candetails.district,
+          country: this.candetails.country,
+          credType: this.candetails.credType
+
+
+
+          // district : response[0]?.district
+        });
+        // const month = (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
+        //   "0" + (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1) :
+        //   new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1
+        const joinM = this.candetails.joiningMonth;
+            const jm = this.monthMap[joinM]
+            const passM = this.candetails.passingMonth;
+            const pm = this.monthMap[passM]
+        this.newRegCourseDetailsformGroup.patchValue({
+          courseName: this.candetails.courseName,
+          collegeName: this.candetails.nursingCollage,
+          examBody: this.candetails.examBody,
+          joinDate: this.candetails.joiningYear + "-" + jm + "-01",
+          rollNum: this.candetails.finalYearRollNo,
+          passDate: this.candetails.passingYear + "-" + pm + "-01",
+          requestType: this.candetails.requestType,
+          university: this.candetails.university,
+          diplomaNumber: this.candetails.finalYearRollNo,
+        })
+
+      }
+      else{
       this.baseService.getDiploma$(this.diplomaBody).subscribe((response) => {
         if (Array.isArray(response)) {
-          console.log("tye",response[0])
-          this.urlDataResponse = response[0].docproof;
-          this.name = response[0].name;
-          this.finalYearRollNo = response[0].finalYearRollNo;
-          this.email=response[0].email;
+          this.candetails=response[0]
+          console.log("tye",this.candetails)
+          
+          this.urlDataResponse = this.candetails.docproof;
+          this.name = this.candetails.name;
+          this.finalYearRollNo =this.candetails.finalYearRollNo;
+          this.email=this.candetails.email;
           this.getStudentOsid();
 
 
@@ -348,45 +401,49 @@ export class RegnDiplomaCertDetailsComponent {
 
           // this.listOfFiles = this.candidateDetailList[0].docproof;
           this.newRegCertDetailsformGroup.patchValue({
-            email: response[0].email,
-            mobNumber: response[0].phoneNumber,
-            applicantName: response[0].name,
-            adhr: response[0].aadhaarNo,
-            motherName: response[0].mothersName,
-            fatherName: response[0].fathersName,
-            dob: response[0].dateOfBirth,
-            gender: response[0].gender,
-            al1: response[0].address,
-            al2: response[0].address,
-            state: response[0].state,
-            pin: response[0].pincode,
-            district: response[0].district,
-            country: response[0].country,
-            credType: response[0].credType
+            email: this.candetails.email,
+            mobNumber: this.candetails.phoneNumber,
+            applicantName: this.candetails.name,
+            adhr: this.candetails.aadhaarNo,
+            motherName:this.candetails.mothersName,
+            fatherName: this.candetails.fathersName,
+            dob: this.candetails.dateOfBirth,
+            gender: this.candetails.gender,
+            al1: this.candetails.address,
+            al2: this.candetails.address,
+            state: this.candetails.state,
+            pin: this.candetails.pincode,
+            district: this.candetails.district,
+            country: this.candetails.country,
+            credType: this.candetails.credType
 
 
 
             // district : response[0]?.district
           });
-          const month = (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
-            "0" + (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1) :
-            new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1
-
+          // const month = (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
+          //   "0" + (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1) :
+          //   new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1
+          const joinM = this.candetails.joiningMonth;
+            const jm = this.monthMap[joinM]
+            const passM = this.candetails.passingMonth;
+            const pm = this.monthMap[passM]
           this.newRegCourseDetailsformGroup.patchValue({
-            courseName: response[0].courseName,
-            collegeName: response[0].nursingCollage,
-            examBody: response[0].examBody,
-            joinDate: response[0].joiningYear + "-" + month + "-01",
-            rollNum: response[0].finalYearRollNo,
-            passDate: response[0].passingYear + "-" + month + "-01",
-            requestType: response[0].requestType,
-            university: response[0].university,
-            diplomaNumber: response[0].finalYearRollNo
+            courseName: this.candetails.courseName,
+            collegeName: this.candetails.nursingCollage,
+            examBody: this.candetails.examBody,
+            joinDate: this.candetails.joiningYear + "-" + jm + "-01",
+            rollNum: this.candetails.finalYearRollNo,
+            passDate: this.candetails.passingYear + "-" + pm + "-01",
+            requestType: this.candetails.requestType,
+            university: this.candetails.university,
+            diplomaNumber: this.candetails.finalYearRollNo
 
           });
         }
       }
       )
+    }
     }
     else{
 
@@ -403,11 +460,12 @@ export class RegnDiplomaCertDetailsComponent {
       }
       this.baseService.getDiploma$(this.diplomaBody).subscribe((response) => {
         if (Array.isArray(response)) {
+          this.candetails=response[0]
           console.log(response[0])
-          this.osid = response[0].osid;
-          this.urlDataResponse = response[0].docproof;
-          this.name = response[0].name;
-          this.finalYearRollNo = response[0].finalYearRollNo;
+          this.osid = this.candetails.osid;
+          this.urlDataResponse = this.candetails.docproof;
+          this.name = this.candetails.name;
+          this.finalYearRollNo =this.candetails.finalYearRollNo;
 
 
           // if (!!this.urlDataResponse) {
@@ -431,21 +489,21 @@ export class RegnDiplomaCertDetailsComponent {
 
           // this.listOfFiles = this.candidateDetailList[0].docproof;
           this.newRegCertDetailsformGroup.patchValue({
-            email: response[0].email,
-            mobNumber: response[0].phoneNumber,
-            applicantName: response[0].name,
-            adhr: response[0].aadhaarNo,
-            motherName: response[0].mothersName,
-            fatherName: response[0].fathersName,
-            dob: response[0].dateOfBirth,
-            gender: response[0].gender,
-            al1: response[0].address,
-            al2: response[0].address,
-            state: response[0].state,
-            pin: response[0].pincode,
-            district: response[0].district,
-            country: response[0].country,
-            credType: response[0].credType
+            email: this.candetails.email,
+            mobNumber: this.candetails.phoneNumber,
+            applicantName: this.candetails.name,
+            adhr: this.candetails.aadhaarNo,
+            motherName: this.candetails.mothersName,
+            fatherName: this.candetails.fathersName,
+            dob:this.candetails.dateOfBirth,
+            gender: this.candetails.gender,
+            al1: this.candetails.address,
+            al2: this.candetails.address,
+            state: this.candetails.state,
+            pin: this.candetails.pincode,
+            district: this.candetails.district,
+            country: this.candetails.country,
+            credType: this.candetails.credType
 
 
 
@@ -454,17 +512,20 @@ export class RegnDiplomaCertDetailsComponent {
           const month = (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
             "0" + (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1) :
             new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1
-
+            const joinM = this.candetails.joiningMonth;
+            const jm = this.monthMap[joinM]
+            const passM = this.candetails.passingMonth;
+            const pm = this.monthMap[passM]
           this.newRegCourseDetailsformGroup.patchValue({
-            courseName: response[0].courseName,
-            collegeName: response[0].nursingCollage,
-            examBody: response[0].examBody,
-            joinDate: response[0].joiningYear + "-" + month + "-01",
-            rollNum: response[0].finalYearRollNo,
-            passDate: response[0].passingYear + "-" + month + "-01",
-            requestType: response[0].requestType,
-            university: response[0].university,
-            diplomaNumber: response[0].finalYearRollNo
+            courseName: this.candetails.courseName,
+            collegeName: this.candetails.nursingCollage,
+            examBody: this.candetails.examBody,
+            joinDate: this.candetails.joiningYear + "-" + jm + "-01",
+            rollNum: this.candetails.finalYearRollNo,
+            passDate: this.candetails.passingYear + "-" + pm + "-01",
+            requestType: this.candetails.requestType,
+            university: this.candetails.university,
+            diplomaNumber: this.candetails.finalYearRollNo
 
           });
         }
@@ -1049,6 +1110,10 @@ export class RegnDiplomaCertDetailsComponent {
 
     doc.save(`Certificate_${this.newRegCourseDetailsformGroup.controls['rollNum'].value}_.pdf`)
 
+  }
+  onEditClick(){
+    this.newRegCertDetailsformGroup.enable();
+    this.newRegCourseDetailsformGroup.enable();
   }
 }
 

@@ -375,6 +375,17 @@ export class BaseServiceService extends HttpService {
     return this.get(reqParam)
 
   }
+  getQRCode$(entityName:string,entityId:string){
+    const header = {
+      'Accept': 'text/plain',
+      
+    }
+    const reqParam:RequestParam={
+      url:this.configService.urlConFig.URLS.ADMIN.CREATE_QR + entityName + "/" + entityId,
+      header:header
+    }
+    return this.get(reqParam)
+  }
 
 
     
