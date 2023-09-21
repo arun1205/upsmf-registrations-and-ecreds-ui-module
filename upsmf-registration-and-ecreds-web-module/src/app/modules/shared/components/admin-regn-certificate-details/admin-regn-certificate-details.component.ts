@@ -338,7 +338,7 @@ export class AdminRegnCertificateDetailsComponent {
             const joinM = response.responseData.joiningMonth;
             const jm = this.monthMap[joinM]
             const passM = response.responseData.passingMonth;
-            const pm = this.monthMap[joinM]
+            const pm = this.monthMap[passM]
 
             this.newRegCourseDetailsformGroup.patchValue({
               courseName: response.responseData.courseName,
@@ -370,6 +370,17 @@ export class AdminRegnCertificateDetailsComponent {
             this.entityId=response.responseData.studentVerification[0].entityId
             this.entityName=response.responseData.studentVerification[0].entityName
             this.filePreview= response.responseData.candidatePic;
+            this.fileSignPreview =  response.responseData.candidateSignature;
+            if(!!this.fileSignPreview){
+              const fileName = this.fileSignPreview.split('/').pop();
+              const extractLastPart = fileName?.split('_').pop();
+              const getuploadObject = {
+                name: extractLastPart,
+                url: this.fileSignPreview
+              }
+              this.fileSignPreview = getuploadObject
+            }
+            
 
             if(!!this.filePreview){
               const fileName = this.filePreview.split('/').pop();

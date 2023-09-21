@@ -331,7 +331,8 @@
                         <div class="full-details">
                             <div class="cer-name">
                                 <p>Certificate Name</p>
-                                <h4>{{(this.stateData.body.type === 'ForeignVerifyReq') ? 'Foreign Verification Request
+                        
+                                <h4>{{(this.stateData.body.credType === 'ForeignVerifyReq' || this.stateData.body.type === 'ForeignVerifyReq') ? 'Foreign Verification Request
                                     ' :
                                     'Good Standing Certificate' }}</h4>
                             </div>
