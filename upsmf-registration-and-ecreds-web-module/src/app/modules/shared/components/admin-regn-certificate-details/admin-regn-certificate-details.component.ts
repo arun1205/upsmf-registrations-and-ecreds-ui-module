@@ -55,6 +55,7 @@ export class AdminRegnCertificateDetailsComponent {
   convertUrlList: string;
   getMakeClaimbody: any;
   isInactive = true;
+  resp:any;
 
   // breadcrumbItems: BreadcrumbItem[] = [
   //   { label: 'Workspace', url: '/admin' },
@@ -894,7 +895,24 @@ export class AdminRegnCertificateDetailsComponent {
   }
 
   async createQRCode() {
-    const qrCodeData = 'https://example.com'; // Replace with your QR code data
+    this.baseService.getQRCode$(this.entityName,this.entityId).subscribe
+    // ({
+    //   next: (response) => {
+    //     console.log("url",response)
+        
+
+
+    //   },
+    //   error: (err) => {
+    //     console.log(err);
+    //   }
+    // })
+    ((response)=>{
+      
+      this.resp= response.responseData.verifyLink
+      console.log(this.resp)
+    })
+    const qrCodeData = this.resp.toString(); // Replace with your QR code data
     return await QRCode.toDataURL(qrCodeData);
   }
 

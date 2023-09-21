@@ -29,6 +29,9 @@ const routes: Routes = [
     path:'regn-diploma-cert-details',component: RegnDiplomaCertDetailsComponent, pathMatch:'full'
   },
   {
+    path: 'diploma/:id', component: RegnDiplomaCertDetailsComponent, pathMatch: 'full',
+  },
+  {
     path: 'good-stand-frgn-cert', component: GoodStandingForeignVerificationComponent, pathMatch: 'full',
   },
   {

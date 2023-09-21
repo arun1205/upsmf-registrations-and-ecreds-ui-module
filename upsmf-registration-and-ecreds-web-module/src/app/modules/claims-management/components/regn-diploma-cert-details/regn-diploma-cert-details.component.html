@@ -543,7 +543,7 @@
                                     <div class="user-info">
                                         <div class="details">
                                             <p>Applicant's Name</p>
-                                            <h4>{{this.name}}</h4>
+                                            <h4>{{this.candetails.name}}</h4>
                                         </div> 
                                         
                                         
@@ -561,7 +561,7 @@
                                         </div>
                                         <div class="details">
                                             <p>Payment Status</p>
-                                            <h4 [ngClass]="getPaymentStatusColorClass(this.candidateDetailList[0]?.paymentStatus)">{{this.candidateDetailList[0]?.paymentStatus}}</h4>
+                                            <h4>{{this.candetails.paymentStatus}}</h4>
                                         </div>
                                     <!-- </div> -->
                                     </div>
@@ -572,14 +572,15 @@
                                 </div>
                                 
                 
-                                <div class="button-group">
+                                <div class="button-group" *ngIf="candetails.paymentStatus !=='SUCCESS'">
+                                    
                                     <button class="button" mat-stroked-button color="primary">Cancel</button>
                                     <button class="button" mat-raised-button color="primary"
                                         (click)="handlePayment()">{{this.tranData ? 'Download Credentials' : 'Make Payment' }}</button>
                                 </div>
-                                <!-- <div class="button-group" *ngIf="this.candidateDetailList[0]?.paymentStatus==='SUCCESS' && this.stateData.status!=='APPROVED'">
+                                <div class="button-group" *ngIf="candetails.paymentStatus ==='SUCCESS' && candetails.status!=='APPROVED'">
                                     <button class="button" mat-raised-button color="primary" (click)="navToPreviousPage()">Back to list</button>
-                                </div> -->
+                                </div>
                              </div>
 
                         </div>
