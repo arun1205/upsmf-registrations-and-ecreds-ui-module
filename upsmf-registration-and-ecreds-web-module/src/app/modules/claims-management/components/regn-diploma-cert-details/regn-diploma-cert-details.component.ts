@@ -56,6 +56,10 @@ export class RegnDiplomaCertDetailsComponent {
   docsResponseUrl: string;
   convertUrlList: string;
   getMakeClaimbody: any;
+  uplaodedFiles:any;
+  filePreview:any;uplaodedSignFiles:any;
+  fileSignPreview:any;
+
 
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Claim Registration Certificate', url: '/claims/new' },
@@ -108,6 +112,9 @@ export class RegnDiplomaCertDetailsComponent {
 
   stateData: any;
   candetails:any;
+  status:string;
+  diplomaOsid:string;
+  isFileInputDisabled = true;
 
   selectedLink: string = 'Candidate Details';
   requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
@@ -123,7 +130,7 @@ export class RegnDiplomaCertDetailsComponent {
     private route: ActivatedRoute,
     public dialog: MatDialog,
   ) {
-    this.userEmail = this.baseService.getUserRole()[0]
+    // this.userEmail = this.baseService.getUserRole()[0]
     // var token:any
     //  token =localStorage.getItem('token')
     //  let tokenId:any = ''
@@ -141,6 +148,7 @@ export class RegnDiplomaCertDetailsComponent {
   }
 
   ngOnInit() {
+    this.userEmail = this.baseService.getUserEmail()
     const storedData = localStorage.getItem('diplomaData')
     if (storedData) {
       this.studData = JSON.parse(storedData)
@@ -319,6 +327,9 @@ export class RegnDiplomaCertDetailsComponent {
           },
           dateOfBirth: {
             eq: dob
+          },
+          email: {
+            eq: this.userEmail
           }
         }
       }
@@ -455,6 +466,9 @@ export class RegnDiplomaCertDetailsComponent {
           },
           dateOfBirth: {
             eq: this.studData.dod
+          },
+          email:{
+            eq:this.studData.email
           }
         }
       }
@@ -537,9 +551,9 @@ export class RegnDiplomaCertDetailsComponent {
 
   newRegCertDetailsformGroupSubmit(value: any) {
     this.submitted = true;
-    if (this.newRegCertDetailsformGroup.valid) {
+    // if (this.newRegCertDetailsformGroup.valid) {
       this.candidateDetails = false;
-    }
+    // }
 
   }
   onNewRegCourseDetailsformSubmit(value: any) {
@@ -560,7 +574,7 @@ export class RegnDiplomaCertDetailsComponent {
       this.updateStudentBody =
       {
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
-        "candidatePic": "arun.jpg",
+        "candidatePic": this.filePreview.url,
         "joiningYear": joinYear.toString(),
         "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
         "gender": this.newRegCertDetailsformGroup.value.gender,
@@ -601,7 +615,7 @@ export class RegnDiplomaCertDetailsComponent {
         "claimType": "registration",
         "certificateNo": "NA",
         "university": value.university,
-        "candidateSignature": "NA",
+        "candidateSignature": this.fileSignPreview.url,
         "validityUpto": "NA",
         "certificateNumber": "NA",
         "courseType":this.stateData.courseType,
@@ -648,6 +662,7 @@ export class RegnDiplomaCertDetailsComponent {
           finalYearRollNo: this.finalYearRollNo,
           regNum:this.stateData.regNo,
           dod:dob,
+          email:this.userEmail,
         }
         console.log("data", paymentData)
         localStorage.setItem('diplomaData', JSON.stringify(paymentData))
@@ -1114,6 +1129,67 @@ export class RegnDiplomaCertDetailsComponent {
   onEditClick(){
     this.newRegCertDetailsformGroup.enable();
     this.newRegCourseDetailsformGroup.enable();
+    this.isFileInputDisabled = false;
+  }
+  onProfileChanged(event?:any){
+    let selectedUploadFile = event.target.files[0];
+    console.log(selectedUploadFile)
+   //  this.profileFileName = selectedUploadFile.name
+    this.uploadProfileData(selectedUploadFile)
+   }
+ 
+   uploadProfileData(selectedFile:any){
+     const formData = new FormData();
+     formData.append('files', selectedFile)
+     this.baseService.uploadFiles$(this.osid,formData,this.endPointUrl).subscribe({
+       next:(res)=>{
+       console.log('profileData',res)
+       this.uplaodedFiles =res.result
+       console.log(this.uplaodedFiles)
+       const UrlwithoutComma = this.uplaodedFiles.replace(/,*$/, '');
+       const fileName = this.uplaodedFiles.split('/').pop();
+       const extractLastPart = fileName?.split('_').pop();
+       const getuploadObject = {
+         name: extractLastPart,
+         url: UrlwithoutComma
+       }
+       this.filePreview = getuploadObject
+       console.log('getuploadObject',this.filePreview)
+       },
+       error:(err)=>{
+         console.log(err)
+       }
+     })
+   }
+   onSignatureChanged(event?:any){
+    let selectedUploadFile = event.target.files[0];
+    console.log(selectedUploadFile)
+   //  this.profileFileName = selectedUploadFile.name
+    this.uploadSignatureData(selectedUploadFile)
+   }
+
+   uploadSignatureData(selectedFile:any){
+    const formData = new FormData();
+    formData.append('files', selectedFile)
+    this.baseService.uploadFiles$(this.osid,formData,this.endPointUrl).subscribe({
+      next:(res)=>{
+      console.log('profileData',res)
+      this.uplaodedSignFiles =res.result
+      console.log(this.uplaodedSignFiles)
+      const UrlwithoutComma = this.uplaodedSignFiles.replace(/,*$/, '');
+      const fileName = this.uplaodedSignFiles.split('/').pop();
+      const extractLastPart = fileName?.split('_').pop();
+      const getuploadObject = {
+        name: extractLastPart,
+        url: UrlwithoutComma
+      }
+      this.fileSignPreview = getuploadObject
+      console.log('getuploadObject',this.fileSignPreview)
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    })
   }
 }
 
