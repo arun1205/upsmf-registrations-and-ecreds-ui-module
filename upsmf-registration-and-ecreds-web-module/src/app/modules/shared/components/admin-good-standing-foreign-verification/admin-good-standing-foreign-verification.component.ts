@@ -150,8 +150,8 @@ export class AdminGoodStandingForeignVerificationComponent {
               }
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
-                  const parts = url.split('=');
-                  const fileNameWithQueryParams = parts[1];
+                  // const parts = url.split('=');
+                  const fileNameWithQueryParams = url;
                   const fileName = fileNameWithQueryParams.split('/').pop();
                   const extractLastPart = fileName?.split('_').pop();
                   const getuploadObject = {
@@ -221,8 +221,8 @@ export class AdminGoodStandingForeignVerificationComponent {
               }
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
-                  const parts = url.split('=');
-                  const fileNameWithQueryParams = parts[1];
+                  // const parts = url.split('=');
+                  const fileNameWithQueryParams = url;
                   const fileName = fileNameWithQueryParams.split('/').pop();
                   const extractLastPart = fileName?.split('_').pop();
                   const getuploadObject = {
@@ -362,10 +362,10 @@ export class AdminGoodStandingForeignVerificationComponent {
         this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
         if (this.urlData.length) {
           this.listOfFiles = this.urlData?.map(url => {
-            const parts = url.split('=');
-            if (parts.length === 2) {
-              return decodeURIComponent(parts[1]);
-            }
+            // const parts = url.split('=');
+            
+              return decodeURIComponent(url);
+            
             return null;
           });
 

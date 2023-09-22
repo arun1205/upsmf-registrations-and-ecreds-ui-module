@@ -864,8 +864,8 @@ export class RegnDiplomaCertDetailsComponent {
       this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
 
       const uploadObj = this.docsUrl.map(url => {
-        const parts = url.split('=');
-        const fileNameWithQueryParams = parts[1];
+        // const parts = url.split('=');
+        const fileNameWithQueryParams = url;
         const fileName = fileNameWithQueryParams.split('/').pop();
         const extractLastPart = fileName?.split('_').pop();
         const getuploadObject = {
