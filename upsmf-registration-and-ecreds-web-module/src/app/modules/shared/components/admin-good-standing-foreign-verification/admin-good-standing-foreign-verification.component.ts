@@ -29,6 +29,7 @@ export class AdminGoodStandingForeignVerificationComponent {
 
   labels = applabels;
   form1Html: any
+  resp:any;
 
   logo = '../../../../../assets/images/sunbird_logo.png';
   internalLogo = '../../../../../assets/images/up_smf_logo-24_x_24.png';
@@ -411,7 +412,12 @@ export class AdminGoodStandingForeignVerificationComponent {
 
   }
   async createQRCode() {
-    const qrCodeData = 'https://example.com'; // Replace with your QR code data
+    this.baseService.getQRCode$(this.entityName, this.entityId).subscribe
+      ((response) => {
+        this.resp = response.responseData.verifyLink
+        console.log(this.resp)
+      })
+    const qrCodeData = this.resp.toString(); // Replace with your QR code data
     return await QRCode.toDataURL(qrCodeData);
   }
   generatePDF(qrCodeString: string) {
