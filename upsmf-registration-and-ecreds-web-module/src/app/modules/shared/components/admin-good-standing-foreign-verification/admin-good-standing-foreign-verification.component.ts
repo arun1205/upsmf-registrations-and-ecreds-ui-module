@@ -138,7 +138,7 @@ export class AdminGoodStandingForeignVerificationComponent {
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
               console.log('urlDaaaa', this.urlData)
-              this.filePreview= response.responseData.studentGoodstandingVerification[0].candidatePic;
+              this.filePreview= response.responseData.candidatePic;
               if(!!this.filePreview){
                 const fileName = this.filePreview.split('/').pop();
                 const extractLastPart = fileName?.split('_').pop();
