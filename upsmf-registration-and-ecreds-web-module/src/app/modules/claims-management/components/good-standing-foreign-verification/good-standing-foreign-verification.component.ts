@@ -87,6 +87,8 @@ export class GoodStandingForeignVerificationComponent {
   filePreview:any;
   todayDate=new Date();
   maxDate=this.todayDate;
+  endPointUrls:any;
+  studentOsId:any;
 
   profQualificationArray = ['A.N.M', 'Midwife', 'H.W', 'Nurse', 'B.SC.Nursing'];
 
@@ -124,6 +126,21 @@ export class GoodStandingForeignVerificationComponent {
       }
     })
     console.log(this.osid)
+    this.getStudentFormOsid()
+  }
+
+  getStudentFormOsid(){
+    this.endPointUrls = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+    this.baseService.getCandidatePersonalDetails$(this.endPointUrls).subscribe({
+      next:(res)=>{
+         console.log(res)
+         this.studentOsId =res.responseData[0].osid 
+         console.log('sss',this.studentOsId)
+      },
+      error:(err)=>{
+     console.log(err)
+      }
+    })
   }
 
   getCandidatePersonalDetails() {
@@ -500,9 +517,9 @@ export class GoodStandingForeignVerificationComponent {
       console.log(this.fileList[i])
       formData.append("files", this.fileList[i]);
     }
-    this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+     let OsIdGoodStanding = this.osid ? this.osid: this.studentOsId
 
-    this.baseService.uploadFiles$(this.osid, formData, this.endPointUrl).subscribe((data) => {
+    this.baseService.uploadFiles$(OsIdGoodStanding, formData, this.endPointUrl).subscribe((data) => {
       console.log(data)
       this.docsResponseUrl = data.result;
       this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
