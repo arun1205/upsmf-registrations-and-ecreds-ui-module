@@ -60,7 +60,7 @@
                                         <h3 class="status">STATUS : {{this.stateData.body.status}}</h3>
                                     </div>
                                     <div class="status-reason" *ngIf="this.stateData.body.status === 'REJECTED'">
-                                        <h3>{{this.stateData.body.status}}</h3>
+                                        <h3>Reason: {{reason}}</h3>
                                     </div>
                                 </div>
                                 <div class="full-details">
@@ -332,7 +332,7 @@
                                             <button class="button" mat-raised-button
                                                 color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Previous</button>
                                         </div>
-                                        <div class="button-group" *ngIf="!this.stateData.body.status==='OPEN'">
+                                        <div class="button-group" *ngIf="this.stateData.body.status==='APPROVED' || this.stateData.body.status==='REJECTED'">
                                             <button class="button" mat-raised-button
                                                 color="primary" (click)="navToPreviousPage()"><mat-icon>keyboard_backspace</mat-icon>Back to
                                                 list</button>
@@ -342,9 +342,10 @@
 
                                         <div class="button-group" *ngIf="this.stateData.body.status==='OPEN'">
                                             <button type="button" class="button" mat-stroked-button color="primary"
-                                                (click)="onReset()">Download Letter to EC</button>
-                                            <button class="button" mat-raised-button color="primary">Sent Email to
-                                                EC</button>
+                                                (click)="onReset()">{{  this.ecStatus==="APPROVED" || this.ecStatus==="REJECTED" ? 'Reject':'Download Letter to EC' }}<mat-icon>{{this.ecStatus==="APPROVED"  || this.ecStatus==="REJECTED" ?
+                                                    'close' : '' }}</mat-icon></button>
+                                            <button class="button" mat-raised-button color="primary">{{ this.ecStatus==="APPROVED"  || this.ecStatus==="REJECTED" ? 'Approve' :'Sent Email to EC'}}<mat-icon>{{this.ecStatus==="APPROVED"  || this.ecStatus==="REJECTED"? 'check' : ''
+                                            }}</mat-icon></button>
                                         </div>
                                     </div>
                                 </div>

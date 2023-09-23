@@ -378,7 +378,7 @@
                                         Credentials':'Make Payment'}}<mat-icon matSuffix>arrow_right_alt</mat-icon></button>
                                 </div>
                                 <div class="button-group"
-                                    *ngIf="this.candidateDetailList[0]?.paymentStatus==='SUCCESS' && this.stateData.status!=='APPROVED'">
+                                    *ngIf="this.candidateDetailList[0]?.paymentStatus==='SUCCESS' && this.stateData.body.status!=='APPROVED'">
                                     <button class="button" mat-raised-button color="primary" (click)="navToPreviousPage()">Back to list</button>
                                 </div>
                             </div>

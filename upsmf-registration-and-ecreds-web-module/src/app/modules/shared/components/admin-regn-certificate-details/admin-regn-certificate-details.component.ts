@@ -67,6 +67,7 @@ export class AdminRegnCertificateDetailsComponent {
   id:string;
   entity: string;
   reason:string;
+  ecStatus:string;
 
   months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -268,6 +269,8 @@ export class AdminRegnCertificateDetailsComponent {
     this.osid = this.stateData?.entityId
     this.id=this.stateData?.id
     this.entity = this.stateData?.entity
+    this.ecStatus=this.stateData?.outsideStudentStatus
+    console.log("status",this.ecStatus)
     if (this.entity === "StudentFromUP" && this.userEmail === "Regulator") {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.entity, this.osid)
         .subscribe(
@@ -382,6 +385,7 @@ export class AdminRegnCertificateDetailsComponent {
             this.entityName=response.responseData.studentVerification[0].entityName
             this.filePreview= response.responseData.candidatePic;
             this.fileSignPreview =  response.responseData.candidateSignature;
+            this.getRejectReasonAdmin()
             if(!!this.fileSignPreview){
               const fileName = this.fileSignPreview.split('/').pop();
               const extractLastPart = fileName?.split('_').pop();
@@ -593,7 +597,7 @@ export class AdminRegnCertificateDetailsComponent {
   onNewRegCourseDetailsformSubmit(value: any) {
     this.submitted = true;
     const osid = this.stateData?.id
-    if (this.entity === "StudentFromUP") {
+    if (this.entity === "StudentFromUP" || this.ecStatus==="APPROVED") {
       const approveBody = {
         action: "GRANT_CLAIM",
         notes: "Registration Certificate"
@@ -603,7 +607,7 @@ export class AdminRegnCertificateDetailsComponent {
           this.navToPreviousPage();
         })
     }
-    else if (this.entity === "StudentOutsideUP" && this.userEmail === "Regulator") {
+    else if (this.entity === "StudentOutsideUP" && this.userEmail === "Regulator" && this.ecStatus!=="APPROVED") {
       const message = `Enter the email`;
       const message1 = `Upload Document`;
 
@@ -622,18 +626,19 @@ export class AdminRegnCertificateDetailsComponent {
 
         if (result) {
           this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+
           if (this.urlData.length) {
             this.listOfFiles = this.urlData?.map(url => {
               // const parts = url.split('=');
               
                 return decodeURIComponent(url);
-              
-              return null;
             });
 
           }
           const details = JSON.parse(this.stateData.propertyData);
           //convert to string with commaa separated
+          
           this.convertUrlList = this.listOfFiles.join(',')
           const mailBody = {
             entityId:this.entityId,
@@ -644,7 +649,7 @@ export class AdminRegnCertificateDetailsComponent {
             council: details.council,
             email: this.newRegCertDetailsformGroup.value.email,
             examBody: value.examBody,
-            docProofs: [this.convertUrlList],
+            docProofs: this.urlData,
             diplomaNumber: "",
             nursingCollage: value.collegeName,
             courseState: "aaaaa",
@@ -881,7 +886,7 @@ export class AdminRegnCertificateDetailsComponent {
   }
 
   takeAcceptRejectAction(entity: string) {
-    if (this.entity === "StudentFromUP") {
+    if (this.entity === "StudentFromUP" || this.ecStatus==="REJECTED") {
       const message = `Reason For Rejection`;
       // const resDialog = new DialogModel( message);
       const shouldShowFileUpload = false;
@@ -1052,6 +1057,7 @@ export class AdminRegnCertificateDetailsComponent {
     });
 
     doc.save(`Certificate_${this.newRegCourseDetailsformGroup.controls['rollNum'].value}_.pdf`)
+    this.navToPreviousPage();
 
   }
   getRejectReasonAdmin(){
