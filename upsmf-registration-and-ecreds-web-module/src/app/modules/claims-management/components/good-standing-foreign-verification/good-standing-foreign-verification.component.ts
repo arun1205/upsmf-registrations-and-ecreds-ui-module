@@ -1002,10 +1002,10 @@ export class GoodStandingForeignVerificationComponent {
   }
   handlePayment() {
     if (this.stateData.body.status === 'APPROVED') {
-      this.entity = this.stateData.entity;
-      this.entityId = this.stateData.entityId;
-      this.attestationName = this.stateData.attestationName;
-      this.attestationId = this.stateData.attestationId
+      this.entity = this.stateData.body.entity;
+      this.entityId = this.stateData.body.entityId;
+      this.attestationName = this.stateData.body.attestationName;
+      this.attestationId = this.stateData.body.attestationId
       this.baseService.getCredentials$(this.entity, this.entityId, this.attestationName, this.attestationId)
         .subscribe((response: any) => {
           const fileName = "Certificate.pdf";

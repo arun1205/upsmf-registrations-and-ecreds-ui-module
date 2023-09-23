@@ -63,7 +63,7 @@
                                         <h3 class="status">STATUS : {{this.stateData?.status}}</h3>
                                     </div>
                                     <div class="status-reason" *ngIf="this.stateData?.status === 'REJECTED'">
-                                        <h3>{{reason}}</h3>
+                                        <h3>Reason: {{reason}}</h3>
                                     </div>
                                 </div>
 
@@ -560,8 +560,8 @@
 
                                         <div class="button-group" *ngIf="this.stateData?.status==='OPEN'">
                                             <button type="button" class="button" mat-stroked-button color="primary"
-                                                (click)="onReset()"> {{ ( this.entity==="StudentFromUP" ) ? 'Reject'
-                                                :'Download Letter to EC' }}<mat-icon>{{ this.entity==="StudentFromUP" ?
+                                                (click)="onReset()"> {{ ( this.entity==="StudentFromUP" || this.ecStatus==="APPROVED"  || this.ecStatus==="REJECTED" ) ? 'Reject'
+                                                :'Download Letter to EC' }}<mat-icon>{{ this.entity==="StudentFromUP" || this.ecStatus==="APPROVED"  || this.ecStatus==="REJECTED" ?
                                                     'close' : '' }}</mat-icon></button>
                                             <!-- <button type="button" class="button" mat-stroked-button color="primary" (click)="onReset(entity)">
                                                     <ng-container [ngSwitch]="userEmail">
@@ -586,8 +586,8 @@
                                                     </ng-container>
                                                   </button> -->
                                             <button class="button" mat-raised-button color="primary">{{ (
-                                                this.entity==="StudentFromUP") ? 'Approve' :'Sent Email to EC'
-                                                }}<mat-icon>{{ this.entity==="StudentFromUP" ? 'check' : ''
+                                                this.entity==="StudentFromUP" || this.ecStatus==="APPROVED"  || this.ecStatus==="REJECTED") ? 'Approve' :'Sent Email to EC'
+                                                }}<mat-icon>{{ this.entity==="StudentFromUP" || this.ecStatus==="APPROVED" || this.ecStatus==="REJECTED" ? 'check' : ''
                                                     }}</mat-icon><mat-icon></mat-icon></button>
                                             <!-- <button class="button" mat-raised-button color="primary">
                                                     <ng-container [ngSwitch]="userEmail">

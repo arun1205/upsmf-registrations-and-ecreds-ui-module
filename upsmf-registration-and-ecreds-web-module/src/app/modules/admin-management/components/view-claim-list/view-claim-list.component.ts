@@ -104,6 +104,15 @@ export class ViewClaimListComponent {
         cell: (element: Record<string, any>) => `Submitted`
       },
       {
+       
+        columnDef: 'Ec',
+        header: 'EC-Status',
+        isSortable: false,
+        isLink: true,
+        cell: (element: Record<string, any>) => `${element['outsideStudentStatus']}`
+        
+      },
+      {
         columnDef: 'viewClaim',
         header: '',
         isSortable: false,

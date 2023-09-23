@@ -51,6 +51,8 @@ export class AdminGoodStandingForeignVerificationComponent {
   entityName: string
   filePreview:any;
   entity: string;
+  id:string;
+  ecStatus:string;
   osid: string;
   stateData: any;
   customData: any;
@@ -61,6 +63,7 @@ export class AdminGoodStandingForeignVerificationComponent {
   selectedLink: string = 'Candidate Details';
   paymentResponse: any;
   isInactive = true;
+  reason:string;
   
 
 
@@ -127,12 +130,16 @@ export class AdminGoodStandingForeignVerificationComponent {
     console.log("getting getCandidatePersonalDetails")
     this.osid = this.stateData.body.entityId
     this.entity = this.stateData.body.entity
+    this.id=this.stateData?.body.id
+    this.ecStatus=this.stateData.body.outsideStudentStatus
+    console.log("status",this.ecStatus)
     console.log("entity", this.entity)
     if (this.entity === "StudentGoodstanding" && this.userEmail === "Regulator") {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
         .subscribe(
           (response: any) => {
             console.log("data", response)
+            this.getRejectReasonAdmin();
             this.urlDataResponse = response.responseData.docproof;
             this.entityId=response.responseData.studentGoodstandingVerification[0].entityId
             this.entityName=response.responseData.studentGoodstandingVerification[0].entityName
@@ -200,10 +207,13 @@ export class AdminGoodStandingForeignVerificationComponent {
     console.log("getting getCandidatePersonalDetails")
     this.osid = this.stateData.body.entityId
     this.entity = this.stateData.body.entity
+    this.id=this.stateData?.body.id
+    this.ecStatus=this.stateData.body.outsideStudentStatus
     if (this.entity === "StudentForeignVerification" && this.userEmail === "Regulator") {
       this.baseService.getCandidatePersonalDetailsRegulator$(this.entity,this.osid)
         .subscribe(
           (response: any) => {
+            this.getRejectReasonAdmin();
             this.urlDataResponse = response.responseData.docproof;
             this.entityId=response.responseData.StudentForeignVerify[0].entityId
             this.entityName=response.responseData.StudentForeignVerify[0].entityName
@@ -342,74 +352,139 @@ export class AdminGoodStandingForeignVerificationComponent {
   }
 
   onGoodStandingForeignVerificationformSubmit(value: any) {
+    this.submitted = true;
     const osid = this.stateData.body.id
-    console.log("value....", value)
-
-    // if(this.entity==="StudentForeignVerification" && this.userEmail==="Regulator"){
-    const message = `Enter the email`;
-    const message1 = `Upload Document`;
-
-    const shouldShowFileUpload = true;
-    const resDialog = new DialogModel(message, message1);
-
-    let dialogRef = this.dialog.open(DialogBoxComponent, {
-      disableClose: true,
-     
-      data: { message, message1, shouldShowFileUpload }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-
-      if (result) {
-        this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
-        if (this.urlData.length) {
-          this.listOfFiles = this.urlData?.map(url => {
-            // const parts = url.split('=');
-            
-              return decodeURIComponent(url);
-            
-            return null;
-          });
-
-        }
-        const details = JSON.parse(this.stateData.body.propertyData);
-        //convert to string with commaa separated
-        this.convertUrlList = this.listOfFiles.join(',')
-        const mailBody = {
-          entityId:this.entityId,
-          entityName:this.entityName,
-          outsideEntityMailId: result.reason,
-          name: this.goodStandingForeignVerificationformGroup.value.maidenName,
-          gender: "NA",
-          council: details.council,
-          email: this.goodStandingForeignVerificationformGroup.value.email,
-          examBody: "UPSMF",
-          docProofs: [this.convertUrlList],
-          diplomaNumber: "",
-          nursingCollage: value.tcName,
-          courseState: "aaaaa",
-          courseCouncil: "BBB",
-          state: this.goodStandingForeignVerificationformGroup.value.state,
-          country: this.goodStandingForeignVerificationformGroup.value.country,
-          // state: this.goodStandingForeignVerificationformGroup.value.state,
-          attachment: result.file,
-
-        }
-        this.baseService.sendMailOutsideUp$(mailBody).subscribe((response) => {
+    if (this.ecStatus === "APPROVED") {
+      const approveBody = {
+        action: "GRANT_CLAIM",
+        notes: "Registration Certificate"
+      }
+      this.baseService.approveClaim$(osid, approveBody)
+        .subscribe((response) => {
           this.navToPreviousPage();
         })
+    }
+    else {
 
-      }
+      console.log("value....", value)
 
-    });
+      // if(this.entity==="StudentForeignVerification" && this.userEmail==="Regulator"){
+      const message = `Enter the email`;
+      const message1 = `Upload Document`;
+
+      const shouldShowFileUpload = true;
+      const resDialog = new DialogModel(message, message1);
+
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
+        disableClose: true,
+
+        data: { message, message1, shouldShowFileUpload }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+
+        if (result) {
+          this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+          if (this.urlData.length) {
+            this.listOfFiles = this.urlData?.map(url => {
+
+              return decodeURIComponent(url);
+
+              return null;
+            });
+
+          }
+          const details = JSON.parse(this.stateData.body.propertyData);
+          //convert to string with commaa separated
+          // this.convertUrlList = this.listOfFiles.join(',')
+          const mailBody = {
+            entityId: this.entityId,
+            entityName: this.entityName,
+            outsideEntityMailId: result.reason,
+            name: this.goodStandingForeignVerificationformGroup.value.maidenName,
+            gender: "NA",
+            council: details.council,
+            email: this.goodStandingForeignVerificationformGroup.value.email,
+            examBody: "UPSMF",
+            docProofs: this.urlData,
+            diplomaNumber: "",
+            nursingCollage: value.tcName,
+            courseState: "aaaaa",
+            courseCouncil: "BBB",
+            state: this.goodStandingForeignVerificationformGroup.value.state,
+            country: this.goodStandingForeignVerificationformGroup.value.country,
+            // state: this.goodStandingForeignVerificationformGroup.value.state,
+            attachment: result.file,
+
+          }
+          this.baseService.sendMailOutsideUp$(mailBody).subscribe((response) => {
+            this.navToPreviousPage();
+          })
+
+        }
+
+      });
+    }
   }
   navToPreviousPage() {
     this.location.back()
   }
-  onReset() {
-    this.createQRCode().then((qrCodeURL: any) => {
-      this.generatePDF(qrCodeURL.toString())
-    })
+  // onReset() {
+  //   this.createQRCode().then((qrCodeURL: any) => {
+  //     this.generatePDF(qrCodeURL.toString())
+  //   })
 
+  // }
+  doFormReset() {
+    this.submitted = false;
+    this.goodStandingForeignVerificationformGroup.reset();
+    this.listOfFiles = [];
+  }
+  takeAcceptRejectAction(entity: string) {
+    if (this.ecStatus==="REJECTED") {
+      const message = `Reason For Rejection`;
+      // const resDialog = new DialogModel( message);
+      const shouldShowFileUpload = false;
+
+
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
+        disableClose: true,
+        width: '40rem',
+        height: '25rem',
+        data: { message, shouldShowFileUpload }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        const reason = result;
+        console.log(reason.value)
+
+        if (result) {
+          const approveBody = {
+            action: "REJECT_CLAIM",
+            notes: reason.reason
+          }
+          const osid = this.stateData?.body.id
+          this.baseService.approveClaim$(osid, approveBody)
+            .subscribe((response) => {
+              this.navToPreviousPage();
+
+            })
+
+        }
+
+
+      });
+
+
+    } else { //studentoutside UP Regulator role
+      this.createQRCode().then((qrCodeURL: any) => {
+        this.generatePDF(qrCodeURL.toString())
+      })
+    }
+  }
+
+  onReset(entity: string) {
+    this.userEmail === "Regulator" ? this.takeAcceptRejectAction(entity) : this.doFormReset();
   }
   async createQRCode() {
     this.baseService.getQRCode$(this.entityName, this.entityId).subscribe
@@ -463,6 +538,13 @@ export class AdminGoodStandingForeignVerificationComponent {
 
     });
     doc.save(`Application_${this.goodStandingForeignVerificationformGroup.controls['regnNum'].value}_.pdf`)
+    this.navToPreviousPage();
+  }
+  getRejectReasonAdmin(){
+    this.baseService.getReasonAdmin$(this.id).subscribe((response)=>{
+      this.reason=response.responseData.notes[1].notes
+      console.log("reason",response.responseData.notes[0].notes)
+    })
   }
 
 }

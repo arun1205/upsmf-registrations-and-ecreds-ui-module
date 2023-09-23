@@ -92,7 +92,7 @@ export interface ClaimsTableData {
     council: string,
     email: string,
     examBody: string,
-    docProofs: string[],
+    docProofs: any,
     diplomaNumber:string,
     nursingCollage: string,
     courseState:string,
