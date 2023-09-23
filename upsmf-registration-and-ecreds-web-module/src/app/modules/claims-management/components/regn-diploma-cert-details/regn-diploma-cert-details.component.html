@@ -403,38 +403,38 @@
                                         </div>
                                         <div class="applicant-details">
                                             <h4>{{labels.attach}}</h4>
-                                        <div class="upload-column">
-                                            <!-- <div class="flex flex-column mt1"> -->
-                                            <!-- </div> -->
-                                            <!-- <div class="ml4 flex flex-column right"> -->
-                                                <label for="file-upload2" class="custom-file-upload">
-                                                    <a mat-button color="primary">+ Add
-                                                        attachment(s) </a>
-                                                </label>
-                                                <mat-hint>docx /pdf files accepted</mat-hint>
-                                                <input id="file-upload2" type="file" style="display: none"
-                                                    (change)="onCourseFileChanged($event)" multiple="true" enctype="multipart/form-data"  accept=".pdf,.docx"  [disabled]="isFileInputDisabled"/>
-                                            <!-- </div> -->
-                                        
-
-                                            <!-- <div class="flex flex-row  ml4 mt1">
-                                                <div class="flex flex-column mt1"> -->
-
-
-                                                    <div *ngFor="let selected of listOfFiles; let index = index">
-                                                     
-                                                        <mat-list >
-                                                            <mat-list-item>{{ selected?.name }} <mat-icon class="mt2 ml4"
-                                                                    (click)="removeSelectedFile(index)">delete</mat-icon></mat-list-item>
-                                                            <mat-divider></mat-divider>
-
-                                                        </mat-list>
-
-                                                    </div>
-
+                                            <div class="upload-column">
+                                                <!-- <div class="flex flex-column mt1"> -->
                                                 <!-- </div> -->
-
-                                            </div>
+                                                <!-- <div class="ml4 flex flex-column right"> -->
+                                                    <label for="fileUpload1" class="custom-file-upload">
+                                                        <a mat-button color="primary">+ Add 
+                                                            attachment(s) </a>
+                                                    </label>
+                                                    <mat-hint>docx /pdf files accepted</mat-hint>
+                                                    <input id="fileUpload1" type="file" style="display: none" enctype="multipart/form-data"
+                                                        (change)="onFileChanged($event)"  multiple="true" accept=".pdf,.docx" [disabled]="isFileInputDisabled"/>
+                                                <!-- </div> -->
+                                            
+    
+                                                <!-- <div class="flex flex-row  ml4 mt1">
+                                                    <div class="flex flex-column mt1"> -->
+    
+    
+                                                        <div *ngFor="let selected of listOfFiles; let index = index">
+    
+                                                            <mat-list >
+                                                                <mat-list-item (click)="navigateToUrl(selected.url)">{{ selected.name }} <mat-icon class="mt2 ml4"
+                                                                        (click)="removeSelectedFile(index)">delete</mat-icon></mat-list-item>
+                                                                <mat-divider></mat-divider>
+    
+                                                            </mat-list>
+    
+                                                        </div>
+    
+                                                    <!-- </div> -->
+    
+                                                </div>
                                         </div>
                                         <div *ngIf="this.userRole === 'StudentOutsideUP'">
                                             <h3>Note: Fill the details in this section as you already registered with any other State Medical Council</h3>
@@ -607,15 +607,15 @@
                                 </div>
                                 
                 
-                                <div class="button-group" *ngIf="candetails.paymentStatus !=='SUCCESS'">
+                                <div class="button-group" >
                                     
                                     <button class="button" mat-stroked-button color="primary">Cancel</button>
                                     <button class="button" mat-raised-button color="primary"
-                                        (click)="handlePayment()">{{this.tranData ? 'Download Credentials' : 'Make Payment' }}</button>
+                                        (click)="handlePayment()">{{this.candetails.paymentStatus==="SUCCESS" ? 'Download Credentials' : 'Make Payment' }}</button>
                                 </div>
-                                <div class="button-group" *ngIf="candetails.paymentStatus ==='SUCCESS' && candetails.status!=='APPROVED'">
+                                <!-- <div class="button-group" *ngIf="candetails.paymentStatus ==='SUCCESS' && candetails.status!=='APPROVED'">
                                     <button class="button" mat-raised-button color="primary" (click)="navToPreviousPage()">Back to list</button>
-                                </div>
+                                </div> -->
                              </div>
 
                         </div>

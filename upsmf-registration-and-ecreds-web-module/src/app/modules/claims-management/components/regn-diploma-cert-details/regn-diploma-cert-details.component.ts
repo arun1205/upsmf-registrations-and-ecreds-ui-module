@@ -199,7 +199,7 @@ export class RegnDiplomaCertDetailsComponent {
   }
 
   getEndPoint() {
-    switch (this.stateData?.origin || this.stateData?.entity) {
+    switch (this.stateData?.origin || this.stateData?.entity || this.studData.entity) {
 
       case 'StudentOutsideUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS_OUTSIDE_UP
@@ -208,7 +208,7 @@ export class RegnDiplomaCertDetailsComponent {
         break;
       case 'StudentFromUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
-        this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
+        this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DIPLOMA'
         this.getCourses(this.courseUrl)
         break;
       case 'Regulator':
@@ -334,55 +334,53 @@ export class RegnDiplomaCertDetailsComponent {
         }
       }
       // console.log(this.candetails.paymentStatus)
-      if(this.stateData.entity){
-        this.candetails=JSON.parse(this.stateData.propertyData)
-        console.log("details....",this.candetails)
-        this.newRegCertDetailsformGroup.patchValue({
-          email: this.candetails.email,
-          mobNumber: this.candetails.phoneNumber,
-          applicantName: this.candetails.name,
-          adhr: this.candetails.aadhaarNo,
-          motherName: this.candetails.mothersName,
-          fatherName: this.candetails.fathersName,
-          dob: this.candetails.dateOfBirth,
-          gender: this.candetails.gender,
-          al1: this.candetails.address,
-          al2: this.candetails.address,
-          state: this.candetails.state,
-          pin: this.candetails.pincode,
-          district: this.candetails.district,
-          country: this.candetails.country,
-          credType: this.candetails.credType
+      // if(this.stateData.entity){
+      //   this.candetails=JSON.parse(this.stateData.propertyData)
+      //   console.log("details....",this.candetails)
+      //   this.newRegCertDetailsformGroup.patchValue({
+      //     email: this.candetails.email,
+      //     mobNumber: this.candetails.phoneNumber,
+      //     applicantName: this.candetails.name,
+      //     adhr: this.candetails.aadhaarNo,
+      //     motherName: this.candetails.mothersName,
+      //     fatherName: this.candetails.fathersName,
+      //     dob: this.candetails.dateOfBirth,
+      //     gender: this.candetails.gender,
+      //     al1: this.candetails.address,
+      //     al2: this.candetails.address,
+      //     state: this.candetails.state,
+      //     pin: this.candetails.pincode,
+      //     district: this.candetails.district,
+      //     country: this.candetails.country,
+      //     credType: this.candetails.credType
 
 
 
-          // district : response[0]?.district
-        });
-        // const month = (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1 < 10) ?
-        //   "0" + (new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1) :
-        //   new Date(Date.parse(response[0].joiningMonth + " 1, 2012")).getMonth() + 1
-        const joinM = this.candetails.joiningMonth;
-            const jm = this.monthMap[joinM]
-            const passM = this.candetails.passingMonth;
-            const pm = this.monthMap[passM]
-        this.newRegCourseDetailsformGroup.patchValue({
-          courseName: this.candetails.courseName,
-          collegeName: this.candetails.nursingCollage,
-          examBody: this.candetails.examBody,
-          joinDate: this.candetails.joiningYear + "-" + jm + "-01",
-          rollNum: this.candetails.finalYearRollNo,
-          passDate: this.candetails.passingYear + "-" + pm + "-01",
-          requestType: this.candetails.requestType,
-          university: this.candetails.university,
-          diplomaNumber: this.candetails.finalYearRollNo,
-        })
+      //   });
+        
+      //   const joinM = this.candetails.joiningMonth;
+      //       const jm = this.monthMap[joinM]
+      //       const passM = this.candetails.passingMonth;
+      //       const pm = this.monthMap[passM]
+      //   this.newRegCourseDetailsformGroup.patchValue({
+      //     courseName: this.candetails.courseName,
+      //     collegeName: this.candetails.nursingCollage,
+      //     examBody: this.candetails.examBody,
+      //     joinDate: this.candetails.joiningYear + "-" + jm + "-01",
+      //     rollNum: this.candetails.finalYearRollNo,
+      //     passDate: this.candetails.passingYear + "-" + pm + "-01",
+      //     requestType: this.candetails.requestType,
+      //     university: this.candetails.university,
+      //     diplomaNumber: this.candetails.finalYearRollNo,
+      //   })
 
-      }
-      else{
+      // }
+      // else{
       this.baseService.getDiploma$(this.diplomaBody).subscribe((response) => {
         if (Array.isArray(response)) {
           this.candetails=response[0]
           console.log("tye",this.candetails)
+          
           
           this.urlDataResponse = this.candetails.docproof;
           this.name = this.candetails.name;
@@ -454,7 +452,7 @@ export class RegnDiplomaCertDetailsComponent {
         }
       }
       )
-    }
+    // }
     }
     else{
 
@@ -473,8 +471,10 @@ export class RegnDiplomaCertDetailsComponent {
         }
       }
       this.baseService.getDiploma$(this.diplomaBody).subscribe((response) => {
+        
         if (Array.isArray(response)) {
           this.candetails=response[0]
+          this. getEndPoint();
           console.log(response[0])
           this.osid = this.candetails.osid;
           this.urlDataResponse = this.candetails.docproof;
@@ -657,12 +657,14 @@ export class RegnDiplomaCertDetailsComponent {
       const dob = this.datePipe.transform(this.stateData.dob, "yyyy-MM-dd")?.toString();
       if (this.osid) {
         const paymentData = {
-          osId: this.osid,
+          osId: this.candetails.osid,
           name: this.name,
           finalYearRollNo: this.finalYearRollNo,
           regNum:this.stateData.regNo,
           dod:dob,
           email:this.userEmail,
+          entity:this.stateData?.origin
+
         }
         console.log("data", paymentData)
         localStorage.setItem('diplomaData', JSON.stringify(paymentData))
@@ -1027,14 +1029,15 @@ export class RegnDiplomaCertDetailsComponent {
   }
 
   handlePayment() {
-    if (this.tranData) {
+    if (this.candetails.paymentStatus==="SUCCESS") {
       this.baseService.getDiplomaCredentials$(this.osid)
         .subscribe((response: any) => {
           const fileName = "Certificate.pdf";
           saveAs(response.responseData, fileName);
         })
-        localStorage.removeItem('dipresData');
+        localStorage.removeItem('diplomaData');
         localStorage.removeItem('studData');
+        localStorage.removeItem('dipresData');
 
     }
     else {

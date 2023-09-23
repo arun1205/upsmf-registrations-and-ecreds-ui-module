@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ApproveClaim, ClaimDetails, ClaimsTableData, SentMailBody, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding, diplomaBody, diplomaPaymentBody, studentUpdate, studentosIdBody } from '../interfaces/interfaces';
+import { ApproveClaim, ClaimDetails, ClaimsTableData, SentMailBody, StudentDetails, StudentDetailsForeignVerification, StudentDetailsGoodStanding, UpdatediplomaBody, diplomaBody, diplomaPaymentBody, studentUpdate, studentosIdBody } from '../interfaces/interfaces';
 import { HttpService } from "../core/services/http-service/http.service";
 
 import { environment } from 'src/environments/environment';
@@ -386,7 +386,15 @@ export class BaseServiceService extends HttpService {
     }
     return this.get(reqParam)
   }
+  updateDiploma$(osId:string,body: UpdatediplomaBody){
+    const reqParam:RequestParam={
+      url:this.configService.urlConFig.URLS.STUDENT.UPDATE_DIPLOMA + osId,
+      data: body,
+      header:this.getHeaders()
+    }
+    return this.put(reqParam)
 
+  }
 
     
 
