@@ -151,6 +151,12 @@ export class PaymentSuccessFailureComponent implements OnInit {
       }
       this.baseService.diplomaPayment$(diplomaPaymentBody).subscribe({
         next: (response) => {
+          const updatediplomaBody = {
+            "paymentStatus": "SUCCESS"
+          }
+          this.baseService.updateDiploma$(this.dipData.osId,updatediplomaBody).subscribe((response) => {
+            console.log(response)
+          })
           console.log(response)
           this.type='diploma';
           localStorage.setItem('dipresData', JSON.stringify(response))

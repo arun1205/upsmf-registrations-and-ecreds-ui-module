@@ -104,7 +104,8 @@ export class NewRegnCertDetailsComponent {
   fileSignPreview:any;
   todayDate=new Date();
   maxDate=this.todayDate;
-
+  data:any;
+  courseType:string;
   stateData: any;
   selectedLink: string = 'Candidate Details';
   requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
@@ -139,6 +140,24 @@ export class NewRegnCertDetailsComponent {
   }
 
   ngOnInit() {
+    if (this.stateData?.propertyData !== undefined) {
+      try {
+        this.data=JSON.parse(this.stateData?.propertyData)
+        this.courseType=this.data.courseType
+
+      } catch (error) {
+        // Handle JSON parsing error
+      }
+    } 
+    
+    
+    
+    
+    
+    
+    
+    // this.data=JSON.parse(this.stateData?.propertyData)
+    // this.courseType=this.data.courseType
     this.initForm();
 
     this.route.queryParams.subscribe((param) => {
@@ -166,7 +185,7 @@ export class NewRegnCertDetailsComponent {
         break;
       case 'StudentFromUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
-        this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
+        this.courseUrl = this.courseType ==="Diploma" ? this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DIPLOMA' :this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
         this.getCourses(this.courseUrl)
         break;
       case 'Regulator':

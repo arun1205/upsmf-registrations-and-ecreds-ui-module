@@ -96,6 +96,8 @@ export class AdminRegnCertificateDetailsComponent {
   paymentResponse: any;
   updateStudentBody: any;
   fileSignPreview:any;
+  data:any;
+  courseType:string;
 
 
   stateData: any;
@@ -132,6 +134,15 @@ export class AdminRegnCertificateDetailsComponent {
   }
 
   ngOnInit() {
+    if (this.stateData?.propertyData !== undefined) {
+      try {
+        this.data=JSON.parse(this.stateData?.propertyData)
+        this.courseType=this.data.courseType
+
+      } catch (error) {
+        // Handle JSON parsing error
+      }
+    } 
     this.initForm();
 
     this.route.queryParams.subscribe((param) => {
@@ -159,7 +170,7 @@ export class AdminRegnCertificateDetailsComponent {
         break;
       case 'StudentFromUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
-        this.courseUrl = this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
+        this.courseUrl = this.courseType ==="Diploma" ? this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DIPLOMA' :this.configService.urlConFig.URLS.STUDENT.GET_COURSES + 'DEGREE'
         this.getCourses(this.courseUrl)
         break;
       case 'Regulator':

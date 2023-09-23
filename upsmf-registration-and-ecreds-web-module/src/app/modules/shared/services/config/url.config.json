@@ -30,7 +30,8 @@
             "GET_DIPLOMA_DETAILS":"api/v1/DiplomaFromUP/search",
             "DIPLOMA_PAYMENT":"claim-ms/api/v1/Payment",
             "STUDENT_OSID":"api/v1/StudentFromUP/search",
-            "STUDENT_REJECT_REASON":"api/v1/StudentFromUP/claims/"
+            "STUDENT_REJECT_REASON":"api/v1/StudentFromUP/claims/",
+            "UPDATE_DIPLOMA":"api/v1/DiplomaFromUP/"
         },
         "ADMIN":
         {

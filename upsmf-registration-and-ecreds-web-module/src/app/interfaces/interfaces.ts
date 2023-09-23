@@ -258,5 +258,8 @@ export interface ClaimsTableData {
     dateOfPayment:string | undefined,
     paymentStatus:string
   }
+  export interface UpdatediplomaBody{
+    paymentStatus:string
+  }
 
 
