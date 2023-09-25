@@ -89,6 +89,8 @@ export class GoodStandingForeignVerificationComponent {
   maxDate=this.todayDate;
   endPointUrls:any;
   studentOsId:any;
+  reason:string;
+  id:string;
 
   profQualificationArray = ['A.N.M', 'Midwife', 'H.W', 'Nurse', 'B.SC.Nursing'];
 
@@ -203,6 +205,8 @@ export class GoodStandingForeignVerificationComponent {
       this.baseService.getCandidatePersonalDetailsGoodstanding$()
         .subscribe(
           (response: any) => {
+            this.id=this.stateData?.body.id
+            this.getRejectReasonStudent()
             this.candidateDetailList = response.responseData
             console.log("det", this.candidateDetailList[0])
             this.osid = this.candidateDetailList[0].osid;
@@ -334,6 +338,8 @@ export class GoodStandingForeignVerificationComponent {
       this.baseService.getCandidatePersonalDetailsForeignVerification$()
         .subscribe(
           (response: any) => {
+            this.id=this.stateData?.body.id
+            this.getRejectReasonStudent()
             this.candidateDetailList = response.responseData
             console.log("det", this.candidateDetailList[0])
             this.osid = this.candidateDetailList[0].osid;
@@ -1184,4 +1190,10 @@ export class GoodStandingForeignVerificationComponent {
        }
      })
    }
+   getRejectReasonStudent(){
+    this.baseService.getReasonStudent$(this.id).subscribe((response)=>{
+      this.reason=response.responseData.notes[1].notes
+      console.log("reason",response.responseData.notes[0].notes)
+    })
+  }
 }
