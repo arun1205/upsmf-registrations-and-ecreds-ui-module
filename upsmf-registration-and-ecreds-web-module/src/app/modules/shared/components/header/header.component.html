@@ -17,7 +17,7 @@
 </mat-menu>
         </div> -->
         <div class="flex flex-column" >
-            <button class="action-btn" [matMenuTriggerFor]="menu">{{'GG'}}</button>
+            <button class="action-btn" [matMenuTriggerFor]="menu">{{this.initials}}</button>
              <mat-menu #menu="matMenu">
             <button mat-menu-item claas="profile-cls" (click)="navigateToProfilePage()">
                 <mat-icon>person</mat-icon>
