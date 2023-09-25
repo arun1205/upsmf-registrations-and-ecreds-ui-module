@@ -244,8 +244,8 @@ export class RegnDiplomaCertDetailsComponent {
         Validators.required,this.validateMinAge(15) as ValidatorFn]),
       al1: new FormControl('', [
         Validators.required]),
-      al2: new FormControl('', [
-        Validators.required]),
+      // al2: new FormControl('', [
+      //   Validators.required]),
       district: new FormControl('', [
         Validators.required]),
       state: new FormControl('UP', [
@@ -419,7 +419,7 @@ export class RegnDiplomaCertDetailsComponent {
             dob: this.candetails.dateOfBirth,
             gender: this.candetails.gender,
             al1: this.candetails.address,
-            al2: this.candetails.address,
+            // al2: this.candetails.address,
             state: this.candetails.state,
             pin: this.candetails.pincode,
             district: this.candetails.district,
@@ -512,7 +512,7 @@ export class RegnDiplomaCertDetailsComponent {
             dob:this.candetails.dateOfBirth,
             gender: this.candetails.gender,
             al1: this.candetails.address,
-            al2: this.candetails.address,
+            // al2: this.candetails.address,
             state: this.candetails.state,
             pin: this.candetails.pincode,
             district: this.candetails.district,
@@ -1096,8 +1096,8 @@ export class RegnDiplomaCertDetailsComponent {
         [this.labels.dob, this.newRegCertDetailsformGroup.controls['dob'].value],
         [this.labels.credType, this.newRegCertDetailsformGroup.controls['credType'].value],
         [this.labels.gender, this.newRegCertDetailsformGroup.controls['gender'].value],
-        [this.labels.al2, this.newRegCertDetailsformGroup.controls['al2'].value],
-        [this.labels.al2, this.newRegCertDetailsformGroup.controls['al2'].value],
+        ["Address", this.newRegCertDetailsformGroup.controls['al1'].value],
+        // [this.labels.al2, this.newRegCertDetailsformGroup.controls['al2'].value],
         [this.labels.district, this.newRegCertDetailsformGroup.controls['district'].value],
         [this.labels.state, this.newRegCertDetailsformGroup.controls['state'].value],
         [this.labels.pin, this.newRegCertDetailsformGroup.controls['pin'].value],
