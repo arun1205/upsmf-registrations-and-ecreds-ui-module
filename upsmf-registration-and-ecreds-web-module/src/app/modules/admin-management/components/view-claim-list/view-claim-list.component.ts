@@ -69,12 +69,12 @@ export class ViewClaimListComponent {
         isSortable: true,
         cell: (element: Record<string, any>) => `${element['id']}`
       },
-      {
-        columnDef: 'council',
-        header: 'Council',
-        isSortable: true,
-        cell: (element: Record<string, any>) => `${element['council']}`
-      },
+      // {
+      //   columnDef: 'council',
+      //   header: 'Council',
+      //   isSortable: true,
+      //   cell: (element: Record<string, any>) => `${element['council']}`
+      // },
       
       {
         columnDef: 'claimType',
@@ -109,7 +109,17 @@ export class ViewClaimListComponent {
         header: 'EC-Status',
         isSortable: false,
         isLink: true,
-        cell: (element: Record<string, any>) => `${element['outsideStudentStatus']}`
+        cell: (element: Record<string, any>) => 
+        // `${element['outsideStudentStatus']}`
+        {
+          const outsideStudentStatus = element['outsideStudentStatus'];
+          if(element['entity']==="StudentFromUP"){
+            return outsideStudentStatus !== null ? `${outsideStudentStatus}` : 'Not required';
+
+          }
+          return outsideStudentStatus !== null ? `${outsideStudentStatus}` : 'pending';
+        }
+      
         
       },
       {
