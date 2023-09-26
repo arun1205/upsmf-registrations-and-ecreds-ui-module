@@ -723,7 +723,7 @@ export class NewRegnCertDetailsComponent {
           "centerCode": '',
           "requestType": value.requestType,
           "docproof": this.convertUrlList,
-          "regNumber": value.rollNum,
+          "regNumber": this.stateData?.regNo ? this.stateData?.regNo : value.rollNum,
           "courseState": value.stateName ? value.stateName : "NA",
           "courseCouncil": value.newCouncil ? value.newCouncil : "NA",
           "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
