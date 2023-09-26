@@ -91,6 +91,7 @@ export class GoodStandingForeignVerificationComponent {
   studentOsId:any;
   reason:string;
   id:string;
+  applicantUserName:string = ''
 
   profQualificationArray = ['A.N.M', 'Midwife', 'H.W', 'Nurse', 'B.SC.Nursing'];
 
@@ -780,6 +781,7 @@ export class GoodStandingForeignVerificationComponent {
       //convert to string with commaa separated
       this.convertUrlList = this.urlList.join(',')
       // this.candidateDetails = false;
+      this.applicantUserName = this.goodStandingForeignVerificationformGroup.value.maidenName;
       const updateStudentGoodstandingBody = {
         "name": this.goodStandingForeignVerificationformGroup.value.maidenName,
         "fathersName": this.goodStandingForeignVerificationformGroup.value.fatherName,
@@ -880,6 +882,7 @@ export class GoodStandingForeignVerificationComponent {
         //convert to string with commaa separated
         this.convertUrlList = this.urlList.join(',')
         // this.candidateDetails = false;
+        this.applicantUserName = this.goodStandingForeignVerificationformGroup.value.maidenName;
         const updateStudentForeignVerificationBody = {
           "name": this.goodStandingForeignVerificationformGroup.value.maidenName,
           "fathersName": this.goodStandingForeignVerificationformGroup.value.fatherName,

@@ -26,7 +26,7 @@ export const applabels = {
     joinDate:"Course Joining Date",
     passDate:"Course Passing Date",
     maidenName:"Maiden Name",
-    mrdName:"Married Name",
+    mrdName:"Marital Status ",
     proQual:"Professional Qualification ",
     tcName:"Name of Training Centre",
     regnNum:"Registration Number",

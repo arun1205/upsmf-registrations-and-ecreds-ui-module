@@ -36,10 +36,10 @@
             <div style="background-color: white;  border-radius: 4px;">
                 <p style="margin: 14px;font-size: 18px;">Period | <b>This month</b> 
                     <span  >
-                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <button mat-icon-button [matMenuTriggerFor]="menumonth">
                             <mat-icon>arrow_drop_down</mat-icon>
                           </button>
-                          <mat-menu #menu="matMenu">
+                          <mat-menu #menumonth="matMenu">
                             <button mat-menu-item >
                               <span>All</span>
                             </button>
@@ -52,9 +52,9 @@
                               <button mat-menu-item >
                                 <span>This month</span>
                               </button>
-                              <button mat-menu-item >
+                              <!-- <button mat-menu-item >
                                 <span>Select dates from calender</span>
-                              </button>
+                              </button> -->
                           </mat-menu>
 
 
