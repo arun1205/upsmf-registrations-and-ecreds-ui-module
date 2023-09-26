@@ -13,6 +13,7 @@ import { ConfirmationPopupComponent } from './components/confirmation-popup/conf
 import { AdminRegnCertificateDetailsComponent } from './components/admin-regn-certificate-details/admin-regn-certificate-details.component';
 import { AdminGoodStandingForeignVerificationComponent } from './components/admin-good-standing-foreign-verification/admin-good-standing-foreign-verification.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { CommonFilterComponent } from './components/common-filter/common-filter.component';
 @NgModule({
   declarations: [
     SharedTableComponent,
@@ -24,6 +25,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     AdminRegnCertificateDetailsComponent,
     AdminGoodStandingForeignVerificationComponent,
     UserProfileComponent,
+    CommonFilterComponent,
    
   ],
   imports: [
@@ -38,7 +40,8 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     SharedTableComponent,
     HeaderComponent,
     SharedSkeletonLoadingComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    CommonFilterComponent
     
   ],
   providers: [ConfigService]

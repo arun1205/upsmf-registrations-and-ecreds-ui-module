@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { ClaimDashBoardData, ClaimsTableData, DashBoardData, TableColumn } from 'src/app/interfaces';
 import { BaseServiceService } from 'src/app/services/base-service.service';
 import { BreadcrumbItem } from '../../shared';
+import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dasboard',
@@ -19,13 +21,18 @@ export class DasboardComponent {
   adminData:DashBoardData []=[];
   adminClaimData:ClaimDashBoardData[]=[];
   adminClaimTableColumns: TableColumn[]=[];
+  isFilter:boolean = false;
+  startDate:string= '';
+  endDate :string = '';
+  entityTypeData:string = '';
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Workspace', url: '/super-admin' },
     { label: 'Dashboard', url: '/super-admin/dashboard' },
   ];
   constructor(
     private router: Router,
-    private baseService: BaseServiceService  ) { 
+    private baseService: BaseServiceService,
+    private datePipe: DatePipe  ) { 
       
 
     }
@@ -146,7 +153,12 @@ export class DasboardComponent {
 
   getClaims() {
     this.isDataLoading = true;
-    this.baseService.getAllClaims$().subscribe(
+    let requestBody = {
+      "startDate": this.startDate,
+      "endDate": this.endDate,
+      "entity": this.entityTypeData
+    }
+    this.baseService.getAllClaims$(requestBody).subscribe(
       (response)=>{
       this.claims=response.claimList
       
@@ -307,6 +319,23 @@ export class DasboardComponent {
       // this.router.navigate(['/grievance', e.id]);
     }
 
+    onClickApplyFilter(event:any){
+     console.log(event)
+     this.entityTypeData =event.entityType
+     if(event.startDate && event.endDate){
+      this.startDate =  moment(event.startDate).format('YYYY-MM-DD')
+      this.endDate = moment(event.endDate).format('YYYY-MM-DD')
+    }
+    this.getClaims()
+    }
+
+    resetFilterValueData(e:any){
+     this.startDate = '';
+     this.endDate = '';
+     this.entityTypeData = '';
+     this.getClaims();
+    }
+
     onEditData(e : any){
       console.log(e)
     }
@@ -316,5 +345,8 @@ export class DasboardComponent {
     onDeleteData(e : any){
       console.log(e)
     }
+
+
+    
 
 }

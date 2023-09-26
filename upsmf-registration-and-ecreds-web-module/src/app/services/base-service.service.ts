@@ -250,12 +250,13 @@ export class BaseServiceService extends HttpService {
     return this.get(reqParam, true); // pass true as second param for pdf download
 
   }
-  getAllClaims$() {
+  getAllClaims$(body:any) {
     const header = {
       'Accept': 'application/json'
     }
     const reqParam: RequestParam = {
       url: this.configService.urlConFig.URLS.CLAIMS.ALL_CLAIMS,
+      data:body,
       header: header
     }
     return this.post(reqParam);
