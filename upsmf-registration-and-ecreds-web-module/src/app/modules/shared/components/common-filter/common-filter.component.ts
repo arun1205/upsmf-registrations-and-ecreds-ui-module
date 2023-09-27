@@ -11,7 +11,7 @@ export class CommonFilterComponent implements OnInit {
   filterForm:FormGroup;
   entityType:any[]=[
     {
-      name:'UP - registration Degree',
+      name:'UP - registration',
       type:'StudentFromUP'
     },
     {
