@@ -594,7 +594,7 @@ export class NewRegnCertDetailsComponent {
 
   newRegCertDetailsformGroupSubmit(value: any) {
     this.submitted = true;
-    if (this.newRegCertDetailsformGroup.valid) {
+    if (this.fileSignPreview.url && this.filePreview.url && this.newRegCertDetailsformGroup.valid) {
       this.candidateDetails = false;
     }
 
@@ -673,7 +673,7 @@ export class NewRegnCertDetailsComponent {
     }
 
     else {
-      if  (!this.stateData.status && this.newRegCourseDetailsformGroup.valid ) {
+      if  (!this.stateData.status && this.listOfFiles[0].url && this.newRegCourseDetailsformGroup.valid  ) {
 
         const joinDate = new Date(this.newRegCourseDetailsformGroup.get('joinDate')?.value);
 

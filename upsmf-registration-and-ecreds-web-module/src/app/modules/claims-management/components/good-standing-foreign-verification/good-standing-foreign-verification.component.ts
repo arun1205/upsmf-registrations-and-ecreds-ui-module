@@ -765,7 +765,7 @@ export class GoodStandingForeignVerificationComponent {
 
     }
 
-    else if ((this.stateData.body.type === 'goodStandingCert' && !this.stateData.body.status)) {
+    else if ((this.stateData.body.type === 'goodStandingCert' && this.listOfFiles[0].url && this.filePreview.url)) {
       const joinDate = new Date(this.goodStandingForeignVerificationformGroup.get('joinDate')?.value);
 
       const passDate = new Date(this.goodStandingForeignVerificationformGroup.get('passDate')?.value);
@@ -866,7 +866,7 @@ export class GoodStandingForeignVerificationComponent {
     }
 
     else {
-      if (this.candidateDetailList[0]?.paymentStatus !== 'SUCCESS') {
+      if (this.candidateDetailList[0]?.paymentStatus !== 'SUCCESS' && this.listOfFiles[0].url && this.filePreview.url) {
         const joinDate = new Date(this.goodStandingForeignVerificationformGroup.get('joinDate')?.value);
 
         const passDate = new Date(this.goodStandingForeignVerificationformGroup.get('passDate')?.value);
