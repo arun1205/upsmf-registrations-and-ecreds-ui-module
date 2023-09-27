@@ -673,7 +673,7 @@ export class NewRegnCertDetailsComponent {
     }
 
     else {
-      if  (!this.stateData.status && this.listOfFiles[0].url && this.newRegCourseDetailsformGroup.valid  ) {
+      if  (!this.stateData.status  && this.newRegCourseDetailsformGroup.valid  ) {
 
         const joinDate = new Date(this.newRegCourseDetailsformGroup.get('joinDate')?.value);
 
