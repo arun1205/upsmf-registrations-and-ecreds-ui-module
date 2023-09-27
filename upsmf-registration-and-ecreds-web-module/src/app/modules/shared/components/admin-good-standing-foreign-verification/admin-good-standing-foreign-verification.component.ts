@@ -368,7 +368,7 @@ export class AdminGoodStandingForeignVerificationComponent {
 
       console.log("value....", value)
 
-      // if(this.entity==="StudentForeignVerification" && this.userEmail==="Regulator"){
+      if(this.userEmail==="Regulator" && !this.ecStatus){
       const message = `Enter the email`;
       const message1 = `Upload Document`;
 
@@ -425,6 +425,7 @@ export class AdminGoodStandingForeignVerificationComponent {
 
       });
     }
+    }
   }
   navToPreviousPage() {
     this.location.back()
@@ -477,9 +478,11 @@ export class AdminGoodStandingForeignVerificationComponent {
 
 
     } else { //studentoutside UP Regulator role
-      this.createQRCode().then((qrCodeURL: any) => {
-        this.generatePDF(qrCodeURL.toString())
-      })
+      if(!this.ecStatus){
+        this.createQRCode().then((qrCodeURL: any) => {
+          this.generatePDF(qrCodeURL.toString())
+        })
+      }
     }
   }
 

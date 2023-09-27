@@ -162,7 +162,7 @@ export class ViewClaimListComponent {
         header: 'Approved Date',
         isSortable: true,
         cell: (element: Record<string, any>) => {
-          const timestamp = element['createdAt'];
+          const timestamp = element['attestedOn'];
           const date = new Date(timestamp);
           const month = this.monthNames[date.getMonth()];
           const day = date.getDate();
@@ -211,7 +211,7 @@ export class ViewClaimListComponent {
         header: 'Rejected Date',
         isSortable: true,
         cell: (element: Record<string, any>) => {
-          const timestamp = element['createdAt'];
+          const timestamp = element['attestedOn'];
           const date = new Date(timestamp);
           const month = this.monthNames[date.getMonth()];
           const day = date.getDate();

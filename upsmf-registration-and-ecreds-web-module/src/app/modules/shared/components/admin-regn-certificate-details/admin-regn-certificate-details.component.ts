@@ -607,7 +607,7 @@ export class AdminRegnCertificateDetailsComponent {
           this.navToPreviousPage();
         })
     }
-    else if (this.entity === "StudentOutsideUP" && this.userEmail === "Regulator" && this.ecStatus!=="APPROVED") {
+    else if (this.entity === "StudentOutsideUP" && this.userEmail === "Regulator" && !this.ecStatus) {
       const message = `Enter the email`;
       const message1 = `Upload Document`;
 
@@ -670,113 +670,109 @@ export class AdminRegnCertificateDetailsComponent {
 
 
     }
-    else if (this.stateData.status) {
-      this.paymentDetails = true;
-    }
+    // else if (this.stateData.status) {
+    //   this.paymentDetails = true;
+    // }
 
-    else {
-      if (!this.stateData.status && this.newRegCourseDetailsformGroup.valid) {
-
-
-        const joinDate = new Date(this.newRegCourseDetailsformGroup.get('joinDate')?.value);
-
-        const passDate = new Date(this.newRegCourseDetailsformGroup.get('passDate')?.value);
-        const jMonth = joinDate.getMonth();
-        const pMonth = passDate.getMonth();
-        const joinYear = joinDate.getFullYear();
-        const passYear = joinDate.getFullYear();
-
-        const joinMonth = this.months[jMonth];
-        const passMonth = this.months[pMonth];
-        this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
-        //convert to string with commaa separated
-        this.convertUrlList = this.urlList.join(',')
-        this.updateStudentBody =
-        {
-          // "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
-          "candidatePic": "arun.jpg",
-          "joiningYear": joinYear.toString(),
-          "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
-          "gender": this.newRegCertDetailsformGroup.value.gender,
-          "address": this.newRegCertDetailsformGroup.value.al1,
-          "state": this.newRegCertDetailsformGroup.value.state,
-          "district": this.newRegCertDetailsformGroup.value.district,
-          "country": this.newRegCertDetailsformGroup.value.country,
-          "pincode": this.newRegCertDetailsformGroup.value.pin,
-          "finalYearRollNo": value.rollNum,
-          "examBody": value.examBody,
-          "joiningMonth": joinMonth,
-          "passingMonth": passMonth,
-          // "email": this.newRegCertDetailsformGroup.value.email,
-          "paymentStatus": "SUCCESS",
-          "feeReciptNo": "12345678",
-          "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
-          // "dateOfBirth": this.datePipe.transform(this.newRegCertDetailsformGroup.value.dob, "yyyy-MM-dd")?.toString(),
-          "barCode": "123457",
-          "nursingCollage": value.collegeName,
-          "passingYear": passYear.toString(),
-          "courseName": value.courseName,
-          "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
-          "registrationType": this.stateData.claimType,
-          "council": this.stateData.councilName,
-          "mothersName": this.newRegCertDetailsformGroup.value.motherName,
-          "name": this.newRegCertDetailsformGroup.value.applicantName,
-          "credType": this.newRegCertDetailsformGroup.value.credType,
-          "examYear": '',
-          "centerCode": '',
-          "requestType": value.requestType,
-          "docproof": this.convertUrlList,
-          "regNumber": this.stateData?.regNo ? this.stateData?.regNo : "NA",
-          "diplomaNumber": value.diplomaNumber,
-          "courseState": value.stateName ? value.stateName : "NA",
-          "courseCouncil": value.newCouncil ? value.newCouncil : "NA",
-          "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
-          "nurseRegDate": value.date ? value.date : "NA",
-          "claimType": "registration",
-          "certificateNo": "NA",
-          "university": value.university,
-          "candidateSignature": "NA",
-          "validityUpto": "NA"
-
-        }
-
-        if (this.osid) {
-          const paymentData = {
-            osId: this.osid,
-            origin: this.stateData?.origin,
-            endPointUrl: this.endPointUrl
-          }
-          localStorage.setItem('payData', JSON.stringify(paymentData))
-          this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
-            .subscribe(
-              (response) => {
-                this.paymentDetails = true;
+    // else {
+    //   if (!this.stateData.status && this.newRegCourseDetailsformGroup.valid) {
 
 
-              },
-            )
-        } else {
-          this.updateStudentBody = {
-            ...this.updateStudentBody,
-            email: this.newRegCertDetailsformGroup.value.email,
-          }
-          this.baseService.postStudent$(this.updateStudentBody, this.endPointUrl).subscribe((data) => {
-            if (data.result['StudentOutsideUP']) {
-              this.paymentDetails = true;
-              this.osid = data?.result?.StudentOutsideUP['osid']
+    //     const joinDate = new Date(this.newRegCourseDetailsformGroup.get('joinDate')?.value);
 
-              const paymentData = {
-                osId: this.osid,
-                origin: this.stateData?.origin,
-                endPointUrl: this.endPointUrl
-              }
-              localStorage.setItem('payData', JSON.stringify(paymentData))
-            }
+    //     const passDate = new Date(this.newRegCourseDetailsformGroup.get('passDate')?.value);
+    //     const jMonth = joinDate.getMonth();
+    //     const pMonth = passDate.getMonth();
+    //     const joinYear = joinDate.getFullYear();
+    //     const passYear = joinDate.getFullYear();
 
-          })
-        }
-      }
-    }
+    //     const joinMonth = this.months[jMonth];
+    //     const passMonth = this.months[pMonth];
+    //     this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+    //     this.convertUrlList = this.urlList.join(',')
+    //     this.updateStudentBody =
+    //     {
+    //       "candidatePic": "arun.jpg",
+    //       "joiningYear": joinYear.toString(),
+    //       "fathersName": this.newRegCertDetailsformGroup.value.fatherName,
+    //       "gender": this.newRegCertDetailsformGroup.value.gender,
+    //       "address": this.newRegCertDetailsformGroup.value.al1,
+    //       "state": this.newRegCertDetailsformGroup.value.state,
+    //       "district": this.newRegCertDetailsformGroup.value.district,
+    //       "country": this.newRegCertDetailsformGroup.value.country,
+    //       "pincode": this.newRegCertDetailsformGroup.value.pin,
+    //       "finalYearRollNo": value.rollNum,
+    //       "examBody": value.examBody,
+    //       "joiningMonth": joinMonth,
+    //       "passingMonth": passMonth,
+    //       "paymentStatus": "SUCCESS",
+    //       "feeReciptNo": "12345678",
+    //       "aadhaarNo": this.newRegCertDetailsformGroup.value.adhr,
+    //       "barCode": "123457",
+    //       "nursingCollage": value.collegeName,
+    //       "passingYear": passYear.toString(),
+    //       "courseName": value.courseName,
+    //       "phoneNumber": this.newRegCertDetailsformGroup.value.mobNumber,
+    //       "registrationType": this.stateData.claimType,
+    //       "council": this.stateData.councilName,
+    //       "mothersName": this.newRegCertDetailsformGroup.value.motherName,
+    //       "name": this.newRegCertDetailsformGroup.value.applicantName,
+    //       "credType": this.newRegCertDetailsformGroup.value.credType,
+    //       "examYear": '',
+    //       "centerCode": '',
+    //       "requestType": value.requestType,
+    //       "docproof": this.convertUrlList,
+    //       "regNumber": this.stateData?.regNo ? this.stateData?.regNo : "NA",
+    //       "diplomaNumber": value.diplomaNumber,
+    //       "courseState": value.stateName ? value.stateName : "NA",
+    //       "courseCouncil": value.newCouncil ? value.newCouncil : "NA",
+    //       "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
+    //       "nurseRegDate": value.date ? value.date : "NA",
+    //       "claimType": "registration",
+    //       "certificateNo": "NA",
+    //       "university": value.university,
+    //       "candidateSignature": "NA",
+    //       "validityUpto": "NA"
+
+    //     }
+
+    //     if (this.osid) {
+    //       const paymentData = {
+    //         osId: this.osid,
+    //         origin: this.stateData?.origin,
+    //         endPointUrl: this.endPointUrl
+    //       }
+    //       localStorage.setItem('payData', JSON.stringify(paymentData))
+    //       this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
+    //         .subscribe(
+    //           (response) => {
+    //             this.paymentDetails = true;
+
+
+    //           },
+    //         )
+    //     } else {
+    //       this.updateStudentBody = {
+    //         ...this.updateStudentBody,
+    //         email: this.newRegCertDetailsformGroup.value.email,
+    //       }
+    //       this.baseService.postStudent$(this.updateStudentBody, this.endPointUrl).subscribe((data) => {
+    //         if (data.result['StudentOutsideUP']) {
+    //           this.paymentDetails = true;
+    //           this.osid = data?.result?.StudentOutsideUP['osid']
+
+    //           const paymentData = {
+    //             osId: this.osid,
+    //             origin: this.stateData?.origin,
+    //             endPointUrl: this.endPointUrl
+    //           }
+    //           localStorage.setItem('payData', JSON.stringify(paymentData))
+    //         }
+
+    //       })
+    //     }
+    //   }
+    // }
   }
 
   navigateToUrl(item: any) {
@@ -922,10 +918,12 @@ export class AdminRegnCertificateDetailsComponent {
 
 
     } else { //studentoutside UP Regulator role
-      this.createQRCode().then((qrCodeURL: any) => {
-        this.generatePDF(qrCodeURL.toString())
-      })
-    }
+      if(!this.ecStatus){
+        this.createQRCode().then((qrCodeURL: any) => {
+          this.generatePDF(qrCodeURL.toString())
+        })
+      }
+    } 
   }
 
   onReset(entity: string) {
