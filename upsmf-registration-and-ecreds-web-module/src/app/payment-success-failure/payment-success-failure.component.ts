@@ -18,6 +18,8 @@ export class PaymentSuccessFailureComponent implements OnInit {
   transactionAmt: string = ''
   transactionId: string = ''
   type: string;
+  diplomaBody: any;
+  candetails: any;
   constructor(private router: Router,
     private route: ActivatedRoute,
     private baseService: BaseServiceService,
@@ -151,14 +153,72 @@ export class PaymentSuccessFailureComponent implements OnInit {
       }
       this.baseService.diplomaPayment$(diplomaPaymentBody).subscribe({
         next: (response) => {
-          const updatediplomaBody = {
-            "paymentStatus": "SUCCESS"
+          this.diplomaBody = {
+            filters: {
+              finalYearRollNo: {
+                eq: this.dipData.regNum
+              },
+              dateOfBirth: {
+                eq: this.dipData.dod
+              },
+              email: {
+                eq: this.dipData.email
+              }
+            }
           }
-          this.baseService.updateDiploma$(this.dipData.osId,updatediplomaBody).subscribe((response) => {
+          this.baseService.getDiploma$(this.diplomaBody).subscribe((response) => {
             console.log(response)
+            if (Array.isArray(response)) {
+              this.candetails = response[0]
+              console.log(response[0])
+
+              const updatediplomaBody = {
+                "paymentStatus": "SUCCESS",
+                "aadhaarNo":this.candetails.aadhaarNo,
+                "address":this.candetails.address,
+                "barcode":this.candetails.barcode,
+                "candidatePic":this.candetails.candidatePic,
+                "candidateSignature":this.candetails.candidateSignature,
+                "centerCode":this.candetails.centerCode,
+                "certificateNumber":this.candetails.certificateNumber,
+                "council":this.candetails.council,
+                "country":this.candetails.country,
+                "courseName":this.candetails.courseName,
+                "credType":this.candetails.credType,
+                "date":this.candetails.date,
+                "dateOfBirth":this.candetails.dateOfBirth,
+                "district":this.candetails.district,
+                "docproof":this.candetails.docproof,
+                "email":this.candetails.email,
+                "examBody":this.candetails.examBody,
+                "examYear": this.candetails.examYear,
+                "fathersName":this.candetails.fathersName,
+                "feeReciptNo":this.candetails.feeReciptNo,
+                "finalYearRollNo":this.candetails.finalYearRollNo,
+                "gender":this.candetails.gender,
+                "joiningMonth":this.candetails.joiningMonth,
+                "joiningYear":this.candetails.joiningYear,
+                "mothersName":this.candetails.mothersName,
+                "name":this.candetails.name,
+                "nursingCollage":this.candetails.nursingCollage,
+                "passingMonth":this.candetails.passingMonth,
+                "passingYear":this.candetails.passingYear, 
+                "phoneNumber":this.candetails.phoneNumber ,
+                "pincode":this.candetails.pincode,
+                "state":this.candetails.state,
+                "university":this.candetails.university,
+                "validityUpto":this.candetails.validityUpto
+              }
+              this.baseService.updateDiploma$(this.dipData.osId, updatediplomaBody).subscribe((response) => {
+                console.log(response)
+              })
+            }
+
+           
           })
+
           console.log(response)
-          this.type='diploma';
+          this.type = 'diploma';
           localStorage.setItem('dipresData', JSON.stringify(response))
 
 
@@ -166,23 +226,20 @@ export class PaymentSuccessFailureComponent implements OnInit {
         error: (err) => {
           console.log(err);
         }
-        // if(response.params['status'] === 'SUCCESSFUL'){
-        //   localStorage.removeItem('payData');
-        // }
 
-      }
 
-      )
+
+      })
 
     }
   }
 
   navigateToHome() {
-    if(this.type==='diploma'){
+    if (this.type === 'diploma') {
       this.router.navigate(['/claims/regn-diploma-cert-details'])
 
     }
-    else{
+    else {
       this.router.navigate(['/claims/manage'])
 
     }

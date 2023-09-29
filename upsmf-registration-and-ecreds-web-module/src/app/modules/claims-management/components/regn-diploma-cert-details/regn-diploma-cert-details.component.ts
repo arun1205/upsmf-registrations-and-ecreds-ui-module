@@ -69,6 +69,7 @@ export class RegnDiplomaCertDetailsComponent {
 
 
   osid: string;
+  Updateosid:string;
   entity: string;
   name: string;
   finalYearRollNo: string;
@@ -182,8 +183,8 @@ export class RegnDiplomaCertDetailsComponent {
     }
     this.baseService.getStudentosid$(this.studentosIdBody).subscribe((response)=>{
       if (Array.isArray(response)) {
-        this.osid = response[0].osid;
-        console.log("osid",this.osid)
+        this.Updateosid = response[0].osid;
+        console.log("osid",this.Updateosid)
 
       }
 
@@ -386,7 +387,9 @@ export class RegnDiplomaCertDetailsComponent {
           this.name = this.candetails.name;
           this.finalYearRollNo =this.candetails.finalYearRollNo;
           this.email=this.candetails.email;
+          this.osid=this.candetails.osid;
           this.getStudentOsid();
+
 
 
           // if (!!this.urlDataResponse) {
@@ -559,7 +562,6 @@ export class RegnDiplomaCertDetailsComponent {
   onNewRegCourseDetailsformSubmit(value: any) {
     if (this.newRegCertDetailsformGroup.dirty || this.newRegCourseDetailsformGroup.dirty) {
       const joinDate = new Date(this.newRegCourseDetailsformGroup.get('joinDate')?.value);
-
       const passDate = new Date(this.newRegCourseDetailsformGroup.get('passDate')?.value);
       const jMonth = joinDate.getMonth();
       const pMonth = passDate.getMonth();
@@ -623,15 +625,15 @@ export class RegnDiplomaCertDetailsComponent {
 
       }
 
-        if (this.osid) {
+        if (this.Updateosid) {
           const paymentData = {
-            osId: this.osid,
+            osId: this.Updateosid,
             origin: this.stateData?.origin,
             endPointUrl: this.endPointUrl,
            
           }
           localStorage.setItem('payData', JSON.stringify(paymentData))
-          this.baseService.updateStudent$(this.osid, this.updateStudentBody, this.endPointUrl)
+          this.baseService.updateStudent$(this.Updateosid, this.updateStudentBody, this.endPointUrl)
           .subscribe(
             (response) => {
               this.paymentDetails = true;
