@@ -864,7 +864,7 @@ export class RegnDiplomaCertDetailsComponent {
 
       if (this.listOfFiles.indexOf(selectedFile.name) === -1) {
         this.fileList.push(selectedFile);
-        this.listOfFiles.push(selectedFile.name);
+        // this.listOfFiles.push(selectedFile.name);
 
       }
     }
@@ -878,10 +878,11 @@ export class RegnDiplomaCertDetailsComponent {
     for (var i = 0; i < this.fileList.length; i++) {
       formData.append("files", this.fileList[i]);
     }
-    this.baseService.uploadFiles$(this.osid, formData, this.endPointUrl).subscribe((data) => {
+    this.baseService.uploadFiles$(this.osid, formData, this.endPointUrl).subscribe({
+      next:(data) => {
       this.docsResponseUrl = data.result;
       this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
-
+      this.fileList = []
       const uploadObj = this.docsUrl.map(url => {
         // const parts = url.split('=');
         const fileNameWithQueryParams = url;
@@ -894,7 +895,12 @@ export class RegnDiplomaCertDetailsComponent {
         return getuploadObject;
       });
       this.listOfFiles.push(...uploadObj)
-    })
+    },
+    error: (err)=>{
+      console.log(err)
+      this.fileList = []
+    }
+  })
 
   }
 
