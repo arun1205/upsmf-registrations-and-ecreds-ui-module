@@ -526,12 +526,13 @@ export class GoodStandingForeignVerificationComponent {
     }
      let OsIdGoodStanding = this.osid ? this.osid: this.studentOsId
 
-    this.baseService.uploadFiles$(OsIdGoodStanding, formData, this.endPointUrl).subscribe((data) => {
+    this.baseService.uploadFiles$(OsIdGoodStanding, formData, this.endPointUrl).subscribe({
+      next:(data) => {
       console.log(data)
       this.docsResponseUrl = data.result;
       this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
       console.log('docsUrl', this.docsUrl)
-
+       this.fileList = []
       const uploadObj = this.docsUrl.map(url => {
         // const parts = url.split('=');
         const fileNameWithQueryParams = url;
@@ -546,7 +547,12 @@ export class GoodStandingForeignVerificationComponent {
       console.log('uO', uploadObj)
       this.listOfFiles.push(...uploadObj)
       console.log('this.listOfFiles', this.listOfFiles)
-    })
+    },
+    error:(err)=>{
+      console.log(err),
+      this.fileList = []
+    }
+  })
 
   }
 
