@@ -36,7 +36,7 @@ export class NewRegnCertificateComponent {
     // 'From UP', 'Outside UP'
   ]
   councilsTypesArray = [
-    'UPSMF', 'UPNM', 'UPDC','UPMC'
+    'UPSMF', 'UPNC', 'UPDC','UPMC'
   ]
 
   qualificationsTypesArray = [
