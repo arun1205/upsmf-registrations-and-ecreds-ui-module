@@ -125,7 +125,7 @@ export class AddUserComponent {
    console.log(this.roleSelectedValue)
    switch (this.roleSelectedValue) {
       case 'CouncilAdmin':
-        this.councilTypeArray = ["UPSMF", "UPNM", "UPDC","UPMC"]
+        this.councilTypeArray = ["UPSMF", "UPNC", "UPDC","UPMC"]
         this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_COUNCIL_USER
         break;
       case 'ExternalCouncil':
@@ -133,11 +133,11 @@ export class AddUserComponent {
         this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_EXTERNAL_USER
         break;
       case 'ExamBody':
-          this.councilTypeArray = ["UPSMF", "UPNM", "UPDC","UPMC"]
+          this.councilTypeArray = ["UPSMF", "UPNC", "UPDC","UPMC"]
           this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_EXAMINATION_USER
         break;
       case 'Regulator':
-          this.councilTypeArray = ["UPSMF", "UPNM", "UPDC","UPMC"]
+          this.councilTypeArray = ["UPSMF", "UPNC", "UPDC","UPMC"]
           this.endPointUrl = this.configService.urlConFig.URLS.USER.CREATE_REGULATOR_USER
         break;
 
