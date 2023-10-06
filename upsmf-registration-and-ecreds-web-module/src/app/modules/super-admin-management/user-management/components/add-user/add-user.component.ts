@@ -185,6 +185,7 @@ export class AddUserComponent {
         // departmentName:  role === 'NODALOFFICER' ? department: role === 'GRIEVANCEADMIN' || role === 'ADMIN' ? -1 : null,
         phoneNumber: phoneNo,
         role: role,
+        entity:'Regulator',
         council:council
 
       }
@@ -287,7 +288,7 @@ export class AddUserComponent {
       // module: "grievance",
       // departmentName:  role === 'NODALOFFICER' ? department: role === 'GRIEVANCEADMIN' || role === 'ADMIN' ? -1 : null,
       phoneNumber: e.phoneNo,
-      entity:e.role,
+      entity:'Regulator',
       role: e.role,
       council:e.council
 
