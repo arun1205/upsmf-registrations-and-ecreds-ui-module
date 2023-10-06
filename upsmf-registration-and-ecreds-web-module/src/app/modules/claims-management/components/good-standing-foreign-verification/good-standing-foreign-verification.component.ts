@@ -819,7 +819,8 @@ export class GoodStandingForeignVerificationComponent {
         // "joiningYear": joinYear.toString(),
         // "passingYear": passYear.toString(),
         "joiningDate":this.datePipe.transform(this.goodStandingForeignVerificationformGroup.get('joinDate')?.value, "yyyy-MM-dd")?.toString(),
-        "courseDate" : this.datePipe.transform(this.goodStandingForeignVerificationformGroup.get('passDate')?.value,"yyyy-MM-dd")?.toString()
+        "courseDate" : this.datePipe.transform(this.goodStandingForeignVerificationformGroup.get('passDate')?.value,"yyyy-MM-dd")?.toString(),
+        // "university":'NA'
 
 
 
@@ -919,6 +920,7 @@ export class GoodStandingForeignVerificationComponent {
           "passingMonth": passMonth,
           "joiningYear": joinYear.toString(),
           "passingYear": passYear.toString(),
+          "university":'NA'
 
         }
         console.log("foreign body", updateStudentForeignVerificationBody)
