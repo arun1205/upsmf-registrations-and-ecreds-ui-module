@@ -266,7 +266,7 @@
                                             </div>
                                         </div>
                                         <!-- </div> -->
-                                        <h4>Attach file(s)</h4>
+                                        <h4>Attach file(s)*</h4>
 
                                         <div class="upload-column">
                                             <!-- <div class="flex flex-column mt1"> -->
@@ -274,10 +274,11 @@
                                             <!-- <div class="ml4 flex flex-column right"> -->
                                             <label for="fileUpload1" class="custom-file-upload">
                                                 <a mat-button color="primary">+ Add
-                                                    attachment(s) </a>
+                                                    attachment(s)* </a>
                                             </label>
                                             <mat-hint>docx /pdf files accepted</mat-hint>
                                             <input id="fileUpload1" type="file" style="display: none"
+                                            formControlName="fileAttach"
                                                 enctype="multipart/form-data" (change)="onFileChanged($event)"
                                                 multiple="true" accept=".pdf,.docx" />
                                             <!-- </div> -->

@@ -271,6 +271,7 @@ export class NewRegnCertDetailsComponent {
       otherRegnNo: new FormControl(''),
       university: new FormControl('', [
         Validators.required]),
+      fileAttach: new FormControl('', Validators.required)  
     });
     this.getEndPoint();
     this.getCandidatePersonalDetails();
