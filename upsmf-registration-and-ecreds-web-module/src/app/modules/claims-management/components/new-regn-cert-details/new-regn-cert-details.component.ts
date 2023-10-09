@@ -57,6 +57,7 @@ export class NewRegnCertDetailsComponent {
   docsResponseUrl: string;
   convertUrlList: string;
   getMakeClaimbody: any;
+  isFieldShow: boolean = false;
 
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Claim Registration Certificate', url: '/claims/new' },
@@ -199,7 +200,25 @@ export class NewRegnCertDetailsComponent {
     return
   }
 
-  requestTypeSelected(e: Event) {
+  requestTypeSelected(e: any) {
+    console.log(e)
+    if(e.value == 'M.B.B.S. Name Change'){
+      console.log('matched')
+      this.isFieldShow= true;
+      this.newRegCourseDetailsformGroup.get('marriedName')?.reset()
+      this.newRegCourseDetailsformGroup.get('qualificationName')?.reset();
+      // this.newRegCourseDetailsformGroup.setValidators(Validators.required)
+      this.newRegCourseDetailsformGroup.get('marriedName')?.setValidators(Validators.required)
+      this.newRegCourseDetailsformGroup.get('qualificationName')?.setValidators(Validators.required)
+      // this.newRegCourseDetailsformGroup.get('marriedName').setValidators(Validators.required);
+    }
+    else{
+      this.isFieldShow = false;
+      this.newRegCourseDetailsformGroup.get('marriedName')?.clearValidators();
+      this.newRegCourseDetailsformGroup.get('qualificationName')?.clearValidators();
+      this.newRegCourseDetailsformGroup.get('marriedName')?.reset()
+      this.newRegCourseDetailsformGroup.get('qualificationName')?.reset();
+    }
   }
 
   stateTypeSelected(e: Event) {
@@ -271,7 +290,9 @@ export class NewRegnCertDetailsComponent {
       otherRegnNo: new FormControl(''),
       university: new FormControl('', [
         Validators.required]),
-      fileAttach: new FormControl('', Validators.required)  
+      fileAttach: new FormControl('', ),
+      marriedName: new FormControl(''),
+      qualificationName: new FormControl('')  
     });
     this.getEndPoint();
     this.getCandidatePersonalDetails();
@@ -570,6 +591,13 @@ export class NewRegnCertDetailsComponent {
                 const passM = this.candidateDetailList[0].passingMonth;
                 const pm = this.monthMap[passM]
 
+                if(this.candidateDetailList[0]?.courseName == 'M.B.B.S. Name Change' ){
+                  this.isFieldShow = true;
+                }
+                else {
+                  this.isFieldShow = false;
+                }
+
               this.newRegCourseDetailsformGroup.patchValue({
                 courseName: this.candidateDetailList[0]?.courseName,
                 collegeName: this.candidateDetailList[0]?.nursingCollage,
@@ -579,9 +607,10 @@ export class NewRegnCertDetailsComponent {
                 passDate: this.candidateDetailList[0]?.passingYear + "-" + pm + "-01",
                 requestType: this.candidateDetailList[0]?.requestType,
                 university:this.candidateDetailList[0]?.university,
-                
-
+                marriedName: this.candidateDetailList[0]?.marriedName,
+                qualificationName: this.candidateDetailList[0]?.qualification
               });
+             
 
             }
 
@@ -737,7 +766,9 @@ export class NewRegnCertDetailsComponent {
           "candidateSignature": this.fileSignPreview.url,
           "validityUpto": "NA",
           "certificateNumber": "NA",
-          "diplomaNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA"
+          "diplomaNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
+          "marriedName":value.marriedName ?  value.marriedName : "NA",
+          "qualification": value.qualificationName ?  value.qualificationName : "NA"
 
         }
 
