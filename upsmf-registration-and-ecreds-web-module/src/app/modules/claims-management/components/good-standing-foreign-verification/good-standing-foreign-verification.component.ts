@@ -457,6 +457,7 @@ export class GoodStandingForeignVerificationComponent {
       mobNumber: new FormControl('', [
         Validators.required,
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
+      fileAttach: new FormControl('')
     });
     if (this.userEmail === "Regulator") {
       { { (this.stateData.body.entity === "StudentForeignVerification" ? this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()) } }

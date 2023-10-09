@@ -362,6 +362,24 @@
                                             </mat-form-field> -->
                                         </div>
 
+                                        <div class="applicant-details" *ngIf="isFieldShow">
+                                            <h4>{{labels.mrdName}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder=" Enter Married Name" formControlName="marriedName" required>
+                                            
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="applicant-details" *ngIf="isFieldShow">
+                                            <h4>{{labels.qualification}}</h4>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Enter Qualification" formControlName="qualificationName" required>
+                                            
+                                            </mat-form-field>
+                                        </div>
+
+                
+                                        
+
                                         <div class="applicant-details">
                                             <h4>{{labels.collegeName}}</h4>
                                             <mat-form-field appearance="outline">
@@ -423,18 +441,18 @@
 
                                         </div>
                                         <div class="applicant-details">
-                                            <h4>{{labels.attach}}</h4>
+                                            <h4>{{labels.attach}}*</h4>
                                             <div class="upload-column">
                                                 <!-- <div class="flex flex-column mt1"> -->
                                                 <!-- </div> -->
                                                 <!-- <div class="ml4 flex flex-column right"> -->
                                                     <label for="fileUpload1" class="custom-file-upload">
                                                         <a mat-button color="primary">+ Add 
-                                                            attachment(s) </a>
+                                                            attachment(s)* </a>
                                                     </label>
                                                     <mat-hint>docx /pdf files accepted</mat-hint>
                                                     <input id="fileUpload1" type="file" style="display: none" enctype="multipart/form-data"
-                                                        (change)="onFileChanged($event)"  multiple="true" accept=".pdf,.docx" />
+                                                    formControlName="fileAttach" (change)="onFileChanged($event)"  multiple="true" accept=".pdf,.docx" />
                                                 <!-- </div> -->
                                             
     
