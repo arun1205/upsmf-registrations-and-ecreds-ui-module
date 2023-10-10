@@ -52,7 +52,7 @@ export class NewRegnCertDetailsComponent {
   docsUrl: any[] = [];
   urlData: any[] = [];
   urlList: any;
-  updatedUrlList: any;
+  updatedUrlList:any[] =[];
   urlDataResponse: string;
   docsResponseUrl: string;
   convertUrlList: string;
@@ -290,7 +290,7 @@ export class NewRegnCertDetailsComponent {
       otherRegnNo: new FormControl(''),
       university: new FormControl('', [
         Validators.required]),
-      fileAttach: new FormControl('', ),
+      // fileAttach: new FormControl('', ),
       marriedName: new FormControl(''),
       qualificationName: new FormControl('')  
     });
@@ -326,6 +326,7 @@ export class NewRegnCertDetailsComponent {
             this.urlDataResponse = candidateDetailList.docproof;
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              this.updatedUrlList = this.updatedUrlList.concat(this.urlData)
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
                   
@@ -407,6 +408,7 @@ export class NewRegnCertDetailsComponent {
             this.urlDataResponse = candidateDetailList.docproof;
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              this.updatedUrlList = this.updatedUrlList.concat(this.urlData)
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
                   
@@ -544,6 +546,7 @@ export class NewRegnCertDetailsComponent {
 
               if (!!this.urlDataResponse) {
                 this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+                this.updatedUrlList = this.updatedUrlList.concat(this.urlData)
                 if (this.urlData.length) {
                   this.listOfFiles = this.urlData?.map(url => {
                    
@@ -659,7 +662,7 @@ export class NewRegnCertDetailsComponent {
 
 
         if (result) {
-          this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+          this.urlList = this.updatedUrlList ? this.updatedUrlList : ''
           if (this.urlData.length) {
             this.listOfFiles = this.urlData?.map(url => {
                 return decodeURIComponent(url);
@@ -715,7 +718,7 @@ export class NewRegnCertDetailsComponent {
 
         const joinMonth = this.months[jMonth];
         const passMonth = this.months[pMonth];
-        this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+        this.urlList = this.updatedUrlList ? this.updatedUrlList : ''
         //convert to string with commaa separated
         this.convertUrlList = this.urlList.join(',')
         this.applicantUserName = this.newRegCertDetailsformGroup.value.applicantName;
@@ -901,6 +904,7 @@ export class NewRegnCertDetailsComponent {
       next:(data) => {
       this.docsResponseUrl = data.result;
       this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
+      this.updatedUrlList = this.updatedUrlList.concat(this.docsUrl)
       this.fileList = []
       const uploadObj = this.docsUrl.map(url => {
         const fileNameWithQueryParams = url

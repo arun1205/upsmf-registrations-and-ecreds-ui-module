@@ -65,7 +65,7 @@ export class GoodStandingForeignVerificationComponent {
   urlData: any[] = [];
   convertUrlList: string;
   urlList: any;
-  updatedUrlList: any;
+  updatedUrlList:any[]=[];
   userRole: any;
   userEmail: any;
   urlDataResponse: string;
@@ -161,6 +161,7 @@ export class GoodStandingForeignVerificationComponent {
             this.urlDataResponse = candidateDetailList.docproof;
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              this.updatedUrlList = this.updatedUrlList.concat(this.urlData)
               console.log('urlDaaaa', this.urlData)
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
@@ -218,6 +219,7 @@ export class GoodStandingForeignVerificationComponent {
             const pm = this.monthMap[passM]
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              this.updatedUrlList = this.updatedUrlList.concat(this.urlData)
               console.log('urlDaaaa', this.urlData)
               this.filePreview= this.candidateDetailList[0].candidatePic;
               if(!!this.filePreview){
@@ -291,6 +293,7 @@ export class GoodStandingForeignVerificationComponent {
             this.urlDataResponse = candidateDetailList.docproof;
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              this.updatedUrlList = this.updatedUrlList.concat(this.urlData)
               console.log('urlDaaaa', this.urlData)
               if (this.urlData.length) {
                 this.listOfFiles = this.urlData?.map(url => {
@@ -351,6 +354,7 @@ export class GoodStandingForeignVerificationComponent {
             
             if (!!this.urlDataResponse) {
               this.urlData = this.urlDataResponse?.split(",").filter(url => url.trim() !== "");
+              this.updatedUrlList = this.updatedUrlList.concat(this.urlData)
               console.log('urlDaaaa',this.urlData)
               this.filePreview= this.candidateDetailList[0].candidatePic;
               if(!!this.filePreview){
@@ -457,7 +461,7 @@ export class GoodStandingForeignVerificationComponent {
       mobNumber: new FormControl('', [
         Validators.required,
         Validators.pattern("^(0|91)?[6-9][0-9]{9}$")]),
-      fileAttach: new FormControl('')
+      // fileAttach: new FormControl('')
     });
     if (this.userEmail === "Regulator") {
       { { (this.stateData.body.entity === "StudentForeignVerification" ? this.getCandidatePersonalDetailsForeign() : this.getCandidatePersonalDetails()) } }
@@ -532,6 +536,7 @@ export class GoodStandingForeignVerificationComponent {
       console.log(data)
       this.docsResponseUrl = data.result;
       this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
+      this.updatedUrlList = this.updatedUrlList.concat(this.docsUrl)
       console.log('docsUrl', this.docsUrl)
        this.fileList = []
       const uploadObj = this.docsUrl.map(url => {
@@ -652,9 +657,9 @@ export class GoodStandingForeignVerificationComponent {
 
 
         if (result) {
-          this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
-          if (this.urlData.length) {
-            this.listOfFiles = this.urlData?.map(url => {
+          this.urlList = this.updatedUrlList ? this.updatedUrlList:''
+          if (this.updatedUrlList.length) {
+            this.listOfFiles = this.updatedUrlList?.map(url => {
               // const parts = url.split('=');
              
                 return decodeURIComponent(url);
@@ -720,9 +725,9 @@ export class GoodStandingForeignVerificationComponent {
 
         console.log("res", result);
         if (result) {
-          this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
-          if (this.urlData.length) {
-            this.listOfFiles = this.urlData?.map(url => {
+          this.urlList = this.updatedUrlList ? this.updatedUrlList : ''
+          if (this.updatedUrlList.length) {
+            this.listOfFiles = this.updatedUrlList?.map(url => {
               // const parts = url.split('=');
               
                 return decodeURIComponent(url);
@@ -784,7 +789,7 @@ export class GoodStandingForeignVerificationComponent {
       const joinMonth = this.months[jMonth];
       const passMonth = this.months[pMonth];
       console.log("joinmonth", joinMonth)
-      this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+      this.urlList = this.updatedUrlList ? this.updatedUrlList : ''
       //convert to string with commaa separated
       this.convertUrlList = this.urlList.join(',')
       // this.candidateDetails = false;
@@ -886,7 +891,7 @@ export class GoodStandingForeignVerificationComponent {
         const joinMonth = this.months[jMonth];
         const passMonth = this.months[pMonth];
         console.log("joinmonth", joinMonth)
-        this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+        this.urlList = this.updatedUrlList ? this.updatedUrlList : ''
         //convert to string with commaa separated
         this.convertUrlList = this.urlList.join(',')
         // this.candidateDetails = false;

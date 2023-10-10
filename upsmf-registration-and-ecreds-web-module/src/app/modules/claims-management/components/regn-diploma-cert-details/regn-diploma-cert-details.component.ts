@@ -51,7 +51,7 @@ export class RegnDiplomaCertDetailsComponent {
   docsUrl: any[] = [];
   urlData: any[] = [];
   urlList: any;
-  updatedUrlList: any;
+  updatedUrlList: any[]=[];
   urlDataResponse: string;
   docsResponseUrl: string;
   convertUrlList: string;
@@ -570,7 +570,7 @@ export class RegnDiplomaCertDetailsComponent {
 
       const joinMonth = this.months[jMonth];
       const passMonth = this.months[pMonth];
-      this.urlList = this.updatedUrlList ? this.updatedUrlList : [...this.docsUrl, ...this.urlData]
+      this.urlList = this.updatedUrlList ? this.updatedUrlList : ''
       //convert to string with commaa separated
       this.convertUrlList = this.urlList.join(',')
       this.updateStudentBody =
@@ -884,6 +884,7 @@ export class RegnDiplomaCertDetailsComponent {
       next:(data) => {
       this.docsResponseUrl = data.result;
       this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
+      this.updatedUrlList = this.updatedUrlList.concat(this.docsUrl)
       this.fileList = []
       const uploadObj = this.docsUrl.map(url => {
         // const parts = url.split('=');
