@@ -99,6 +99,7 @@ export class AdminRegnCertificateDetailsComponent {
   fileSignPreview:any;
   data:any;
   courseType:string;
+  isFieldShow:boolean = false;
 
 
   stateData: any;
@@ -257,6 +258,9 @@ export class AdminRegnCertificateDetailsComponent {
       otherRegnNo: new FormControl(''),
       university: new FormControl('', [
         Validators.required]),
+      marriedName: new FormControl(''),
+      qualificationName: new FormControl('')
+
     });
     this.getEndPoint();
     this.newRegCertDetailsformGroup.disable();
@@ -353,7 +357,12 @@ export class AdminRegnCertificateDetailsComponent {
             const jm = this.monthMap[joinM]
             const passM = response.responseData.passingMonth;
             const pm = this.monthMap[passM]
-
+            if(response.responseData?.courseName == 'M.B.B.S. Name Change' ){
+              this.isFieldShow = true;
+            }
+            else {
+              this.isFieldShow = false;
+            }
             this.newRegCourseDetailsformGroup.patchValue({
               courseName: response.responseData.courseName,
               collegeName: response.responseData.nursingCollage,
@@ -364,7 +373,9 @@ export class AdminRegnCertificateDetailsComponent {
               rollNum: response.responseData.finalYearRollNo,
               passDate: response.responseData.passingYear + "-" + pm + "-01",
               requestType: response.responseData.requestType,
-              diplomaNumber: response.responseData.diplomaNumber
+              diplomaNumber: response.responseData.diplomaNumber,
+              marriedName: response.responseData?.marriedName,
+              qualificationName: response.responseData?.qualification
             });
 
             // }
@@ -457,7 +468,12 @@ export class AdminRegnCertificateDetailsComponent {
             const jm = this.monthMap[joinM]
             const passM = response.responseData.passingMonth;
             const pm = this.monthMap[passM]
-
+            if(response.responseData?.courseName == 'M.B.B.S. Name Change' ){
+              this.isFieldShow = true;
+            }
+            else {
+              this.isFieldShow = false;
+            }
             this.newRegCourseDetailsformGroup.patchValue({
               courseName: response.responseData.courseName,
               collegeName: response.responseData.nursingCollage,
@@ -468,7 +484,9 @@ export class AdminRegnCertificateDetailsComponent {
               passDate: response.responseData.passingYear + "-" + pm + "-01",
               requestType: response.responseData.requestType,
               university: response.responseData.university,
-              diplomaNumber: response.responseData.diplomaNumber
+              diplomaNumber: response.responseData.diplomaNumber,
+              marriedName: response.responseData?.marriedName,
+              qualificationName: response.responseData?.qualification
 
 
             });
