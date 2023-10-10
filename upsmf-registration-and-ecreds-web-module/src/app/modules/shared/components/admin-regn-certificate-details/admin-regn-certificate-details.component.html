@@ -384,6 +384,21 @@
                                             </mat-form-field> -->
                                     </div>
 
+                                    <div class="applicant-details" *ngIf="isFieldShow">
+                                        <h4>{{labels.mrdName}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder=" Enter Married Name" formControlName="marriedName" required>
+                                        
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="applicant-details" *ngIf="isFieldShow">
+                                        <h4>{{labels.qualification}}</h4>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput placeholder="Enter Qualification" formControlName="qualificationName" required>
+                                        
+                                        </mat-form-field>
+                                    </div>
+
                                     <div class="applicant-details">
                                         <h4>{{labels.collegeName}}</h4>
                                         <mat-form-field appearance="outline">

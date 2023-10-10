@@ -621,6 +621,8 @@ export class RegnDiplomaCertDetailsComponent {
         "validityUpto": "NA",
         "certificateNumber": "NA",
         "courseType":this.stateData.courseType,
+        "marriedName":"NA",
+        "qualification":"NA"
 
 
       }
