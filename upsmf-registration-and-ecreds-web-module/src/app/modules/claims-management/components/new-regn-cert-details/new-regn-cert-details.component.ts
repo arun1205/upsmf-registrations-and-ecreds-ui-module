@@ -110,7 +110,9 @@ export class NewRegnCertDetailsComponent {
   stateData: any;
   selectedLink: string = 'Candidate Details';
   requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
-  applicantUserName:string =''
+  applicantUserName:string ='';
+  endPointUrls:string = '';
+  studentOsId:string;
 
  
 
@@ -168,7 +170,21 @@ export class NewRegnCertDetailsComponent {
         this.paymentDetails = this.paymentResponse.isPayment
       }
     })
+  this.getStudentFormOsid();
+  }
 
+  getStudentFormOsid(){
+    this.endPointUrls = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+    this.baseService.getCandidatePersonalDetails$(this.endPointUrls).subscribe({
+      next:(res)=>{
+         console.log(res)
+         this.studentOsId =res.responseData[0].osid 
+         console.log('sss',this.studentOsId)
+      },
+      error:(err)=>{
+     console.log(err)
+      }
+    })
   }
 
   getCourses(courseUrl: string) {
@@ -825,9 +841,10 @@ export class NewRegnCertDetailsComponent {
    }
 
    uploadSignatureData(selectedFile:any){
+    let stdOsid = this.osid ? this.osid : this.studentOsId
     const formData = new FormData();
     formData.append('files', selectedFile)
-    this.baseService.uploadFiles$(this.osid,formData,this.endPointUrl).subscribe({
+    this.baseService.uploadFiles$(stdOsid,formData,this.endPointUrl).subscribe({
       next:(res)=>{
       console.log('profileData',res)
       this.uplaodedSignFiles =res.result
@@ -856,9 +873,10 @@ export class NewRegnCertDetailsComponent {
   }
 
   uploadProfileData(selectedFile:any){
+    let profileOsid = this.osid ? this.osid : this.studentOsId
     const formData = new FormData();
     formData.append('files', selectedFile)
-    this.baseService.uploadFiles$(this.osid,formData,this.endPointUrl).subscribe({
+    this.baseService.uploadFiles$(profileOsid,formData,this.endPointUrl).subscribe({
       next:(res)=>{
       console.log('profileData',res)
       this.uplaodedFiles =res.result
@@ -895,12 +913,13 @@ export class NewRegnCertDetailsComponent {
   }
 
   uploadFiles() {
-
+  let attachOsid = this.osid ? this.osid : this.studentOsId
+  console.log(this.osid)
     const formData = new FormData();
     for (var i = 0; i < this.fileList.length; i++) {
       formData.append("files", this.fileList[i]);
     }
-    this.baseService.uploadFiles$(this.osid, formData, this.endPointUrl).subscribe({
+    this.baseService.uploadFiles$(attachOsid, formData, this.endPointUrl).subscribe({
       next:(data) => {
       this.docsResponseUrl = data.result;
       this.docsUrl = this.docsResponseUrl.split(',').filter(url => url.trim() !== "")
