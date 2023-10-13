@@ -109,7 +109,7 @@ export class NewRegnCertDetailsComponent {
   courseType:string;
   stateData: any;
   selectedLink: string = 'Candidate Details';
-  requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
+  requestTypesArray = ['Original', 'Correction', 'Name change', 'Duplicate'];
   applicantUserName:string ='';
   endPointUrls:string = '';
   studentOsId:string;
