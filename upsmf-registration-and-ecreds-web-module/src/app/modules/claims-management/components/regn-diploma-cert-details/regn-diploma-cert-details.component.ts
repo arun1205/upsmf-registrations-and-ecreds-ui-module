@@ -119,7 +119,7 @@ export class RegnDiplomaCertDetailsComponent {
   isFileInputDisabled = true;
 
   selectedLink: string = 'Candidate Details';
-  requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
+  requestTypesArray = ['Original', 'Correction', 'Name change', 'Duplicate'];
 
 
 
@@ -953,7 +953,8 @@ export class RegnDiplomaCertDetailsComponent {
     this.selectLink(option);
     switch (option) {
       case 'Payment Details':
-        this.paymentDetails = !this.paymentDetails
+        this.paymentDetails = false;
+        this.candidateDetails = false;
         break;
       case 'Candidate Details':
         this.candidateDetails = true;
