@@ -787,7 +787,8 @@ export class NewRegnCertDetailsComponent {
           "certificateNumber": "NA",
           "diplomaNumber":this.stateData?.regNo ? this.stateData?.regNo : "NA",
           "marriedName":value.marriedName ?  value.marriedName : "NA",
-          "qualification": value.qualificationName ?  value.qualificationName : "NA"
+          "qualification": value.qualificationName ?  value.qualificationName : "NA",
+           "refNo":"NA"
 
         }
 
