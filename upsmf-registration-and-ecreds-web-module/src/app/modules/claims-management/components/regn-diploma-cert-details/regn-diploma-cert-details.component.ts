@@ -60,6 +60,7 @@ export class RegnDiplomaCertDetailsComponent {
   filePreview:any;uplaodedSignFiles:any;
   fileSignPreview:any;
   refNo:any;
+  regNumber:any;
 
 
   breadcrumbItems: BreadcrumbItem[] = [
@@ -390,6 +391,7 @@ export class RegnDiplomaCertDetailsComponent {
           this.email=this.candetails.email;
           this.osid=this.candetails.osid;
           this.refNo= this.candetails.refNo;
+          this.regNumber =  this.candetails.regNumber
           this.getStudentOsid();
 
 
@@ -486,6 +488,7 @@ export class RegnDiplomaCertDetailsComponent {
           this.name = this.candetails.name;
           this.finalYearRollNo =this.candetails.finalYearRollNo;
           this.refNo= this.candetails.refNo;
+          this.regNumber =  this.candetails.regNumber
 
 
           // if (!!this.urlDataResponse) {
@@ -612,7 +615,7 @@ export class RegnDiplomaCertDetailsComponent {
         "centerCode": '',
         "requestType": value.requestType,
         "docproof": this.convertUrlList,
-        "regNumber": this.stateData?.regNo ? this.stateData?.regNo : "NA",
+        // "regNumber": this.stateData?.regNo ? this.stateData?.regNo : "NA",
         "courseState": value.stateName ? value.stateName : "NA",
         "courseCouncil": value.newCouncil ? value.newCouncil : "NA",
         "nurseRegNo": value.otherRegnNo ? value.otherRegnNo : "NA",
@@ -626,7 +629,8 @@ export class RegnDiplomaCertDetailsComponent {
         "courseType":this.stateData.courseType,
         "marriedName":"NA",
         "qualification":"NA",
-        "refNo":this.refNo
+        "refNo":this.refNo,
+        "regNumber": this.regNumber
 
 
       }
