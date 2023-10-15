@@ -25,7 +25,7 @@ export class AddUserComponent {
   userIds:string =''
 
   roleTypesArray = ["CouncilAdmin", "ExternalCouncil", "ExamBody","Regulator"];
-  councilTypeArray:string[]=["UPSMF", "UPNM", "UPDC","UPMC"]
+  councilTypeArray:string[]=["UPSMF", "UPNC", "UPDC","UPMC"]
   activeStatusArray = ["Active", "Inactive"];
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Workspace', url: '/super-admin' },
@@ -72,16 +72,16 @@ export class AddUserComponent {
       lastName = this.userDetails.lastName
     };
     if(this.userDetails?.attributes.role[0] === 'CouncilAdmin'){
-      this.councilTypeArray = ["UPSMF", "UPNM", "UPDC","UPMC"]
+      this.councilTypeArray = ["UPSMF", "UPNC", "UPDC","UPMC"]
     }
     else if(this.userDetails?.attributes.role[0] === 'ExternalCouncil'){
       this.councilTypeArray = ['OtherState']
     }
     else if(this.userDetails?.attributes.role[0] === 'Regulator'){
-      this.councilTypeArray = ["UPSMF", "UPNM", "UPDC","UPMC"]
+      this.councilTypeArray = ["UPSMF", "UPNC", "UPDC","UPMC"]
     }
     else {
-      this.councilTypeArray =["UPSMF", "UPNM", "UPDC","UPMC"]
+      this.councilTypeArray =["UPSMF", "UPNC", "UPDC","UPMC"]
     }
     this.newUserformGroup.setValue({
       fName: firstName,

@@ -15,6 +15,7 @@ export class UserProfileComponent implements OnInit {
 userDetails:any;
 userRole:any;
 endPointUrl:string = ''
+userProfileRole:string = ''
 breadcrumbItems: BreadcrumbItem[] = [
   { label: 'Home', url: '/' },
   {label: 'Profile', url: '/user-profile'},
@@ -35,14 +36,17 @@ breadcrumbItems: BreadcrumbItem[] = [
     switch (this.userRole) {
       case 'StudentFromUP':
         this.endPointUrl = this.configService.urlConFig.URLS.STUDENT.GET_STUDENT_DETAILS
+        this.userProfileRole = 'Student'
         this.getUserDetails()
         break;
       case 'Regulator':
         this.endPointUrl = this.configService.urlConFig.URLS.ADMIN.GET_ADMIN_DETAILS
+        this.userProfileRole = 'Admin'
         this.getUserDetails()
         break;
       case 'SuperAdmin':
         this.endPointUrl = this.configService.urlConFig.URLS.SUPERADMIN.GET_SUPERADMIN_DETAILS
+        this.userProfileRole = 'Super Admin'
         this.getUserDetails()
         break;
       default:
