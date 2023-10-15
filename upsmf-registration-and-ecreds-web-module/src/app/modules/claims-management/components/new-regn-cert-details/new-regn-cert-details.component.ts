@@ -111,6 +111,7 @@ export class NewRegnCertDetailsComponent {
   selectedLink: string = 'Candidate Details';
   requestTypesArray = ['Original', 'Correction', 'Name change', 'Duplicate'];
   applicantUserName:string ='';
+  examsBody:string = '';
   endPointUrls:string = '';
   studentOsId:string;
 
@@ -738,6 +739,7 @@ export class NewRegnCertDetailsComponent {
         //convert to string with commaa separated
         this.convertUrlList = this.urlList.join(',')
         this.applicantUserName = this.newRegCertDetailsformGroup.value.applicantName;
+        this.examsBody = value.examBody
         this.updateStudentBody =
         {
           "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
