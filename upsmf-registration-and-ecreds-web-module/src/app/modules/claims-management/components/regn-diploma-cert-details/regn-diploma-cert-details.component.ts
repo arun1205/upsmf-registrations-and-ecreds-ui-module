@@ -121,7 +121,7 @@ export class RegnDiplomaCertDetailsComponent {
 
   selectedLink: string = 'Candidate Details';
   requestTypesArray = ['Original', 'Correction', 'Name change', 'Duplicate'];
-
+  examsBody:any;
 
 
 
@@ -579,6 +579,7 @@ export class RegnDiplomaCertDetailsComponent {
       this.urlList = this.updatedUrlList ? this.updatedUrlList : ''
       //convert to string with commaa separated
       this.convertUrlList = this.urlList.join(',')
+      this.examsBody = value.examBody
       this.updateStudentBody =
       {
         "date": this.datePipe.transform(new Date(), "yyyy-MM-dd")?.toString(),
