@@ -104,7 +104,7 @@ export class AdminRegnCertificateDetailsComponent {
 
   stateData: any;
   selectedLink: string = 'Candidate Details';
-  requestTypesArray = ['Orignal', 'Correction', 'Name change', 'Dublicate'];
+  requestTypesArray = ['Original', 'Correction', 'Name change', 'Duplicate'];
   breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Workspace', url: '/admin' },
     { label: 'Claim Manage', url: '/admin/manage-claim' },
